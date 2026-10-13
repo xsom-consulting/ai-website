@@ -1,0 +1,992 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Jetons de design — portés depuis `xsom.fr` (assets/css/tokens.css).
+
+   Source unique de vérité pour les couleurs. Aucune valeur brute ne doit
+   apparaître ailleurs : `tailwind.config.ts` ne fait que les référencer.
+
+   Les bornes du cuivre ne sont pas choisies à l'œil. Ce sont les teintes les plus
+   extrêmes qui conservent 4.5:1 avec le texte posé dessus, et le fichier source en
+   tient le journal — deux de ses paliers d'opacité y sont documentés comme des
+   corrections, avec la valeur fautive citée à côté. Reprendre des opacités « à
+   l'œil » (white/40, white/50) réintroduirait exactement ce qui a déjà été jugé non
+   conforme.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Encres (fonds sombres) ---------------------------------------- */
+  --ink-950: #050b14;
+  --ink-900: #0a1628;
+  --ink-800: #0f2038;
+  --ink-700: #16304f;
+  --ink-600: #1e3d63;
+
+  /* ---- Accent signature : le cuivre ----------------------------------
+     Un métal, pas une couleur. Un aplat le fait lire comme de l'orange ; il lui
+     faut un reflet, un corps et une ombre. */
+  --copper: #e2603a; /* corps, teinte pivot — 4.62:1 sur ink-900 */
+  --copper-sheen: #f7a077; /* reflet — 9.63:1 avec ink-950 */
+  --copper-shade: #ca5330; /* ombre — 4.50:1 avec ink-950, plancher */
+  --copper-bright: #f5793f;
+  --copper-deep: #b84a28; /* texte sur fond clair — 4.75:1 */
+  --copper-wash: rgba(226, 96, 58, 0.1);
+  --copper-line: rgba(226, 96, 58, 0.38);
+  --copper-glow: rgba(226, 96, 58, 0.22);
+
+  /* Surface métallique. Ce qui fait lire « métal » n'est pas un fondu doux mais
+     une rupture : sur une surface bombée, la lumière casse net à la ligne
+     médiane. D'où l'écart franc entre 47 % et 53 %. Le reflet diagonal
+     par-dessus simule la source lumineuse. */
+  --copper-metal:
+    linear-gradient(102deg, transparent 22%, rgba(255, 234, 216, 0.26) 42%, transparent 62%),
+    linear-gradient(
+      180deg,
+      #f9ae88 0%,
+      #f08355 34%,
+      #e86a41 47%,
+      #d4562f 53%,
+      var(--copper-shade) 100%
+    );
+
+  --copper-metal-hot:
+    linear-gradient(102deg, transparent 18%, rgba(255, 244, 232, 0.4) 40%, transparent 66%),
+    linear-gradient(180deg, #ffc2a0 0%, #fa9264 34%, #f2764c 47%, #e05f36 53%, #d05531 100%);
+
+  /* Relief : liseré lumineux en haut, sombre en bas. Sur 1 px, donc jamais sous
+     le texte — le contraste n'en dépend pas. */
+  --copper-relief:
+    inset 0 1px 0 rgba(255, 226, 205, 0.58), inset 0 -1px 0 rgba(92, 28, 12, 0.38);
+
+  /* ---- Surfaces claires ------------------------------------------------ */
+  --paper: #ffffff;
+  --paper-warm: #f6f3f0;
+  --paper-dim: #e8e2dc;
+
+  /* ---- Texte — contextuels, réécrits par `.section--light` -------------
+     Les paliers sont repris tels quels. .48 et non .38 : .38 ne donnait que
+     3.57:1 sur ink-900, sous le seuil AA, alors que ce jeton porte du texte
+     lisible. */
+  --text-hi: rgba(255, 255, 255, 0.95);
+  --text-mid: rgba(255, 255, 255, 0.72);
+  --text-low: rgba(255, 255, 255, 0.52);
+  --text-faint: rgba(255, 255, 255, 0.48);
+
+  /* ---- Surfaces et bordures — contextuelles ---------------------------- */
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-up: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-mid: rgba(255, 255, 255, 0.14);
+
+  /* Le cuivre quand il porte du texte : --copper sur sombre (4.62:1),
+     --copper-deep sur clair (5.9:1). */
+  --copper-text: var(--copper);
+
+  --title-ink: #eef2f8; /* 15.8:1 sur ink-900 */
+
+  /* ---- Échelle typographique — reprise de `tokens.css` -----------------
+     Les tailles sont fluides et non des paliers : c'est ce qui fait qu'un titre
+     garde la même densité de 360 px à 1440 px. `text-2xl sm:text-3xl` donnait
+     deux tailles fixes, un saut au point de rupture, et laissait deux sections
+     de la même page composer leurs h2 différemment.
+
+     Les trois familles (--font-display, --font-body, --font-mono) ne sont PAS
+     redéclarées ici : `next/font/local` les définit sur <html> dans
+     app/layout.tsx, et elles portent des noms générés. Les réécrire avec les
+     littéraux du site romprait l'auto-hébergement et rendrait les polices
+     introuvables. D'où le `@apply font-display` des classes ci-dessous.
+
+     Seuls les paliers réellement employés sont portés : --fs-display, --fs-body,
+     --fs-sm, --fs-xs et --fs-metric du site n'ont pas d'usage ici, et un jeton
+     sans usage est du code mort. */
+  --fs-h1: clamp(2.1rem, 4.4vw, 3.4rem);
+  --fs-h2: clamp(1.65rem, 3.2vw, 2.5rem);
+  --fs-h3: clamp(1.15rem, 1.8vw, 1.4rem);
+  --fs-lead: clamp(1rem, 1.4vw, 1.15rem);
+  --fs-label: 0.7rem;
+
+  /* ---- Balayage de titre ----------------------------------------------
+     Le relief d'un titre vient d'une lumière qui le traverse et suit le curseur,
+     jamais d'un changement de couleur ou de style : c'est ce qui distingue un
+     titre composé d'un titre décoré.
+
+     `--title-sheen-pos` est réécrite au pointeur par `components/Motion.tsx`.
+     Sans JavaScript, sans pointeur fin, ou sous `prefers-reduced-motion`, elle
+     vaut 50 % : la lumière reste au centre, immobile, et le titre garde
+     exactement la même lisibilité.
+
+     Le dégradé lui-même n'est PAS écrit ici, contrairement à tout le reste de ce
+     fichier, et c'est délibéré. Un `var()` imbriqué dans une custom property est
+     résolu là où la propriété est DÉCLARÉE, pas là où elle est utilisée : un
+     dégradé défini dans `:root` y figerait `--title-sheen-pos` à 50 %, puis les
+     titres hériteraient cette valeur déjà figée. La position ne bougerait
+     jamais. Il est donc écrit au point d'usage, dans la règle `[data-sheen]`. */
+  --title-glint: #ffffff; /* cœur du balayage */
+  --title-glint-warm: #fff5ed; /* fuite tiède, rappel du cuivre */
+  --title-sheen-pos: 50%;
+
+  /* ---- Mouvement -------------------------------------------------------
+     Déclarés une seule fois : le soulèvement des cartes de section et la
+     révélation au défilement lisent tous deux ces deux jetons. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-reveal: 700ms;
+
+  /* ---- Grain : bruit SVG en data-URI, aucun fichier image --------------- */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+
+  /* ---- Sémantique ------------------------------------------------------ */
+  --danger: #ff6b6b;
+  --success: #4ade80;
+
+  /* ---- Fond de page ---------------------------------------------------- */
+  --canvas: var(--ink-900);
+
+  /* ---- Rythme vertical et colonne de texte -----------------------------
+     `--container` vaut 72rem et non les 1240px de `tokens.css` : c'est la largeur
+     que `max-w-6xl` donne déjà à l'en-tête, au pied de page et aux écrans de la
+     console. Élargir la seule page d'accueil désalignerait le logo de l'en-tête
+     avec le contenu qui passe dessous, un défaut visible, là où 88px de largeur
+     en plus ne se voient pas.
+
+     Le plancher de la gouttière est celui de `px-6` (1.5rem) et non les 1.25rem
+     du site : elle ne se resserre donc jamais par rapport à l'existant, elle ne
+     fait que s'ouvrir en grand écran. */
+  --container: 72rem;
+  --container-narrow: 47.5rem; /* 760px, la colonne du bandeau final */
+  /* La bande du relevé, et elle seule. 128px de plus que `--container`, ce qui
+     décale le bord des rangées de 64px vers l'extérieur par rapport au logo de
+     l'en-tête. Le désalignement est réel et il est assumé ici, parce que la
+     section est une bande pleine largeur : le fond clair borne le bloc à l'oeil
+     bien avant que la colonne ne le fasse, et vingt-trois rangées à quatre
+     colonnes ne tiennent pas lisiblement dans 72rem. Aucune autre section ne
+     prend ce jeton. */
+  --container-wide: 80rem;
+  --gutter: clamp(1.5rem, 4vw, 2.5rem);
+  --section-y: clamp(4.5rem, 9vw, 8rem);
+  --section-y-tight: clamp(3rem, 6vw, 5rem);
+}
+
+/* La section claire réécrit le bloc contextuel d'un coup. C'est la pièce
+   d'architecture que le modèle de thème de Tailwind ne sait pas exprimer : sans
+   elle, chaque composant porterait deux jeux de classes écrits à la main. */
+.section--light {
+  --canvas: var(--paper-warm);
+  --text-hi: var(--ink-900);
+  --text-mid: rgba(15, 32, 56, 0.78);
+  --text-low: rgba(15, 32, 56, 0.7);
+  --text-faint: rgba(15, 32, 56, 0.66);
+  --surface: rgba(15, 32, 56, 0.03);
+  --surface-up: rgba(15, 32, 56, 0.055);
+  --border: rgba(15, 32, 56, 0.12);
+  --border-mid: rgba(15, 32, 56, 0.2);
+  --copper-text: var(--copper-deep);
+  --title-ink: var(--ink-900);
+
+  background: var(--canvas);
+  color: var(--text-mid);
+}
+
+@layer base {
+  body {
+    background: var(--canvas);
+    @apply text-white antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-bold;
+    color: var(--title-ink);
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--copper-glow);
+    @apply text-white;
+  }
+}
+
+@layer components {
+  /* Le relevé plutôt que la carte flottante : un filet, pas une ombre portée. */
+  .card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    @apply rounded-lg;
+  }
+
+  /* En bande claire, la carte repose sur le papier et non sur `--surface`.
+     Les 3 % de `--surface` par-dessus `--paper-warm` composent #efedea, où
+     `--copper-deep` — que `tokens.css` documente pourtant comme « texte sur fond
+     clair » — rend 4.43:1 : sous le plancher, sur le `.card__num`. Sur `--paper`
+     le même jeton rend 5.19:1.
+
+     Le site tranche ce cas à l'identique : `.section--light .dg-node` y repasse le
+     nœud en `var(--paper)` plutôt que de garder son remplissage translucide. Une
+     surface translucide mange toujours la marge du cuivre ; en bande claire on la
+     retire au lieu d'éclaircir la teinte. */
+  .section--light .card {
+    background: var(--paper);
+  }
+
+  /* Une ligne du relevé qui ne concerne pas le visiteur : **estompée, jamais
+     cachée** — le relevé complet est l'argument.
+
+     L'estompage passait par `opacity-45` sur le conteneur. C'est le mauvais
+     mécanisme : l'opacité se multiplie sur TOUS les descendants, sans égard pour
+     ce qu'ils portent. Mesuré sur `--ink-900` : le titre de ligne tombait à
+     4.16:1 et `--text-low` à 2.10:1. Pour ramener ce dernier au plancher il
+     aurait fallu 0.87, c'est-à-dire ne plus estomper du tout — l'outil ne peut
+     pas faire ce qu'on lui demandait.
+
+     On redéfinit donc les jetons contextuels du bloc, exactement comme le fait
+     `.section--light` un peu plus haut : le contraste devient un choix au lieu
+     d'être un reste. */
+
+  /* Le cuivre métallique, jamais un aplat. Sans les deux couches et la rupture
+     médiane, le bouton redevient un rectangle orange. */
+
+  .input {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    @apply w-full rounded px-3.5 py-2.5 text-sm text-white outline-none transition;
+  }
+  .input::placeholder {
+    color: var(--text-faint);
+  }
+  .input:focus {
+    border-color: var(--copper-line);
+    box-shadow: 0 0 0 2px var(--copper-wash);
+  }
+
+  /* Toute étiquette est en mono : c'est le troisième rôle typographique, et il
+     porte l'identité autant que les deux autres. */
+  .label {
+    color: var(--text-faint);
+    @apply font-mono text-[0.7rem] uppercase tracking-[0.14em];
+  }
+  .muted {
+    color: var(--text-mid);
+  }
+
+  /* L'en-tête translucide, porté de `.site-header::before` (components.css l. 22).
+
+     Le voile ne peut PAS s'écrire en utilitaire : `bg-navy/90` demande à Tailwind
+     d'appliquer une opacité à `var(--ink-900)`, ce qu'il ne sait pas faire sur une
+     couleur qu'il ne peut pas décomposer. Il n'émet alors aucune règle du tout, et
+     la barre reste entièrement transparente. Le défaut ne se voyait pas tant que la
+     page était uniformément sombre ; sous une bande claire, le papier remonte au
+     travers et le texte de navigation s'efface.
+
+     `color-mix` réutilise le jeton au lieu de recopier ses composantes ; la
+     déclaration opaque au-dessus est la solution de repli pour un navigateur qui ne
+     la connaît pas, exactement comme le `@supports not` du site. */
+
+  /* ---- Bloc de marque — porté depuis `xsom.fr` (components.css l. 46-70) --
+     Le vocabulaire du site : un logo, un nom, une baseline. Le POC n'avait qu'un
+     bouclier générique enfermé dans une boîte cerclée ; le site, lui, ne met
+     jamais son logo dans une boîte, le signe se suffit. */
+  .brand {
+    @apply flex shrink-0 items-center gap-3;
+  }
+
+  /* 42 px pour un signe qui en fait 34. Les SVG du kit embarquent une marge de
+     réserve : le tracé n'occupe que 81,4 % de la largeur du viewBox, mesuré sur
+     ses extrémités réelles (109,99 → 414,15 sur un viewBox de 374,18). Une boîte
+     de 34 px ne rendrait que 27,7 px de dessin. La taille est portée par le
+     composant, qui la reçoit en prop ; ici, seule la tenue dans la ligne. */
+  .brand img {
+    @apply shrink-0 object-contain;
+  }
+
+  .brand__name {
+    color: var(--title-ink);
+    @apply font-display text-base font-bold leading-[1.1] tracking-[-0.004em];
+  }
+
+  /* La seconde moitié du mot-marque, en retrait. `var(--text-low)` et non
+     `text-white/50` : l'en-tête de ce fichier interdit les opacités choisies à
+     l'œil, parce qu'un jeton porte son seuil de contraste documenté et pas une
+     valeur brute. --text-low vaut .52, reste au-dessus du plancher 4.5:1, et
+     bascule tout seul dans une `.section--light`. */
+  .brand__product {
+    color: var(--text-low);
+    @apply font-medium;
+  }
+
+  /* La baseline. Mono, capitales, très espacée : le troisième rôle typographique
+     du site. Le texte diffère de celui de `xsom.fr` (le produit n'est pas le
+     cabinet), la forme est reprise au jeton près. */
+  .brand__tag {
+    color: var(--text-faint);
+    @apply mt-0.5 block font-mono text-[0.56rem] font-medium uppercase tracking-[0.16em];
+  }
+
+  /* Pas de pilule : le registre est technique, les angles sont quasi droits. */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-sm border px-2 py-0.5 font-mono text-xs;
+  }
+  .badge-neutral {
+    border-color: var(--border-mid);
+    background: var(--surface-up);
+    color: var(--text-mid);
+  }
+  .badge-green {
+    @apply border-emerald-400/30 bg-emerald-400/10 text-emerald-300;
+  }
+  .badge-red {
+    @apply border-red-400/30 bg-red-400/10 text-red-300;
+  }
+  .badge-amber {
+    @apply border-amber-400/30 bg-amber-400/10 text-amber-300;
+  }
+
+  /* Chiffres tabulaires : dans un relevé, les colonnes tombent d'aplomb. */
+
+  /* ======================================================================
+     Vocabulaire typographique — porté depuis `xsom.fr`
+     (assets/css/base.css et assets/css/components.css).
+
+     La famille est portée par la CLASSE et non par la balise, contrairement au
+     site qui s'appuie sur un sélecteur `h1, h2, h3`. Raison : le titre du héros
+     est un `<p>` — le `<h1>` de la page est le mot-marque de l'en-tête, et le
+     test e2e le cible par son rôle — donc un sélecteur de balise ne l'atteindrait
+     jamais. Les classes sont ainsi autoportantes : elles composent correctement
+     sur n'importe quel élément.
+     ====================================================================== */
+
+  /* Le chapô. Sa largeur est une MESURE (56 caractères) et non une largeur en
+     pixels : elle suit la taille de police, là où `max-w-2xl` la figeait à 42rem
+     et rendait la ligne trop longue dès que le texte grossissait.
+     --text-mid = 9.2:1 sur ink-900, 7.4:1 sous `.section--light`. */
+  .lead {
+    font-size: var(--fs-lead);
+    line-height: 1.65;
+    color: var(--text-mid);
+    max-width: 56ch;
+  }
+
+  /* La numérotation de section : [ 01 ] LE PROBLÈME.
+     Le crochet est la seule pièce en cuivre ; l'étiquette reste en --text-low
+     (5.4:1 sur ink-900, 5.8:1 sous `.section--light`, tous deux au-dessus du
+     plancher 4.5:1 documenté plus haut). C'est ce qui remplace le
+     `label text-brand-bright` du POC, où toute l'étiquette virait au cuivre clair.
+
+     Le numéro passe par l'attribut `data-num` et non par le texte : c'est un
+     repère de composition, pas une chaîne à traduire, il n'a donc rien à faire
+     dans `lib/strings.ts`. `gap-3` vaut 0.75rem, soit exactement le --sp-3 du
+     site : les deux grilles d'espacement partagent la même base 4. */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono font-medium uppercase;
+    font-size: var(--fs-label);
+    letter-spacing: 0.16em;
+    color: var(--text-low);
+  }
+  .eyebrow::before {
+    content: "[ " attr(data-num) " ]";
+    color: var(--copper-text);
+  }
+
+  /* Le numéro de carte. Il tient le rôle que la pastille d'icône tient dans les
+     cartes qui en portent une : marquer l'entrée de la carte. Les deux ne se
+     cumulent pas. `mb-4` vaut 1rem, soit le --sp-4 du site. */
+
+  /* ======================================================================
+     Bandes et colonnes — portées depuis `base.css` et `components.css`.
+
+     Le site ALTERNE : une page est une suite de bandes pleine largeur dont le
+     fond change, et c'est cette alternance, pas une couleur de plus, qui la rend
+     reconnaissable au premier coup d'œil. La conséquence structurelle est que la
+     largeur maximale ne peut plus vivre sur la balise `<section>` : un fond ne
+     peut pas être pleine largeur si l'élément qui le porte est déjà centré à
+     72rem. D'où le couple `.section` (la bande, sa respiration) / `.wrap` (la
+     colonne, sa gouttière).
+     ====================================================================== */
+  .section {
+    position: relative;
+    padding-block: var(--section-y);
+  }
+  /* La bande resserrée : un aparté, pas une section de plein droit. */
+
+  .wrap {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Deux colonnes éditoriales : l'énoncé à gauche, la démonstration à droite.
+     L'écart est un `clamp` que les utilitaires Tailwind ne savent pas dire sans
+     valeur arbitraire, et il est employé deux fois. */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Le bandeau d'appel : une encre plus profonde que la page, et une seule source
+     de lumière cuivre au-dessus du titre. C'est le seul moment coloré de la page,
+     et il est à la fin, pas dispersé. */
+
+  /* L'en-tête de page. `components.css` compense ici la hauteur d'un en-tête
+     FIXE (`padding-top: calc(var(--header-h) + …)`) ; le nôtre est `sticky`, il
+     occupe donc déjà sa place dans le flux et ajouter `--header-h` compterait la
+     hauteur deux fois. */
+
+  /* La signature des cartes : un filet cuivre qui se tire en bordure haute au
+     survol. Portée par `.section .card` et non par `.card` : la même classe sert
+     dans les écrans de la console, où un soulèvement au survol ferait bouger des
+     lignes de tableau et des files d'approbation. */
+  .section .card {
+    position: relative;
+    overflow: hidden;
+    transition:
+      border-color 240ms var(--ease-out),
+      background 240ms var(--ease-out),
+      transform 240ms var(--ease-out);
+  }
+  .section .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--copper-sheen), var(--copper) 30%, transparent 72%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 320ms var(--ease-out);
+  }
+  .section .card:hover {
+    border-color: var(--copper-line);
+    background: var(--surface-up);
+    transform: translateY(-2px);
+  }
+  .section .card:hover::before {
+    transform: scaleX(1);
+  }
+
+  /* Le filet reste, le mouvement part : un changement d'état instantané n'est pas
+     une animation. Cette règle SURVIT à la ceinture générale du § 4 : celle-ci
+     ne raccourcit que des durées, elle laisserait donc le `translateY(-2px)`
+     s'appliquer d'un coup. Ici, le soulèvement n'a simplement pas lieu. */
+  @media (prefers-reduced-motion: reduce) {
+    .section .card,
+    .section .card::before {
+      transition: none;
+    }
+    .section .card:hover {
+      transform: none;
+    }
+  }
+
+  /* La sélection est définie une fois pour la page sombre (blanc sur halo
+     cuivre). Dans une bande claire, le même blanc tombe à ~1.5:1. */
+  .section--light ::selection {
+    color: var(--ink-900);
+  }
+}
+
+/* ==========================================================================
+   Texture et mouvement — portés depuis `assets/css/base.css`.
+
+   Ces règles sont écrites APRÈS les `@layer` de Tailwind, et pas dedans. Les
+   `@layer` de Tailwind v3 ne sont pas des couches CSS natives : c'est un tri à la
+   compilation, et les utilitaires sont émis en dernier. Placé dans
+   `@layer components`, un `text-white` posé sur un titre l'emporterait à
+   spécificité égale sur le balayage.
+   ========================================================================== */
+
+/* ---- 1. Grain -----------------------------------------------------------
+   Matière imprimée plutôt qu'aplat numérique. Fixe, non cliquable, au-dessus de
+   tout : le z-index le plus haut du front est 50. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: var(--grain);
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+/* ---- 2. Balayage de titre ------------------------------------------------
+   Le titre est d'abord posé en couleur pleine. Tout ce qui suit n'ajoute que de
+   la lumière par-dessus : si rien ne s'applique, il reste exactement lisible. */
+[data-sheen] {
+  color: var(--title-ink);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  [data-sheen] {
+    /* Dégradé écrit ICI et non dans `:root` : voir le commentaire du jeton
+       `--title-sheen-pos`. Écrit au point d'usage, il lit la valeur portée par le
+       titre lui-même, celle que le pointeur réécrit. */
+    background-image: linear-gradient(
+      94deg,
+      var(--title-ink) 0%,
+      var(--title-ink) calc(var(--title-sheen-pos) - 24%),
+      var(--title-glint) calc(var(--title-sheen-pos) - 3%),
+      var(--title-glint-warm) calc(var(--title-sheen-pos) + 3%),
+      var(--title-ink) calc(var(--title-sheen-pos) + 24%),
+      var(--title-ink) 100%
+    );
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Sur fond clair, ajouter de la lumière ferait chuter le contraste au lieu de
+     le creuser : le titre y reste en aplat. */
+  .section--light [data-sheen] {
+    background-image: none;
+    -webkit-text-fill-color: var(--text-hi);
+    color: var(--text-hi);
+  }
+
+  /* Contraste forcé : le fond n'est plus peint, un glyphe transparent
+     disparaîtrait purement et simplement. On lui rend sa couleur. */
+  @media (forced-colors: active) {
+    [data-sheen] {
+      background-image: none;
+      -webkit-text-fill-color: currentColor;
+      color: CanvasText;
+    }
+  }
+}
+
+/* ---- 3. Révélation au défilement -----------------------------------------
+   L'état masqué n'est posé que si `data-motion` vaut `on`. La valeur compte, et
+   pas seulement la présence du marqueur : le script d'amorce du système de
+   design écrit `off` quand le visiteur a cliqué « Réduire les animations », et
+   un sélecteur de présence gardait alors `opacity: 0` sur un contenu que plus
+   rien n'allait révéler — `Motion.tsx` refuse justement de poser l'observateur
+   dans ce cas. Un clic suffisait à effacer le contenu d'une page, durablement,
+   puisque la préférence est persistée.
+
+   Sans JavaScript, rien n'est jamais caché. */
+[data-motion="on"] .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--t-reveal) var(--ease-out),
+    transform var(--t-reveal) var(--ease-out);
+}
+[data-motion="on"] .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+[data-motion="on"] .reveal[data-delay="1"] {
+  transition-delay: 60ms;
+}
+[data-motion="on"] .reveal[data-delay="2"] {
+  transition-delay: 120ms;
+}
+[data-motion="on"] .reveal[data-delay="3"] {
+  transition-delay: 180ms;
+}
+[data-motion="on"] .reveal[data-delay="4"] {
+  transition-delay: 240ms;
+}
+[data-motion="on"] .reveal[data-delay="5"] {
+  transition-delay: 300ms;
+}
+
+/* Une carte révélée ne se soulève pas au survol, et c'est le comportement du
+   site : `.reveal.is-visible` et `.section .card:hover` sont à égalité de
+   spécificité, l'ordre source tranche, et le `transform: none` de la révélation
+   est écrit plus bas. `base.css` et `components.css` produisent exactement le
+   même arbitrage sur `xsom.fr`. Le filet cuivre, lui, est porté par `::before` :
+   il n'est pas concerné et reste la signature de survol des cartes révélées. Le
+   soulèvement continue de jouer sur les cartes non révélées (les trois boîtes du
+   schéma de flux). Ne pas « réparer » par une règle plus spécifique : ce serait
+   s'écarter de la charte pour deux pixels. */
+
+/* ---- 4. Mouvement réduit — règle absolue, aucune exception ---------------
+   Deuxième ceinture, indépendante du JavaScript. Le `!important` n'est pas
+   décoratif : la position du balayage est écrite en style EN LIGNE par le
+   pointeur, et seule une déclaration `!important` en feuille de style l'emporte
+   sur un style en ligne sans `!important`. C'est ce qui ramène la lumière au
+   centre si le réglage système bascule en cours de session. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* La ceinture GÉNÉRALE, portée telle quelle de `base.css` (l. 330-341).
+     Elle manquait, et l'annonce « aucune exception » ci-dessus était donc
+     fausse : les deux règles qui suivaient ne couvraient que ce qu'on avait
+     écrit à la main. Tout le reste continuait de bouger — l'`animate-fade-up`
+     du héros (600 ms, translateY), les `animate-ping` / `animate-spin` /
+     `animate-bounce` du loader, ces trois-là en boucle INFINIE, et chaque
+     `transition` / `transition-colors` utilitaire de l'application.
+
+     Le sélecteur universel est la seule forme qui atteigne ce qu'on n'a pas
+     écrit soi-même : les animations émises par Tailwind depuis
+     `tailwind.config.ts` et les classes utilitaires posées au fil des
+     composants. C'est pourquoi la correction est ici et pas dans
+     `components/Loader.tsx` — corriger le loader laisserait le défaut entier
+     partout ailleurs.
+
+     Trois déclarations, chacune indispensable :
+     - `animation-duration` seul ne suffit PAS sur une boucle : un cycle de
+       0,01 ms répété à l'infini reste du mouvement. C'est
+       `animation-iteration-count: 1` qui l'arrête.
+     - On n'écrit pas `animation: none` : cela renverrait un élément animé en
+       `both` à son état de DÉPART — le héros resterait à `opacity: 0`,
+       c'est-à-dire invisible. Une durée quasi nulle le pose au contraire à son
+       état final, immédiatement.
+     - `transition-duration` plutôt que `transition: none` : les changements
+       d'état continuent d'avoir lieu, ils cessent seulement d'être joués. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Les neutralisations spécifiques restent : la ceinture agit sur les DURÉES,
+     jamais sur les valeurs, et ces deux-là posent une valeur. */
+  [data-sheen] {
+    --title-sheen-pos: 50% !important;
+  }
+  /* Sans cette règle, une `.reveal` resterait à `opacity: 0` jusqu'à ce que
+     l'IntersectionObserver la croise — c'est-à-dire invisible si le réglage
+     système bascule alors que `data-motion` est déjà posé. */
+  [data-motion] .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   Le filet cuivre — porté depuis `xsom.fr`
+   (`assets/css/base.css` l. 227-233, dégradé final de
+    `assets/css/components.css` l. 1196-1202).
+
+   Sa définition sur le site tient en une phrase : « le filet cuivre : ouvre
+   chaque section, REMPLACE les séparateurs gris ». Ce n'est donc pas un ornement
+   de plus, c'est le remplaçant du `border-t` neutre en tête de bloc — et les
+   sections qui ouvraient sur `border-t border-white/10` ouvraient sur exactement
+   ce que ce filet remplace.
+
+   Trois arrêts et non une teinte plate : un trait uniforme à côté de surfaces
+   métalliques trahit l'aplat. Le reflet (`--copper-sheen`) attaque, le corps
+   (`--copper`) suit, puis le trait s'éteint. `color-mix` réutilise les jetons au
+   lieu de recopier leurs composantes ; la déclaration au-dessus est le repli pour
+   un navigateur qui ne la connaît pas — c'est la forme d'origine de `base.css`,
+   avec le jeton `--copper-line`, et non une valeur choisie à l'œil.
+
+   Décoratif au sens de WCAG 1.4.11 : le filet n'identifie aucun état et ne porte
+   aucune information. `--copper-line` vaut 1.69:1 sur `--ink-900` ; c'est la
+   valeur du site et elle n'a pas à atteindre 3:1.
+
+   Écrit dans `@layer components` et non en fin de fichier hors couche : sans
+   quoi son `margin-block` l'emporterait sur les utilitaires `mt-*`/`mb-*` posés
+   au point d'usage, à spécificité égale et par ordre source.
+   ========================================================================== */
+@layer components {
+  .rule {
+    height: 1px;
+    border: 0;
+    margin-block: 1rem;
+    background: linear-gradient(90deg, var(--copper-line), transparent 65%);
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--copper-sheen) 55%, transparent) 0%,
+      color-mix(in srgb, var(--copper) 42%, transparent) 30%,
+      transparent 70%
+    );
+  }
+}
+
+/* ============================================================================
+   LE RELEVÉ DES MENACES (`L4` + `L5`, fusionnés)
+
+   Une seule section pour vingt-trois menaces, là où il y en avait deux qui
+   nommaient les mêmes objets. La séparation se lisait comme une répétition :
+   même titre de menace, deux mises en forme, vingt lignes d'écart.
+
+   Chaque rangée répond aux trois questions dans l'ordre où on les pose :
+
+     [rang]  [schéma]        Titre                        [couverture]
+                             Ce que c'est, en une phrase   [densité de preuve]
+                             chemin d'entrée prouvé        [numéro de relevé]
+
+   **Bande claire.** Le relevé est le morceau qu'on lit vraiment, pas qu'on
+   survole, et vingt-trois rangées de texte fin sur fond sombre fatiguent. Tous
+   les jetons employés ici sont contextuels : `.section--light` les réécrit, et
+   la section bascule sans une seule substitution de couleur au point d'usage.
+
+   Contrastes en bande claire, sur `--paper-warm` (#f6f3f0) : titre
+   `--title-ink` 16.40:1, phrase en clair `--text-mid` 7.59:1, étape
+   `--text-low` 5.83:1, numéro de relevé `--text-faint` 5.13:1, rang et mode
+   `--copper-text` (soit `--copper-deep`) 4.69:1.
+
+   **Un piège évité, et c'est le même qu'au lot précédent.** Le cuivre sur lavis
+   cuivre tombe à **4.21:1** en bande claire. L'étape tenue prend donc
+   `var(--paper)` et garde son seul liseré, exactement comme
+   `.section--light .card` et `.section--light .dg-node` le font déjà. Une
+   surface translucide mange toujours la marge du cuivre.
+
+   **`--copper-sheen` est banni de cette section.** Il vaut 8.85:1 sur sombre et
+   1.9:1 sur clair : parfait avant la bascule, illisible après, et rien ne
+   l'aurait signalé. Partout où il portait du texte, `--copper-text` le remplace.
+   ========================================================================== */
+@layer components {
+  /* --- La chaîne d'attaque, montrée une fois en tête : la légende ---------- */
+
+  /* L'étape que la passerelle tient. Fond `--paper` et non `--copper-wash` :
+     voir l'en-tête, le lavis coûte 0.48 de contraste au cuivre. */
+
+  /* --- Le relevé ---------------------------------------------------------- */
+
+  /* Les libellés de colonnes. Ils rendent la colonne de droite lisible tout de
+     suite : `[ B ] BLOQUÉ ||||· M-02` se reconstitue sinon par déduction.
+     Sous 1000px la grille n'a que deux colonnes, ils n'auraient rien à
+     surmonter et sortent. `--text-low` plutôt que le `--text-faint` de
+     `.label` : ce sont les plus petits caractères de la section. */
+
+  /* La grille est portée par le bouton : toute la rangée est la cible de clic,
+     et non un chevron de 16px que personne ne vise du premier coup. */
+  .menace {
+    display: grid;
+    width: 100%;
+    text-align: left;
+    grid-template-columns: var(--releve-cols);
+    gap: 0.25rem var(--releve-gap);
+    align-items: start;
+    padding: 1.15rem 0.25rem;
+  }
+
+  /* Placement explicite, et ce n'est pas une précaution.
+
+     La grille n'a que deux colonnes sous 1000px, mais la rangée a quatre
+     enfants et aucun ne déclarait sa colonne. Le placement automatique posait
+     donc le titre et la phrase en clair DANS la colonne de 2.75rem : mesuré,
+     le corps faisait 44px de large à 900px comme à 390px, le texte se cassait
+     caractère par caractère, et la section pesait dix-huit écrans sur mobile.
+     Le défaut était là avant ce lot et personne ne l'avait vu. */
+
+  /* Le corps de la rangée. `min-width: 0` porté par la classe et non par un
+     utilitaire au point d'usage : une piste de grille ne se laisse pas
+     rétrécir sous la largeur de son contenu sans qu'on le lui dise, et le
+     titre déborderait sa colonne. */
+
+  /* Le bouton n'avait aucun anneau de focus et retombait sur celui du
+     navigateur. Beaucoup de cibles, dont la plupart hautes de 39px : la
+     navigation au clavier a besoin qu'on dise où elle est. L'offset négatif
+     garde l'anneau dans la rangée, sans heurter le filet de la voisine. */
+  /* Le maillon de chaîne est un bouton depuis qu'il filtre. Trois états à dire :
+     survol, focus clavier, et pressé. Le pressé passe par le PAPIER et un filet
+     cuivre, jamais par un lavis — `bg-brand/15` n'émet aucune règle, et un lavis
+     sous du cuivre était mesuré à 4.21:1 en bande claire. */
+
+  /* Le compte par maillon. Il est là pour que replier ne cache rien : le lecteur
+     voit combien de menaces chaque maillon porte avant de cliquer. */
+
+  .menace:focus-visible {
+    outline: 2px solid var(--copper-text);
+    outline-offset: -2px;
+  }
+
+  /* Le schéma : la chaîne en réduction, le point d'entrée allumé. Sous 1000px
+     il passe en ligne avec son libellé plutôt que de disparaître : c'est la
+     seule chose qui dise *où* la menace entre. */
+
+  /* La colonne de droite : ce que le backend en tient. */
+
+  /* --- Le second registre -------------------------------------------------
+
+     Le haut du classement se lit en rangées pleines ; le reste se lit en
+     lignes. Ce qui coûte la hauteur n'est pas le nombre de rangées, c'est la
+     figure de 112px peinte sur chaque rangée FERMÉE : mesuré, une rangée
+     fermée fait 176px et sa figure en fait 112. La ligne compacte tombe à
+     39px, et la figure revient à l'ouverture.
+
+     Rien n'est retiré du document. La figure, la phrase en clair et le chemin
+     d'entrée sont servis au premier rendu pour toutes les menaces et restent
+     dans `textContent` : la recherche dans la page les trouve, un robot les
+     lit, et la règle que ce fichier s'est donnée — une rangée qui ne concerne
+     pas le visiteur est estompée, jamais cachée — n'est pas contredite. C'est
+     ce qui a fait préférer la compaction à un `<details>` qui aurait replié le
+     bas du classement : le pli n'économisait que 0.73 écran de plus, au prix
+     de tout cela.
+
+     La coupure suit le drapeau `critique` de `lib/menaces.ts`. Aucun rang,
+     aucun seuil, aucun nombre n'est écrit ici : basculer un drapeau dans le
+     classement déplace la rangée de registre toute seule.
+
+     `:not([aria-expanded="true"])` annule la compaction, si bien qu'un clic
+     rend la rangée pleine ET ouvre son panneau de preuve d'un coup. La rangée
+     hors carte ne porte pas l'attribut du tout — elle ne peut pas s'ouvrir —
+     donc elle reste compacte, ce qui est ce qu'il faut. */
+
+  /* La figure partie, l'étape reste seule dans sa colonne, en face du titre.
+     `display: none` et non `visibility` ni une opacité : la figure sort ainsi
+     de l'arbre d'accessibilité au lieu d'y laisser son `<title>` en double. */
+
+  /* Au-dessus du point de rupture la couverture repasse en ligne, calée à
+     droite, sur la colonne que la barre de libellés surmonte. Sous 1000px elle
+     retombe sous le titre et la ligne compacte fait deux ou trois lignes : le
+     registre en une ligne n'existe qu'à partir du point de rupture, c'est
+     assumé. */
+
+  /* La pastille : cinq points, celui de l'étape allumé. */
+  .points {
+    width: 52px;
+    height: 10px;
+    flex: none;
+  }
+}
+
+/* ============================================================================
+   LES DIAGRAMMES DE MENACE (`L4`)
+
+   Une figure par menace, et une seule grammaire pour les vingt-trois : sans elle
+   on obtient une collection de dessins, pas un système. Le vocabulaire tient en
+   six classes, et la couleur ne vient QUE d'elles. Une figure qui écrirait sa
+   propre couleur ne basculerait pas avec la bande, et
+   `tests/test_schemas_menaces.py` la rejette avant la construction.
+
+     .n      une station              .a   le trait de l'attaque
+     .n--hot une station compromise   .x   une barre de blocage
+     .f      un flux normal           .d   une frontière en pointillés
+     .t      une étiquette            .t--hot   une étiquette d'accent
+
+   Contrastes mesurés, bande claire sur `--paper-warm` avec les boîtes en
+   `--paper` : traits et flux 5.83:1 (6.11 sur une boîte), attaque 4.69:1
+   (5.19 sur une boîte), étiquettes 7.59:1, étiquette d'accent 5.19:1. Les traits
+   et les flèches portent de l'information au sens de WCAG 1.4.11 — une figure
+   dont on ne verrait pas les liens ne dirait plus rien — d'où le seuil 3:1 tenu
+   avec `--text-low` et non un gris décoratif.
+
+   **Le lavis est banni ici aussi.** `--copper-wash` sous une étiquette cuivre
+   donnait 4.62:1, soit 0.12 de marge. La station compromise garde donc le fond
+   `--paper` et ne se distingue que par son cadre et son étiquette : 5.19:1. Une
+   surface translucide mange toujours la marge du cuivre, et c'est la troisième
+   fois que ce fichier le constate.
+
+   **Le mouvement est à l'arrêt par défaut**, et c'est délibéré. Vingt-trois
+   figures qui s'animent en même temps font une page qui clignote, pas une page
+   qui explique. Le trait d'attaque ne se met en marche qu'au survol de sa rangée
+   ou quand elle est ouverte : le mouvement devient alors une réponse à un geste,
+   donc une information.
+   ========================================================================== */
+@layer components {
+  .diag {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+
+    --diag-line: var(--text-low);
+    --diag-text: var(--text-mid);
+    --diag-hot: var(--copper-text);
+    --diag-face: var(--paper);
+  }
+
+  .diag--grand {
+    max-width: 400px;
+  }
+
+  .diag .n {
+    fill: var(--diag-face);
+    stroke: var(--diag-line);
+    stroke-width: 1;
+  }
+
+  .diag .n--hot {
+    stroke: var(--diag-hot);
+    stroke-width: 1.4;
+  }
+
+  .diag .f {
+    fill: none;
+    stroke: var(--diag-line);
+    stroke-width: 1;
+    stroke-linecap: round;
+  }
+
+  .diag .a {
+    fill: none;
+    stroke: var(--diag-hot);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Un polygone d'attaque (une pointe, un éclat) veut du plein, pas un contour.
+     `fill: none` sur `.a` le rendrait invisible ; cette règle le rattrape sans
+     obliger l'auteur de la figure à écrire une couleur. */
+  .diag polygon.a {
+    fill: var(--diag-hot);
+  }
+
+  .diag .x {
+    fill: none;
+    stroke: var(--diag-hot);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+  }
+
+  .diag .d {
+    fill: none;
+    stroke: var(--diag-line);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .diag .t {
+    fill: var(--diag-text);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .diag .t--hot {
+    fill: var(--diag-hot);
+  }
+
+  .diag .mk {
+    fill: var(--diag-line);
+    stroke: none;
+  }
+
+  .diag .mk--hot {
+    fill: var(--diag-hot);
+  }
+
+  /* Les marqueurs vivent dans le `<defs>` partagé, hors de tout `.diag` : la règle
+     ci-dessus ne les atteint pas. Ils prennent donc leurs jetons au document. */
+  .mk {
+    fill: var(--text-low);
+    stroke: none;
+  }
+
+  .mk--hot {
+    fill: var(--copper-text);
+  }
+
+  /* Le trait d'attaque en marche : un pointillé qui remonte le chemin. À l'arrêt,
+     `stroke-dasharray` n'est pas posé du tout — le trait reste plein et lisible,
+     ce qui compte pour la figure imprimée ou capturée. */
+
+  @keyframes diagFlux {
+    to {
+      stroke-dashoffset: -18;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+# Dépendances et constructions
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Tests
+test-results/
+playwright-report/
+
+# Secrets : jamais dans git. Le site n'a aucune variable obligatoire ; une variable
+# facultative (recherche par IA du glossaire) se pose dans l'hébergeur, pas ici.
+.env
+.env.*
+!.env.example
+
+# Films (Remotion) : ressources téléchargées ou recréées par les scripts, jamais versionnées.
+# `films/public/` : séquences Pexels, polices et logo copiés, musiques synthétisées, captures
+# de la console de démonstration. `films/out/` : images clés et journaux de sonde.
+films/public/
+films/out/
+
+# Lien Vercel local (la configuration de déploiement vit dans le projet Vercel)
+.vercel/
+
+# Éditeur et système
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Outillage d'assistants IA : jamais publié.
+/.ignore
+/AGENTS.md
+/CLAUDE.md
+/frontend/AGENTS.md
+/frontend/CLAUDE.md
+/.claude/
+/.mcp.json
+/_bmad/
+/_bmad-output/
+/graft/
+
+# Sorties locales
+/local/
