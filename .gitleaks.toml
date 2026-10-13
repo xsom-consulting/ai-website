@@ -1,0 +1,13 @@
+title = "ai-website"
+
+[extend]
+useDefault = true
+
+# Seule exception : l'identifiant de menace « vol-cle-api-ia » rapproché du nom d'un
+# fichier d'image (un UUID). Ce n'est pas une clé : il n'y a aucun secret dans ce dépôt.
+[[allowlists]]
+description = "Identifiant de menace et nom de fichier d'image dans frontend/lib/threat-visuals.ts"
+condition = "AND"
+regexTarget = "line"
+paths = ['''frontend/lib/threat-visuals\.ts$''']
+regexes = ['''"vol-cle-api-ia": "[0-9a-f-]{36}\.webp"''']

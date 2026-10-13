@@ -55,6 +55,12 @@ glossaire filtre le texte dans le navigateur. La politique de confidentialité e
 Projet Vercel : racine `frontend`, Next.js, Node 24. Les trois noms d'hôte (`ai.xsom.fr`,
 `fleet.xsom.fr`, `guard.xsom.fr`) pointent vers ce même projet. Aucune variable n'est à renseigner.
 
+## Recherche de secrets
+
+```sh
+gitleaks git --no-banner .   # historique ; `.gitleaks.toml` porte l'unique exception, un faux positif documenté
+```
+
 ## Intégration continue
 
 `.github/workflows/ci.yml` se déclenche à chaque push et à chaque pull request : installation,
