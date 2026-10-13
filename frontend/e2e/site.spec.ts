@@ -58,6 +58,24 @@ test("rien ne mène à une connexion, une inscription ou un appairage", async ({
   }
 });
 
+test("chaque film déclaré et chaque affiche existent", async ({ page, request }) => {
+  const declared = new Set<string>();
+  for (const chemin of ["/", "/fleet", "/secret-guard"]) {
+    await page.goto(chemin);
+    const urls = await page.locator("video").evaluateAll((videos) =>
+      videos.flatMap((video) => [video.getAttribute("src"), video.getAttribute("poster")].filter((url): url is string => !!url)),
+    );
+    for (const url of urls) declared.add(url);
+  }
+  // Accueil IA, Fleet (accueil et cinq films), Secret Guard : au moins treize fichiers.
+  expect(declared.size).toBeGreaterThanOrEqual(13);
+  for (const url of declared) {
+    // Les premiers octets suffisent : on prouve que le fichier est servi, sans le télécharger.
+    const reponse = await request.get(url, { headers: { range: "bytes=0-1" } });
+    expect([200, 206], url).toContain(reponse.status());
+  }
+});
+
 test("le site n'exige aucune variable d'environnement : la recherche par IA est facultative", async ({ request }) => {
   // Sans clé, la route répond « indisponible » et le glossaire retombe sur son filtre local.
   const reponse = await request.post("/api/threat-search", { data: { query: "injection de prompt", lang: "fr" } });

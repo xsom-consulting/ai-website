@@ -8,7 +8,9 @@ import { expect, test, type Page } from "@playwright/test";
  */
 const PORT = Number(process.env.XSOM_E2E_PORT ?? 3100);
 
-test.use({ launchOptions: { args: ["--host-resolver-rules=MAP *.xsom.fr 127.0.0.1"] } });
+// Mouvement réduit : les films ne se téléchargent pas (leur présence est vérifiée à part,
+// dans `site.spec.ts`), si bien que la page atteint le calme réseau sur une machine chargée.
+test.use({ launchOptions: { args: ["--host-resolver-rules=MAP *.xsom.fr 127.0.0.1"] }, contextOptions: { reducedMotion: "reduce" } });
 
 function watch(page: Page) {
   const problems: string[] = [];
@@ -31,7 +33,7 @@ const sites = [
 for (const site of sites) {
   test(`${site.host} has its brand, its menu and no console error`, async ({ page }) => {
     const problems = watch(page);
-    await page.goto(`http://${site.host}:${PORT}/`, { waitUntil: "networkidle" });
+    await page.goto(`http://${site.host}:${PORT}/`, { waitUntil: "load" });
     await expect(page.locator(".guard-header .brand__name").first()).toHaveText(site.brand);
     await expect(page.locator("h1").first()).toContainText(site.heading.split(" ").slice(0, 3).join(" "));
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
@@ -47,7 +49,7 @@ for (const site of sites) {
   for (const path of site.paths.filter((p) => p !== "/")) {
     test(`${site.host}${path} loads without console error`, async ({ page }) => {
       const problems = watch(page);
-      const response = await page.goto(`http://${site.host}:${PORT}${path}`, { waitUntil: "networkidle" });
+      const response = await page.goto(`http://${site.host}:${PORT}${path}`, { waitUntil: "load" });
       expect(response?.status()).toBe(200);
       await expect(page.locator(".guard-header .brand__name").first()).toHaveText(site.brand);
       expect(problems).toEqual([]);
@@ -56,7 +58,7 @@ for (const site of sites) {
 }
 
 test("a link from one production address to another is absolute", async ({ page }) => {
-  await page.goto(`http://ai.xsom.fr:${PORT}/`, { waitUntil: "networkidle" });
+  await page.goto(`http://ai.xsom.fr:${PORT}/`, { waitUntil: "load" });
   const products = page.locator("#produits");
   await expect(products.getByRole("link", { name: /Découvrir xSOM Fleet/ })).toHaveAttribute("href", "https://fleet.xsom.fr/");
   await expect(products.getByRole("link", { name: /Découvrir Secret Guard/ })).toHaveAttribute("href", "https://guard.xsom.fr/");
