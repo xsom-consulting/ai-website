@@ -1,0 +1,906 @@
+.guard-glossary__skip {
+  position: absolute;
+  inset: var(--sp-3) auto auto var(--sp-3);
+  z-index: var(--signal-z-overlay);
+  padding: var(--sp-3) var(--sp-4);
+  color: var(--signal-accent-ink);
+  background: var(--signal-accent);
+  transform: translateY(-200%);
+}
+.guard-glossary__skip:focus {
+  transform: translateY(0);
+}
+.guard-glossary__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.guard-glossary__hero {
+  padding-block: var(--sp-8) var(--sp-12);
+}
+.guard-glossary__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: var(--signal-touch);
+  color: var(--signal-muted);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-10);
+}
+.guard-glossary__hero h1 {
+  max-width: 18ch;
+  margin-top: var(--sp-4);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+.guard-glossary__intro {
+  max-width: 62ch;
+  margin-top: var(--sp-6) !important;
+  color: var(--signal-muted);
+  font-size: var(--fs-lead);
+}
+.guard-glossary__content {
+  padding-bottom: var(--sp-16);
+  scroll-margin-top: var(--sp-6);
+}
+
+/* --- Barre de recherche et de filtres -------------------------------------- */
+/* Une lecture de haut en bas : la recherche, puis deux étapes numérotées, puis
+   un repli pour tout le reste. Le tri appartient aux résultats, pas aux filtres. */
+.guard-glossary__toolbar {
+  display: grid;
+  gap: var(--sp-6);
+  padding: var(--sp-6);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--r-lg);
+  background: var(--signal-surface);
+}
+.guard-glossary__hint {
+  margin-bottom: calc(var(--sp-2) * -1) !important;
+  padding-top: var(--sp-5);
+  border-top: var(--signal-border) solid var(--signal-line);
+  font-size: var(--fs-sm);
+  color: var(--signal-muted);
+}
+.guard-glossary__facet-label {
+  display: flex !important;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.guard-glossary__step {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-family: var(--signal-font-mono);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  color: var(--signal-accent-ink);
+  background: var(--signal-accent);
+}
+.guard-glossary__search label,
+.guard-glossary__select label,
+.guard-glossary__facet-label {
+  display: block;
+  margin-bottom: var(--sp-2) !important;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--signal-text);
+}
+.guard-glossary__search > div,
+.guard-glossary__select > div {
+  position: relative;
+}
+.guard-glossary__search svg,
+.guard-glossary__select svg {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke: var(--signal-faint);
+  stroke-width: 1.5;
+  fill: none;
+  pointer-events: none;
+}
+.guard-glossary__search svg {
+  left: var(--sp-3);
+}
+.guard-glossary__select svg {
+  right: var(--sp-3);
+}
+.guard-glossary__search input,
+.guard-glossary__select select {
+  width: 100%;
+  min-height: var(--signal-touch);
+  border: var(--signal-border) solid var(--signal-line-strong);
+  border-radius: var(--r-md);
+  font: inherit;
+  color: var(--signal-text);
+  background: var(--signal-bg);
+}
+.guard-glossary__search input {
+  min-height: 3.25rem;
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-10);
+  font-size: var(--fs-body);
+}
+.guard-glossary__select select {
+  appearance: none;
+  padding: var(--sp-2) var(--sp-10) var(--sp-2) var(--sp-3);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.guard-glossary__select select:focus-visible {
+  outline: var(--signal-focus) solid var(--signal-accent-text);
+  outline-offset: 2px;
+}
+.guard-glossary__search input::placeholder {
+  color: var(--signal-faint);
+}
+.guard-glossary__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.guard-glossary__filters button {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--sp-1);
+  min-height: var(--signal-touch);
+  padding: var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-4);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--r-md);
+  color: var(--signal-muted);
+  background: var(--signal-surface);
+  font-size: var(--fs-sm);
+}
+.guard-glossary__chip-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.guard-glossary__filters small {
+  font-size: var(--fs-xs);
+  line-height: 1.35;
+  text-align: left;
+  color: var(--signal-faint);
+}
+.guard-glossary__filters button[aria-pressed="true"] small {
+  color: inherit;
+  opacity: 0.85;
+}
+/* La couverture se lit en cartes : le libellé, son compte, et ce qu'il veut dire. */
+.guard-glossary__filters button:hover {
+  border-color: var(--signal-accent-text);
+}
+.guard-glossary__filters button[aria-pressed="true"] {
+  border-color: var(--signal-accent);
+  color: var(--signal-accent-ink);
+  background: var(--signal-accent);
+}
+.guard-glossary__count {
+  min-width: 1.75em;
+  padding: 0 var(--sp-1);
+  border-radius: var(--r-sm);
+  font-family: var(--signal-font-mono);
+  font-size: var(--fs-label);
+  line-height: 1.6;
+  text-align: center;
+  color: var(--signal-faint);
+  background: var(--signal-bg);
+}
+.guard-glossary__filters button[aria-pressed="true"] .guard-glossary__count {
+  color: inherit;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+.guard-glossary__legend {
+  max-width: 80ch;
+  margin-bottom: var(--sp-3) !important;
+  font-size: var(--fs-xs);
+  color: var(--signal-faint);
+}
+.guard-glossary__selects {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+/* --- Plus de filtres : un repli, fermé par défaut ---------------------------- */
+.guard-glossary__more {
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--r-md);
+  background: var(--signal-bg);
+}
+.guard-glossary__more summary {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: var(--signal-touch);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  list-style: none;
+}
+.guard-glossary__more summary::-webkit-details-marker {
+  display: none;
+}
+.guard-glossary__more summary:focus-visible {
+  outline: var(--signal-focus) solid var(--signal-accent-text);
+  outline-offset: 2px;
+  border-radius: var(--r-md);
+}
+.guard-glossary__more-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--signal-text);
+}
+.guard-glossary__more-hint {
+  overflow: hidden;
+  font-size: var(--fs-xs);
+  color: var(--signal-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.guard-glossary__more summary > svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke: var(--signal-faint);
+  stroke-width: 1.5;
+  fill: none;
+}
+[data-motion="on"] .guard-glossary__more summary > svg {
+  transition: transform var(--signal-normal) var(--signal-ease);
+}
+.guard-glossary__more[open] summary > svg {
+  transform: rotate(180deg);
+}
+.guard-glossary__more[open] summary {
+  border-bottom: var(--signal-border) solid var(--signal-line);
+}
+.guard-glossary__badge {
+  min-width: 1.5em;
+  padding: 0 var(--sp-1);
+  border-radius: var(--r-sm);
+  font-family: var(--signal-font-mono);
+  font-size: var(--fs-label);
+  line-height: 1.6;
+  text-align: center;
+  color: var(--signal-accent-ink);
+  background: var(--signal-accent);
+}
+.guard-glossary__more-body {
+  display: grid;
+  gap: var(--sp-6);
+  padding: var(--sp-5) var(--sp-4);
+}
+.guard-glossary__group-fields {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.guard-glossary__group-fields legend {
+  margin-bottom: var(--sp-3);
+  padding: 0;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--signal-tracking);
+  text-transform: uppercase;
+  color: var(--signal-faint);
+}
+
+/* --- Panneau du moteur Secret Guard ---------------------------------------- */
+.guard-glossary__guard h3 {
+  color: var(--signal-accent-text);
+}
+
+/* --- Résultats -------------------------------------------------------------- */
+.guard-glossary__results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  min-height: 4.75rem;
+  padding-block: var(--sp-4);
+  font-size: var(--fs-sm);
+  color: var(--signal-faint);
+}
+.guard-glossary__results-heading strong {
+  font-family: var(--signal-font-mono);
+  color: var(--signal-text);
+}
+.guard-glossary__results-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  min-width: 0;
+}
+.guard-glossary__active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.guard-glossary__active button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-height: 2rem;
+  padding: var(--sp-1) var(--sp-2) var(--sp-1) var(--sp-3);
+  border: var(--signal-border) solid var(--signal-accent);
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  color: var(--signal-accent-text);
+  background: color-mix(in srgb, var(--signal-accent) 8%, transparent);
+}
+.guard-glossary__active button:hover {
+  background: color-mix(in srgb, var(--signal-accent) 16%, transparent);
+}
+.guard-glossary__active svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  fill: none;
+}
+.guard-glossary__reset {
+  padding: var(--sp-2) 0;
+  min-height: var(--signal-touch);
+  color: var(--signal-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  border: 0;
+  background: transparent;
+}
+.guard-glossary__select[data-inline] {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.guard-glossary__select[data-inline] label {
+  margin-bottom: 0 !important;
+  font-weight: 500;
+  color: var(--signal-faint);
+  white-space: nowrap;
+}
+.guard-glossary__select[data-inline] > div {
+  min-width: 12rem;
+}
+
+/* --- Le tableau ------------------------------------------------------------- */
+.guard-glossary__table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--fs-sm);
+}
+.guard-glossary__col--threat {
+  width: 24%;
+}
+.guard-glossary__col--visual {
+  width: 14%;
+}
+.guard-glossary__col--attack {
+  width: 32%;
+}
+.guard-glossary__col--mitigation {
+  width: 30%;
+}
+.guard-glossary__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: var(--signal-border) solid var(--signal-line-strong);
+  background: var(--signal-bg);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: left;
+  color: var(--signal-faint);
+}
+.guard-glossary__group th {
+  padding: var(--sp-8) var(--sp-4) var(--sp-3);
+  border-bottom: var(--signal-border) solid var(--signal-line-strong);
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  text-align: left;
+  color: var(--signal-text);
+}
+.guard-glossary__group span {
+  margin-left: var(--sp-2);
+  font-family: var(--signal-font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  color: var(--signal-faint);
+}
+.guard-glossary__row > * {
+  padding: var(--sp-4);
+  border-bottom: var(--signal-border) solid var(--signal-line);
+  vertical-align: top;
+  text-align: left;
+  color: var(--signal-muted);
+  line-height: 1.5;
+}
+.guard-glossary__row:hover > *,
+.guard-glossary__row[data-open] > * {
+  background: var(--signal-surface);
+}
+.guard-glossary__row[data-open] > :first-child {
+  box-shadow: inset 3px 0 0 var(--signal-accent);
+}
+.guard-glossary__row[data-open] > * {
+  border-bottom-color: transparent;
+}
+.guard-glossary__threat {
+  font-weight: 400;
+  scroll-margin-top: var(--sp-16);
+}
+.guard-glossary__kicker {
+  display: block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--signal-tracking);
+  text-transform: uppercase;
+  color: var(--signal-accent-text);
+}
+.guard-glossary__threat button {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--signal-text);
+}
+.guard-glossary__threat button:hover span {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.guard-glossary__threat button svg {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: var(--signal-accent-text);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.guard-glossary__threat button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+[data-motion="on"] .guard-glossary__threat button svg {
+  transition: transform var(--signal-normal) var(--signal-ease);
+}
+.guard-glossary__code {
+  display: inline-block;
+  margin-top: var(--sp-2);
+  font-family: var(--signal-font-mono);
+  font-size: var(--fs-label);
+  color: var(--signal-faint);
+}
+.guard-glossary__visual {
+  position: relative;
+  display: block;
+  width: 4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--signal-accent-text);
+  cursor: zoom-in;
+}
+.guard-glossary__visual img {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  border: var(--signal-border) solid var(--signal-line-strong);
+  border-radius: var(--r-sm);
+  object-fit: cover;
+  background: var(--signal-bg);
+}
+.guard-glossary__visual span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.guard-glossary__visual:hover img,
+.guard-glossary__visual:focus-visible img {
+  border-color: var(--signal-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal-accent) 16%, transparent);
+}
+.guard-glossary__modal-backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-5);
+  background: color-mix(in srgb, var(--signal-text) 62%, transparent);
+}
+.guard-glossary__modal {
+  width: min(60rem, 100%);
+  max-height: calc(100vh - 2 * var(--sp-5));
+  overflow: auto;
+  border: var(--signal-border) solid var(--signal-line-strong);
+  border-radius: var(--r-lg);
+  background: var(--signal-bg);
+  box-shadow: 0 2rem 5rem color-mix(in srgb, var(--signal-text) 42%, transparent);
+}
+.guard-glossary__modal header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: var(--signal-border) solid var(--signal-line);
+}
+.guard-glossary__modal h2 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-h3);
+  color: var(--signal-text);
+}
+.guard-glossary__modal header button {
+  display: grid;
+  flex: 0 0 auto;
+  width: var(--signal-touch);
+  height: var(--signal-touch);
+  place-items: center;
+  border: var(--signal-border) solid var(--signal-line-strong);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--signal-text);
+  cursor: pointer;
+}
+.guard-glossary__modal > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- Le détail d'une ligne -------------------------------------------------- */
+.guard-glossary__details > td {
+  padding: 0 var(--sp-4) var(--sp-6);
+  border-bottom: var(--signal-border) solid var(--signal-line);
+  background: var(--signal-surface);
+  box-shadow: inset 3px 0 0 var(--signal-accent);
+}
+.guard-glossary__details[hidden] {
+  display: none;
+}
+/* Définition, couverture, figure : autant de colonnes que la ligne a de choses à
+   dire, et qui se replient d'elles-mêmes quand la place manque. */
+.guard-glossary__detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--sp-6);
+  align-items: start;
+  padding-top: var(--sp-2);
+  overflow-wrap: anywhere;
+}
+.guard-glossary__detail-column {
+  display: grid;
+  gap: var(--sp-4);
+  max-width: 72ch;
+}
+.guard-glossary__detail h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-body), sans-serif;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--signal-faint);
+}
+.guard-glossary__detail p {
+  margin-top: var(--sp-2) !important;
+  color: var(--signal-muted);
+}
+.guard-glossary__definition {
+  color: var(--signal-text) !important;
+}
+.guard-glossary__example {
+  padding: var(--sp-4);
+  border-left: 2px solid var(--signal-line-strong);
+  background: var(--signal-bg);
+}
+.guard-glossary__guard {
+  padding: var(--sp-4);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--r-md);
+  background: var(--signal-bg);
+}
+.guard-glossary__guard a {
+  display: inline-flex;
+  gap: var(--sp-1);
+  min-height: var(--signal-touch);
+  align-items: center;
+  margin-top: var(--sp-1);
+  color: var(--signal-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.guard-glossary__facets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-8);
+  margin: 0;
+}
+.guard-glossary__facets dt {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--signal-faint);
+}
+.guard-glossary__facets dd {
+  margin: var(--sp-1) 0 0;
+  color: var(--signal-text);
+}
+.guard-glossary__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.guard-glossary__tags span {
+  padding: var(--sp-1) var(--sp-2);
+  color: var(--signal-accent-text);
+  background: var(--signal-accent-wash);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+}
+.guard-glossary__source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-height: var(--signal-touch);
+  border-top: var(--signal-border) solid var(--signal-line);
+  padding-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--signal-accent-text);
+}
+/* La figure explique le mécanisme que la ligne vient de nommer.
+
+   Les quatre jetons sont obligatoires : `.diag` les fait par défaut pointer sur la
+   palette de `globals.css`, dont `--paper`, un blanc que le système de design ne
+   rebride pas. Sans ce bloc, les stations sortiraient blanches sur un fond sombre. */
+.guard-glossary__figure {
+  display: flex;
+  justify-content: center;
+  padding: var(--sp-4);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--r-md);
+  background: var(--signal-bg);
+}
+.guard-glossary__figure .diag {
+  --diag-line: var(--signal-faint);
+  --diag-text: var(--signal-muted);
+  --diag-hot: var(--signal-accent-text);
+  --diag-face: var(--signal-bg);
+}
+/* Le trait d'attaque se met en marche au survol de la figure : un mouvement qui
+   répond à un geste, comme sur le classement. */
+[data-motion="on"] .guard-glossary__figure:hover .diag .a-move {
+  stroke-dasharray: 5 4;
+  animation: diagFlux 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-motion="on"] .guard-glossary__figure:hover .diag .a-move {
+    stroke-dasharray: none;
+    animation: none;
+  }
+}
+
+.guard-glossary__empty {
+  text-align: center;
+  padding: var(--sp-12) var(--sp-6);
+  border: var(--signal-border) dashed var(--signal-line-strong);
+  border-radius: var(--r-lg);
+}
+.guard-glossary__empty h2 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+.guard-glossary__empty p {
+  margin-block: var(--sp-3) var(--sp-5);
+  color: var(--signal-muted);
+}
+.guard-glossary__scope {
+  max-width: 90ch;
+  margin-top: var(--sp-6) !important;
+  font-size: var(--fs-sm);
+  color: var(--signal-faint);
+}
+.guard-glossary__scope a {
+  color: var(--signal-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.guard-glossary__next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  padding: var(--sp-8);
+  margin-top: var(--sp-12);
+  border-radius: var(--r-lg);
+  background: var(--signal-accent-wash);
+}
+.guard-glossary__next h2 {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+.guard-glossary__next p {
+  margin-top: var(--sp-3);
+  color: var(--signal-muted);
+}
+.guard-glossary__next .guard-button {
+  flex-shrink: 0;
+}
+
+/* Sous 1024px, six colonnes ne tiennent plus : chaque ligne devient une fiche, dont
+   les cellules gardent leur intitulé de colonne. Le titre vient d'abord, puis les
+   deux verdicts côte à côte, puis l'attaque, la parade et les outils. */
+@media (max-width: 1024px) {
+  .guard-glossary__table,
+  .guard-glossary__table tbody,
+  .guard-glossary__table tr,
+  .guard-glossary__table th,
+  .guard-glossary__table td {
+    display: block;
+    width: auto;
+  }
+  .guard-glossary__table colgroup,
+  .guard-glossary__table thead {
+    display: none;
+  }
+  .guard-glossary__group th {
+    padding: var(--sp-8) 0 var(--sp-1);
+    border: 0;
+  }
+  .guard-glossary__table tbody:first-of-type .guard-glossary__group th {
+    padding-top: 0;
+  }
+  .guard-glossary__table .guard-glossary__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-4);
+    margin-top: var(--sp-3);
+    padding: var(--sp-5);
+    border: var(--signal-border) solid var(--signal-line);
+    border-radius: var(--r-lg);
+    background: var(--signal-surface);
+  }
+  .guard-glossary__row[data-open] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 0;
+  }
+  .guard-glossary__row > *,
+  .guard-glossary__row:hover > *,
+  .guard-glossary__row[data-open] > *,
+  .guard-glossary__row[data-open] > :first-child {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .guard-glossary__row > .guard-glossary__threat {
+    grid-column: 1 / -1;
+  }
+  .guard-glossary__row > [data-cell="visual"] { order: 1; }
+  .guard-glossary__row > [data-cell="attack"] {
+    order: 2;
+    grid-column: 1 / -1;
+  }
+  .guard-glossary__row > [data-cell="mitigation"] {
+    order: 3;
+    grid-column: 1 / -1;
+  }
+  .guard-glossary__row > td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--signal-faint);
+  }
+  .guard-glossary__details > td {
+    padding: var(--sp-2) var(--sp-5) var(--sp-5);
+    border: var(--signal-border) solid var(--signal-line);
+    border-top: 0;
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
+    box-shadow: none;
+    background: var(--signal-surface);
+  }
+  .guard-glossary__selects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 800px) {
+  .guard-glossary .guard-header__inner {
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+  .guard-glossary .guard-header nav {
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .guard-glossary .guard-header nav > a:first-child {
+    display: inline-flex;
+  }
+  .guard-glossary__more summary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .guard-glossary__more-hint {
+    display: none;
+  }
+  .guard-glossary__next {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+@media (max-width: 480px) {
+  .guard-glossary__back {
+    margin-bottom: var(--sp-6);
+  }
+  .guard-glossary__toolbar,
+  .guard-glossary__next {
+    padding: var(--sp-5);
+  }
+  .guard-glossary__row {
+    padding: var(--sp-4);
+  }
+  .guard-glossary__selects {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .guard-glossary__filters button {
+    flex-grow: 1;
+  }
+  .guard-glossary__select[data-inline],
+  .guard-glossary__select[data-inline] > div {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .guard-glossary__next .guard-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,48 @@
+/* Homepage only. Shared xSOM tokens and console remain separate. */
+.guard-home { --home-ink: #0c1c33; --home-ice: #9dccff; --home-risk: #f9b8a5; --home-muted: #b4c8df; }
+.guard-home .guard-header__inner { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; }
+.guard-home .guard-header .brand { grid-column: 1; justify-self: start; }
+.guard-home .guard-header nav { grid-column: 2; justify-self: center; flex-wrap: nowrap; white-space: nowrap; }
+.guard-home .guard-header .console-language { grid-column: 3; justify-self: end; }
+.guard-home .guard-header .brand__name { color: #152b45; }
+.guard-home .guard-header .brand__product { color: #53677d; }
+.guard-home .guard-header nav > a:not(.guard-button) { color: #334b65; }
+.guard-home .guard-header nav > a:not(.guard-button):hover { color: #195ca8; }
+.guard-home .guard-header .xsom-brand-mark__dark { display: block; }
+.guard-home .guard-header .xsom-brand-mark__light { display: none; }
+.guard-home .guard-header .console-language button { color: #66798e; }
+.guard-home .guard-header .console-language button:hover { color: #195ca8; }
+.guard-home .guard-header .console-language button[aria-pressed="true"] { color: #152b45; }
+.guard-home .guard-header :is(a, button):focus-visible { outline-color: #195ca8; }
+.guard-glossary-link { display: flex; align-items: center; gap: 1.5rem; margin-top: 3rem; padding-block: 1.5rem; border-top: 1px solid var(--signal-line); border-bottom: 1px solid var(--signal-line); }
+.guard-glossary-link__icon { flex-shrink: 0; font: 500 1.75rem var(--font-display), sans-serif; color: var(--signal-accent-text); width: 50px; }
+.guard-glossary-link h3 { font-size: 1.1rem; font-weight: 600; }
+.guard-glossary-link p { color: var(--signal-muted); font-size: .9rem; margin-top: .25rem; max-width: 58ch; }
+.guard-glossary-link a { display: inline-flex; align-items: center; gap: 1rem; flex-shrink: 0; color: var(--signal-accent-text); margin-left: auto; font-size: .9rem; min-height: 44px; }
+@media (max-width: 1100px) {
+  .guard-home .guard-header nav { gap: 1rem; }
+  .guard-glossary-link { flex-wrap: wrap; }
+  .guard-glossary-link a { margin-left: 0; }
+}
+@media (max-width: 800px) {
+  .guard-glossary-link > div { flex: 1; }
+  .guard-glossary-link a { width: 100%; padding-left: calc(50px + 1.5rem); }
+}
+@media (max-width: 600px) {
+  .guard-home .guard-header__inner { min-height: 0; grid-template-columns: auto 1fr auto; gap: .5rem; padding-block: .55rem; }
+  .guard-home .guard-header .brand { gap: .5rem; }
+  .guard-home .guard-header .brand__name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .guard-home .guard-header .xsom-brand-mark { width: 30px; height: 30px; }
+  .guard-home .guard-header nav { gap: clamp(.45rem, 2.7vw, .8rem); font-size: clamp(.64rem, 2.7vw, .75rem); }
+  .guard-home .guard-header nav > a:nth-child(2) { font-size: inherit; }
+  .guard-home .guard-header .console-language { margin-left: 0; font-size: .62rem; }
+  .guard-home .guard-header .console-language button { min-width: 1.35rem; padding-inline: .1rem; }
+  .guard-home .guard-header .guard-button { position: absolute; right: 0; top: 1rem; padding: .5rem .7rem; gap: .6rem; font-size: .75rem; min-height: 40px; }
+  .guard-glossary-link { gap: 1rem; margin-top: 2rem; }
+  .guard-glossary-link__icon { width: 35px; font-size: 1.4rem; }
+  .guard-glossary-link a { padding-left: 0; font-size: .85rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .guard-home *, .guard-home *::before, .guard-home *::after { animation: none !important; transition: none !important; }
+}
+[data-reduced-motion="true"] .guard-home *, [data-reduced-motion="true"] .guard-home *::before, [data-reduced-motion="true"] .guard-home *::after { animation: none !important; transition: none !important; }

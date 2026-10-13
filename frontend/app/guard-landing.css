@@ -1,0 +1,228 @@
+/* Product-specific geometry; palette, type and spacing come from the shared kit. */
+.guard-landing {
+  --guard-hero-size: clamp(2.75rem, 4.2vw, 4.75rem);
+  --guard-title-size: clamp(1.875rem, 3vw, 3rem);
+  --guard-stage-height: 20rem;
+  --guard-perspective: 56rem;
+  --guard-core-width: 8rem;
+  --guard-core-height: 7rem;
+  --guard-core-tilt: 56deg;
+  --guard-core-spin: -35deg;
+  --guard-node-width: 10rem;
+  --guard-rise: 1.25rem;
+  --guard-stage-grid: 2rem;
+  --guard-motion-duration: 900ms;
+  --guard-line-leading: 1.15;
+  color: var(--signal-text);
+  background: var(--signal-bg);
+  font-family: var(--font-body), sans-serif;
+  line-height: var(--signal-leading);
+}
+.guard-landing *,
+.guard-landing *::before,
+.guard-landing *::after {
+  box-sizing: border-box;
+}
+.guard-landing :is(h1, h2, h3, p, ul, ol) {
+  margin: 0;
+}
+.guard-landing :is(h1, h2, h3) {
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: var(--signal-display-tracking);
+}
+.guard-landing :is(button, a, summary, input):focus-visible {
+  outline: var(--signal-focus) solid var(--signal-accent-text);
+  outline-offset: var(--signal-focus-offset);
+}
+.guard-landing button {
+  font: inherit;
+  cursor: pointer;
+}
+.guard-landing a {
+  text-decoration: none;
+}
+.guard-wrap {
+  width: min(100% - var(--gutter) * 2, var(--container));
+  margin-inline: auto;
+}
+.guard-header {
+  border-bottom: var(--signal-border) solid var(--signal-line);
+  background: var(--signal-bg);
+}
+.guard-header__inner {
+  min-height: var(--header-h);
+  display: flex;
+  gap: var(--sp-8);
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--sp-3);
+}
+.guard-header nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  font-size: var(--fs-sm);
+}
+.guard-nav-shell {
+  display: contents;
+}
+.guard-header nav > a:not(.guard-button) {
+  color: var(--signal-muted);
+  min-height: var(--signal-touch);
+  display: inline-flex;
+  align-items: center;
+}
+.guard-header nav > a:hover {
+  color: var(--signal-accent-text);
+}
+/* La langue se change, mais ne concurrence ni le menu ni l'action principale :
+   deux lettres sans cadre, la langue active seulement plus lisible. */
+.guard-header .console-language {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+.guard-header .console-language button {
+  min-width: 2rem;
+  padding-inline: 0.25rem;
+  border-radius: 0;
+  background: none;
+  color: var(--signal-muted);
+}
+.guard-header .console-language button:hover {
+  color: var(--signal-accent-text);
+}
+.guard-header .console-language button[aria-pressed="true"] {
+  background: none;
+  color: var(--signal-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.4em;
+}
+/* Les liens éditoriaux restent visibles : le menu est une vraie orientation,
+   pas seulement une porte vers la page produit. */
+.guard-header nav > a.guard-nav__link:first-child {
+  display: inline-flex;
+}
+.guard-header .brand__product {
+  font-family: var(--font-body), sans-serif;
+}
+.guard-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  min-height: var(--signal-touch);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--signal-accent);
+  color: var(--signal-accent-ink);
+  border: var(--signal-border) solid var(--signal-accent);
+  border-radius: var(--r-md);
+  font-weight: 600;
+  transition: transform var(--signal-normal) var(--signal-ease);
+}
+.guard-button:hover {
+  transform: translateY(var(--signal-lift));
+}
+.guard-button--small {
+  padding: var(--sp-2) var(--sp-4);
+  gap: var(--sp-4);
+}
+.guard-kicker {
+  color: var(--signal-accent-text);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+/* Section 2 : le problème, groupé par maillon. */
+/* La figure lit les jetons de la bande : écrite en dur, elle serait parfaite ici et
+   illisible sur la bande claire de `/evidence`, qui rend les mêmes schémas. */
+
+/* La page de l'offre libre-service. */
+.guard-footer {
+  border-top: var(--signal-border) solid var(--signal-line);
+  padding-block: var(--sp-8);
+}
+.guard-footer > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+}
+.guard-footer p {
+  color: var(--signal-faint);
+  font-size: var(--fs-xs);
+  margin-right: auto;
+}
+.guard-footer a,
+.guard-footer summary {
+  color: var(--signal-muted);
+  font-size: var(--fs-sm);
+  min-height: var(--signal-touch);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.guard-footer details {
+  position: relative;
+}
+.guard-footer signal-preferences {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  width: var(--signal-diagram-wide);
+  max-width: 80vw;
+  background: var(--signal-surface);
+  padding: var(--sp-4);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--signal-shadow);
+}
+/* A sourced 3D still supplies materiality; DOM labels remain readable and live. */
+@media (max-width: 1100px) {
+  .guard-header nav {
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 600px) {
+  .guard-header__inner {
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .guard-header nav {
+    width: 100%;
+    justify-content: flex-start;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+  }
+  .guard-header nav > a.guard-nav__link {
+    font-size: var(--fs-xs);
+  }
+  .guard-header .brand {
+    margin-bottom: var(--sp-1);
+  }
+  .guard-footer > div {
+    gap: var(--sp-4);
+  }
+  .guard-footer p {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .guard-landing *,
+  .guard-landing *::before,
+  .guard-landing *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-reduced-motion="true"] .guard-landing *,
+html[data-signal-motion="reduced"] .guard-landing * {
+  animation: none !important;
+  transition: none !important;
+}
