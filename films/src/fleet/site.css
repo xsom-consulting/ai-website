@@ -1,0 +1,42 @@
+/* Films of fleet.xsom.fr: the homepage hero and the silent "how it works" loops.
+   Built on .film (titles.css) and .fleet (fleet.css). The hero keeps the site films' safe
+   area (no title above 290 px nor below 250 px from the bottom: the page's header and
+   controls cover the frame); the loops play in cards with nothing over them. */
+.site { background: #050d1b; }
+.site .backdrop { position: absolute; inset: 0; background: radial-gradient(ellipse 90% 80% at 50% 40%, #0d2340, #050d1b 72%); }
+
+/* Browser window around a console capture. */
+.site .tour-window { position: absolute; border-radius: 16px; overflow: hidden; background: #0b1626; box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(124,192,255,.18); }
+.site .chrome { position: relative; display: flex; align-items: center; gap: 28px; padding: 0 28px; background: #121f33; border-bottom: 1px solid rgba(124,192,255,.16); }
+.site .dots { display: flex; gap: 12px; }
+.site .dots i { width: 16px; height: 16px; border-radius: 50%; background: #3a4a61; }
+.site .address { flex: 0 1 auto; min-width: 0; font: 500 24px Mono, monospace; color: #a9c0de; background: #0b1626; padding: 8px 22px; border-radius: 8px; white-space: nowrap; }
+.site .mention { margin-left: auto; font: 600 26px Source, sans-serif; letter-spacing: .01em; color: #ffd27a; border: 2px solid rgba(255,210,122,.6); padding: 4px 16px; border-radius: 8px; white-space: nowrap; background: rgba(40,28,4,.4); }
+.site .callout { position: absolute; left: 40px; max-width: 1240px; font: 600 46px/1.18 Source, sans-serif; letter-spacing: -.3px; color: #f5f8ff; background: rgba(5,13,27,.93); border-left: 8px solid #7cc0ff; padding: 22px 34px 24px; border-radius: 10px; box-shadow: 0 16px 50px rgba(0,0,0,.5); }
+
+/* The terminal of the "block" loop. */
+.site .terminal { position: absolute; left: 170px; top: 150px; width: 1580px; height: 760px; border-radius: 16px; overflow: hidden; background: #0a1220; box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(124,192,255,.18); }
+.site .terminal .chrome .address { background: none; padding: 0; color: #8fa6c4; }
+.site .term-body { position: absolute; left: 0; right: 0; top: 64px; bottom: 0; padding: 40px 54px; font: 500 34px/1.5 Mono, monospace; color: #dbe7f7; }
+.site .term-line { white-space: pre-wrap; }
+.site .term-dim { color: #6f86a6; }
+.site .prompt { display: flex; gap: 22px; border: 2px solid #2a3a52; border-radius: 10px; padding: 16px 24px; }
+.site .prompt b { color: #7cc0ff; font-weight: 500; }
+.site .caret { display: inline-block; width: .6em; height: 1.1em; vertical-align: -.2em; background: #7cc0ff; margin-left: 2px; }
+.site .masked { color: #ffd27a; }
+.site .blocked { margin-top: 30px; border-left: 8px solid #ff4263; background: rgba(255,66,99,.09); border-radius: 8px; padding: 22px 32px; font: 500 30px/1.45 Mono, monospace; }
+.site .blocked .head { color: #ff8ca0; font-weight: 500; }
+.site .blocked .tag { display: block; font-size: 24px; letter-spacing: .08em; text-transform: uppercase; color: #ff8ca0; margin-bottom: 12px; }
+.site .tour-note { position: absolute; left: 170px; right: 170px; font: 600 40px Source, sans-serif; color: #d3e5ff; letter-spacing: -.2px; }
+.site .tour-note small { font: 500 24px Mono, monospace; color: #8fa6c4; letter-spacing: .02em; margin-left: 20px; }
+.site .film-title { position: absolute; left: 170px; top: 46px; font: 800 56px Saira, sans-serif; text-transform: uppercase; letter-spacing: -.01em; color: #f5f8ff; }
+
+/* The console in the hero: a window in light perspective on the dark frame. */
+.site .console-shot { position: absolute; left: 790px; top: 300px; width: 1010px; perspective: 2200px; }
+.site .console-shot .tour-window { position: relative; width: 1010px; height: 530px; }
+
+/* Hero layout. */
+.site-hero .hero-stack { left: 140px; top: 290px; }
+.site-hero .hero-seats { right: 150px; }
+.site-hero .mention-wrap { position: absolute; left: 140px; top: 560px; }
+.site-hero .mention { margin: 0; font-size: 30px; padding: 6px 18px; }

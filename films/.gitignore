@@ -1,0 +1,5 @@
+# Downloaded stock footage, copied fonts and synthesised scores: fetched or rebuilt by the scripts.
+public/
+
+# Render logs and local outputs of the presentation films.
+out/

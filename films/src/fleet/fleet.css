@@ -1,0 +1,49 @@
+/* Kinetic titles of the xSOM Fleet presentation films, on a 1920 × 1080 frame. Built on the
+   site films' .film base (titles.css); these films have no page chrome over them, so the
+   safe area is a plain 110 px margin. */
+.fleet .shade { position: absolute; inset: 0; }
+.fleet .shade--left { background: linear-gradient(90deg, rgba(3,12,26,.9), rgba(3,12,26,.62) 48%, rgba(3,12,26,.15) 80%); }
+.fleet .shade--right { background: linear-gradient(270deg, rgba(3,12,26,.9), rgba(3,12,26,.62) 48%, rgba(3,12,26,.15) 80%); }
+.fleet .shade--full { background: rgba(3,12,26,.74); }
+.fleet .shade--deep { background: radial-gradient(ellipse 80% 75% at 50% 50%, rgba(3,12,26,.78), rgba(3,12,26,.9)); }
+.fleet .shade--center { background: radial-gradient(ellipse 70% 62% at 50% 50%, rgba(3,12,26,.72), rgba(3,12,26,.38) 70%, rgba(3,12,26,.2)); }
+.fleet .flash--red { background: radial-gradient(ellipse at 50% 55%, rgba(255,70,100,.5), rgba(255,70,100,.1) 70%); }
+.fleet .flash--blue { background: radial-gradient(ellipse at 50% 45%, rgba(140,205,255,.55), rgba(140,205,255,.1) 70%); }
+
+.fleet .stack { position: absolute; }
+.fleet .stack--left { left: 140px; top: 50%; transform: translateY(-50%); }
+.fleet .stack--right { right: 140px; top: 50%; transform: translateY(-50%); text-align: right; }
+.fleet .stack--center { left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; display: flex; flex-direction: column; align-items: center; }
+.fleet .stack--top { left: 140px; top: 200px; }
+
+.fleet .kicker { font-size: 64px; }
+.fleet .title { font-size: 128px; }
+.fleet .title--xl { font-size: 196px; }
+.fleet .title--m { font-size: 96px; }
+.fleet .title--s { font-size: 80px; }
+.fleet .brand { text-transform: none; letter-spacing: -.01em; }
+.fleet .sub { font-size: 52px; margin-top: 18px; }
+.fleet .number { font-family: Saira, sans-serif; font-weight: 800; font-size: 230px; line-height: 1; letter-spacing: -.02em; text-shadow: 0 6px 40px rgba(2,10,24,.55); }
+.fleet .number--m { font-size: 170px; }
+.fleet .red { color: #ff4263; text-shadow: 0 0 60px rgba(255,66,99,.4), 0 6px 40px rgba(2,10,24,.6); }
+.fleet .rule { margin-bottom: 30px; transform-origin: 0 50%; }
+.fleet .stack--center .rule { transform-origin: 50% 50%; }
+
+.fleet .act { position: absolute; left: 140px; top: 96px; display: flex; align-items: center; gap: 22px; font-family: Mono, monospace; font-size: 26px; letter-spacing: .14em; text-transform: uppercase; color: #a9c8ef; }
+.fleet .act b { color: #050d1b; background: #7cc0ff; padding: 6px 12px; border-radius: 4px; font-weight: 500; }
+.fleet .source { margin-top: 26px; font-family: Mono, monospace; font-size: 24px; letter-spacing: .04em; color: rgba(211,229,255,.78); }
+.fleet .badge { display: inline-block; font-family: Mono, monospace; font-size: 26px; letter-spacing: .08em; text-transform: uppercase; color: #ffd27a; border: 2px solid rgba(255,210,122,.75); padding: 10px 18px; border-radius: 6px; background: rgba(40,28,4,.35); }
+
+/* Four quick words of the teaser, and the solution's pillars. */
+.fleet .slam { font-family: Saira, sans-serif; font-weight: 800; font-size: 112px; line-height: 1.02; text-transform: uppercase; letter-spacing: -.02em; transform-origin: 0 60%; text-shadow: 0 6px 40px rgba(2,10,24,.55); }
+
+/* The seat cap. */
+.fleet .seats { position: absolute; right: 140px; top: 50%; transform: translateY(-50%); }
+.fleet .legend { display: flex; gap: 40px; margin-top: 26px; font-family: Mono, monospace; font-size: 26px; color: #d3e5ff; }
+.fleet .legend i { display: inline-block; width: 22px; height: 22px; border-radius: 5px; margin-right: 12px; vertical-align: -3px; }
+
+/* End card. */
+.fleet .logo { display: flex; align-items: center; gap: 40px; }
+.fleet .wordmark { font-family: Manrope, sans-serif; font-weight: 800; font-size: 150px; letter-spacing: -.03em; color: #f5f8ff; }
+.fleet .wordmark span { font-weight: 300; color: #7cc0ff; }
+.fleet .url { font-family: Mono, monospace; font-size: 40px; letter-spacing: .06em; color: #7cc0ff; margin-top: 34px; }
