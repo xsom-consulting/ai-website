@@ -1,0 +1,725 @@
+/* Page xSOM Fleet. Elle reprend l'accueil (`home.css`, sous `.xhome` : en-tête, film
+   d'ouverture, titres, révélation) ; ce qui lui est propre vit sous `.xfl`. Couleurs et
+   durées viennent des jetons ; les transparences passent par color-mix. */
+
+.xfl {
+  --fl-glow: color-mix(in srgb, var(--signal-accent) 55%, white);
+  --fl-tint: color-mix(in srgb, var(--signal-accent) 5%, var(--signal-bg));
+}
+
+/* ---- Les logos des assistants, sur une tuile claire. */
+.xfl .fl-logo {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.75rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 24%;
+  background: white;
+}
+.xfl .fl-logo img {
+  width: 76%;
+  height: auto;
+}
+.xfl .fl-logo[data-host="codex"] img {
+  width: 100%;
+}
+
+/* ---- Film d'ouverture : le repli dessiné sous la vidéo ne se voit que si l'affiche
+   manque (la vidéo sans image est transparente). */
+.xfl .home-film__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-16) var(--gutter);
+  background:
+    linear-gradient(var(--home-ink-line) 1px, transparent 1px) 0 0 / 4rem 4rem,
+    linear-gradient(90deg, var(--home-ink-line) 1px, transparent 1px) 0 0 / 4rem 4rem,
+    radial-gradient(50rem 26rem at 70% 30%, color-mix(in srgb, var(--signal-accent) 30%, transparent), transparent 70%),
+    var(--home-ink);
+  color: var(--home-ink-text);
+  text-align: center;
+}
+.xfl .home-film__fallback .fl-mark {
+  display: block;
+  width: clamp(2.5rem, 6vw, 4.5rem);
+  height: auto;
+}
+.xfl .home-film__fallback .fl-mark img {
+  width: 100%;
+  height: auto;
+}
+.xfl .home-film__fallback .xsom-brand-mark__dark {
+  display: block;
+}
+.xfl .home-film__fallback .xsom-brand-mark__light {
+  display: none;
+}
+.xfl .home-film__fallback p {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 7vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+.xfl .home-film__fallback span {
+  max-width: 34ch;
+  color: var(--home-ink-muted);
+  font-size: var(--fs-lead);
+}
+.xfl .home-film__video {
+  z-index: 0;
+}
+
+/* ---- La promesse, sur le fond nuit du film qu'elle prolonge. */
+.xfl .fl-hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: var(--sp-20) var(--sp-24);
+  overflow: hidden;
+  background:
+    radial-gradient(60rem 30rem at 85% 0%, color-mix(in srgb, var(--signal-accent) 24%, transparent), transparent 70%),
+    var(--home-ink);
+  color: var(--home-ink-text);
+  scroll-margin-top: var(--home-header);
+}
+.xfl .fl-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--home-ink-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--home-ink-line) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  opacity: 0.35;
+  mask-image: linear-gradient(180deg, transparent, black 30%, transparent 95%);
+}
+.xfl .fl-hero h1 {
+  color: var(--home-ink-text);
+}
+.xfl .fl-hero .home-kicker {
+  color: var(--home-ink-muted);
+}
+.xfl :is(.fl-hero, .fl-section--ink, .fl-cta) :is(a, button, summary):focus-visible {
+  outline-color: var(--home-ink-text);
+}
+.xfl .fl-hero__title {
+  max-width: 22ch;
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-display);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.xfl .fl-hero__title span {
+  color: var(--fl-glow);
+}
+.xfl .fl-hero__lead {
+  max-width: 56ch;
+  margin: var(--sp-6) 0 0;
+  color: var(--home-ink-muted);
+  font-size: var(--fs-lead);
+  line-height: var(--signal-leading);
+}
+.xfl .fl-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-top: var(--sp-8);
+}
+.xfl .fl-hero__how {
+  color: var(--home-ink-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--home-ink-text) 40%, transparent);
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color var(--t-fast) var(--ease);
+}
+.xfl .fl-hero__how:hover {
+  text-decoration-color: currentColor;
+}
+.xfl .fl-hero__hosts {
+  margin-top: var(--sp-12);
+}
+.xfl .fl-hero__hosts p {
+  margin: 0 0 var(--sp-3);
+  color: var(--home-ink-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.xfl .fl-hero__hosts ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-hero__hosts li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-lead);
+  font-weight: 600;
+}
+
+/* ---- Sections claires, en alternance avec une teinte légère. */
+.xfl .fl-section {
+  padding-block: var(--section-y);
+}
+.xfl .fl-section--tint {
+  background: var(--fl-tint);
+}
+.xfl .fl-head {
+  display: grid;
+  justify-items: center;
+  margin-bottom: var(--sp-12);
+  text-align: center;
+}
+
+/* ---- La plateforme et ses trois modules. Le module à venir est en pointillés : il
+   n'existe pas encore, et rien ne le fait passer pour livré. */
+.xfl .fl-modules {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-module {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-3);
+  padding: var(--sp-8);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--home-radius);
+  background: var(--signal-surface);
+}
+.xfl .fl-module[data-status="soon"] {
+  border-style: dashed;
+  background: transparent;
+}
+.xfl .fl-module__status {
+  margin: 0;
+  color: var(--signal-accent-text);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.xfl .fl-module[data-status="soon"] .fl-module__status {
+  color: var(--signal-muted);
+}
+.xfl .fl-module h3 {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.xfl .fl-module__lead {
+  margin: 0;
+  color: var(--signal-text);
+  font-weight: 600;
+  line-height: var(--signal-leading);
+}
+.xfl .fl-module ul {
+  display: grid;
+  gap: var(--sp-3);
+  margin: var(--sp-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-module li {
+  position: relative;
+  padding-left: var(--sp-5);
+  color: var(--signal-muted);
+  line-height: var(--signal-leading);
+}
+.xfl .fl-module li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: var(--sp-3);
+  height: 2px;
+  background: var(--signal-accent);
+}
+.xfl .fl-module__link {
+  margin-top: var(--sp-2);
+  color: var(--signal-accent-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+/* ---- Les deux factures, côte à côte. */
+.xfl .fl-bills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+  max-width: 64rem;
+  margin-inline: auto;
+}
+.xfl .fl-bill {
+  padding: var(--sp-10);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: calc(var(--home-radius) * 1.5);
+  background: var(--signal-surface);
+}
+.xfl .fl-bill[data-bill="seat"] {
+  border-color: var(--signal-accent);
+  box-shadow: 0 var(--sp-8) var(--sp-24) color-mix(in srgb, var(--signal-accent) 14%, transparent);
+}
+.xfl .fl-bill__label {
+  margin: 0;
+  color: var(--signal-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.xfl .fl-bill__value {
+  margin: var(--sp-4) 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-metric);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.xfl .fl-bill[data-bill="seat"] .fl-bill__value {
+  color: var(--signal-accent-text);
+}
+.xfl .fl-bill__unit {
+  margin: var(--sp-3) 0 0;
+  color: var(--signal-text);
+  line-height: var(--signal-leading);
+}
+.xfl .fl-bill__source {
+  margin: var(--sp-6) 0 0;
+  color: var(--signal-muted);
+  font-size: var(--fs-xs);
+}
+.xfl .fl-note {
+  max-width: 64rem;
+  margin: var(--sp-8) auto 0;
+  color: var(--signal-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--signal-leading);
+}
+
+/* ---- Les quatre limites, en cartes. */
+.xfl .fl-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-card {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-3);
+  padding: var(--sp-8);
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--home-radius);
+  background: var(--signal-surface);
+}
+.xfl .fl-card__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  aspect-ratio: 1;
+  border-radius: 30%;
+  background: color-mix(in srgb, var(--signal-accent) 12%, transparent);
+  color: var(--signal-accent-text);
+}
+.xfl .fl-card h3,
+.xfl .fl-principles h3,
+.xfl .fl-steps h4 {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.xfl .fl-card p,
+.xfl .fl-principles p,
+.xfl .fl-steps p {
+  margin: 0;
+  color: var(--signal-muted);
+  line-height: var(--signal-leading);
+}
+
+/* ---- Le déploiement : une liste à filets, sans cartes. */
+.xfl .fl-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-8) var(--sp-12);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-principles li {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-2);
+  padding-top: var(--sp-5);
+  border-top: var(--signal-border) solid var(--signal-line);
+}
+
+/* ---- La démarche en trois temps. */
+.xfl .fl-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-steps li {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-2);
+}
+.xfl .fl-steps__index {
+  color: var(--signal-accent-text);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+/* ---- Une phrase qui précise la section : filet d'accent, texte courant. */
+.xfl .fl-split {
+  max-width: 52rem;
+  margin: var(--sp-10) auto 0;
+  padding: var(--sp-4) var(--sp-6);
+  border-left: 3px solid var(--signal-accent);
+  background: var(--signal-surface);
+  color: var(--signal-text);
+  line-height: var(--signal-leading);
+}
+
+/* ---- Comment ça marche : cinq films, en quinconce sur ordinateur. */
+.xfl .fl-how {
+  display: grid;
+  gap: var(--sp-24);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-how__step {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-12);
+  scroll-margin-top: var(--home-header);
+}
+.xfl .fl-how__step:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+}
+.xfl .fl-how__step:nth-child(even) .fl-how__media {
+  order: 2;
+}
+.xfl .fl-how__media {
+  margin: 0;
+}
+.xfl .fl-how__media figcaption {
+  margin-top: var(--sp-3);
+  color: var(--signal-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+}
+.xfl .fl-how__text {
+  display: grid;
+  gap: var(--sp-3);
+}
+.xfl .fl-how__index {
+  color: var(--signal-accent-text);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.xfl .fl-how__text h3 {
+  margin: 0;
+  font-size: var(--fs-h2);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.xfl .fl-how__text p {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--signal-muted);
+  font-size: var(--fs-lead);
+  line-height: var(--signal-leading);
+}
+
+/* Le cadre d'un film : 16:9, fond nuit quadrillé sous la vidéo en guise de repli. */
+.xfl .fl-film {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: var(--signal-border) solid var(--signal-line);
+  border-radius: var(--home-radius);
+  background: var(--home-ink);
+  box-shadow: 0 var(--sp-6) var(--sp-20) color-mix(in srgb, var(--home-ink) 18%, transparent);
+}
+.xfl .fl-film__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(var(--home-ink-line) 1px, transparent 1px) 0 0 / 3rem 3rem,
+    linear-gradient(90deg, var(--home-ink-line) 1px, transparent 1px) 0 0 / 3rem 3rem,
+    radial-gradient(30rem 16rem at 30% 20%, color-mix(in srgb, var(--signal-accent) 26%, transparent), transparent 70%);
+  color: color-mix(in srgb, var(--home-ink-text) 30%, transparent);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+.xfl .fl-film__video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.xfl .fl-film__toggle {
+  position: absolute;
+  right: var(--sp-3);
+  bottom: var(--sp-3);
+  display: grid;
+  place-items: center;
+  width: var(--signal-touch);
+  height: var(--signal-touch);
+  padding: 0;
+  border: var(--signal-border) solid color-mix(in srgb, var(--home-ink-text) 28%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--home-ink) 62%, transparent);
+  color: var(--home-ink-text);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.xfl .fl-film__toggle:hover {
+  background: var(--home-ink);
+  border-color: var(--home-ink-text);
+}
+.xfl .fl-film__toggle:focus-visible {
+  outline-color: var(--home-ink-text);
+}
+.xfl .fl-film__toggle svg {
+  display: block;
+}
+
+/* ---- Les preuves, sur fond nuit : trois pièces numérotées. */
+.xfl .fl-section--ink {
+  background: var(--home-ink);
+  color: var(--home-ink-text);
+}
+.xfl .fl-section--ink :is(h2, h3) {
+  color: var(--home-ink-text);
+}
+.xfl .fl-section--ink .home-kicker {
+  color: var(--home-ink-muted);
+}
+.xfl .fl-section--ink .home-lead {
+  margin: var(--sp-5) 0 0;
+  color: var(--home-ink-muted);
+}
+.xfl .fl-section--ink .fl-split {
+  border-left-color: var(--fl-glow);
+  background: color-mix(in srgb, var(--home-ink-text) 6%, transparent);
+  color: var(--home-ink-text);
+}
+.xfl .fl-pieces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-pieces li {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-3);
+  padding-top: var(--sp-6);
+  border-top: var(--signal-border) solid var(--home-ink-line);
+}
+.xfl .fl-pieces__index {
+  color: var(--fl-glow);
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-metric);
+  font-weight: 800;
+  line-height: 1;
+}
+.xfl .fl-pieces h3 {
+  margin: 0;
+  font-size: var(--fs-h3);
+  line-height: 1.2;
+}
+.xfl .fl-pieces p {
+  margin: 0;
+  color: var(--home-ink-muted);
+  line-height: var(--signal-leading);
+}
+
+/* ---- Sous-titre de la démarche, sous le déploiement. */
+.xfl .fl-subtitle {
+  margin: var(--sp-20) 0 var(--sp-10);
+  font-size: var(--fs-h3);
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* ---- Questions fréquentes : éléments natifs <details>, un filet entre chacun. */
+.xfl .fl-faq__list {
+  max-width: 52rem;
+  margin: 0 auto;
+  border-top: var(--signal-border) solid var(--signal-line);
+}
+.xfl .fl-faq details {
+  border-bottom: var(--signal-border) solid var(--signal-line);
+}
+.xfl .fl-faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: var(--signal-touch);
+  padding: var(--sp-5) 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-lead);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.xfl .fl-faq summary::-webkit-details-marker {
+  display: none;
+}
+.xfl .fl-faq summary::after {
+  content: "+";
+  flex: none;
+  color: var(--signal-accent-text);
+  font-family: var(--font-mono), monospace;
+  font-size: 1.4em;
+  font-weight: 500;
+  line-height: 1;
+  transition: transform var(--t-fast) var(--ease);
+}
+.xfl .fl-faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+.xfl .fl-faq summary:focus-visible {
+  outline: var(--signal-focus) solid var(--signal-accent);
+  outline-offset: var(--signal-focus-offset);
+}
+.xfl .fl-faq details p {
+  max-width: 64ch;
+  margin: 0;
+  padding: 0 0 var(--sp-6);
+  color: var(--signal-muted);
+  line-height: var(--signal-leading);
+}
+
+/* ---- L'appel final, sur fond nuit. */
+.xfl .fl-cta {
+  padding-block: var(--section-y);
+  background: var(--home-ink);
+  color: var(--home-ink-text);
+}
+.xfl .fl-cta__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-5);
+  text-align: center;
+}
+.xfl .fl-cta h2 {
+  margin: 0;
+  color: var(--home-ink-text);
+  font-size: var(--fs-h2);
+}
+.xfl .fl-cta p {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--home-ink-muted);
+  line-height: var(--signal-leading);
+}
+.xfl .fl-cta :is(a, button):focus-visible {
+  outline-color: var(--home-ink-text);
+}
+
+@media (max-width: 1100px) {
+  .xfl .fl-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .xfl .fl-modules {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  /* Le film passe en 16:9 dans le flux, la barre dessous : le repli ne couvre que
+     l'image, et la vidéo reste au-dessus de lui. */
+  .xfl .home-film__fallback {
+    inset: 0 0 auto;
+    aspect-ratio: 16 / 9;
+    padding: var(--sp-6) var(--gutter);
+  }
+  .xfl .home-film__video {
+    position: relative;
+  }
+  .xfl .fl-how {
+    gap: var(--sp-16);
+  }
+  .xfl .fl-how__step,
+  .xfl .fl-how__step:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+  }
+  .xfl .fl-how__step:nth-child(even) .fl-how__media {
+    order: 0;
+  }
+  .xfl .fl-how__text h3 {
+    font-size: var(--fs-h3);
+  }
+  .xfl .fl-pieces,
+  .xfl .fl-principles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  .xfl .fl-bills,
+  .xfl .fl-grid,
+  .xfl .fl-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .xfl .fl-bill {
+    padding: var(--sp-8);
+  }
+  .xfl .fl-hero {
+    padding-block: var(--sp-16);
+  }
+  .xfl .home-film__fallback span {
+    display: none;
+  }
+}
