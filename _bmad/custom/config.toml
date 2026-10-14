@@ -1,0 +1,12 @@
+# Team configuration for this repository. Personal overrides stay untracked.
+[core]
+user_name = "Maintainer"
+project_name = "ai-website"
+communication_language = "English"
+document_output_language = "English"
+output_folder = "../product-planning/ai-website/_bmad-output"
+
+[modules.bmm]
+planning_artifacts = "../product-planning/ai-website/docs/planning"
+implementation_artifacts = "../product-planning/ai-website/docs/stories"
+project_knowledge = "."
