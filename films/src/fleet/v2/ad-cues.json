@@ -1,0 +1,22 @@
+{
+  "_note": "Minutage (secondes) de la publicité xSOM Fleet v2, à 120 BPM (un temps = 0,5 s). Lu par FleetAd.tsx (images) et scripts/ad-score.mjs (musique et bruitages) : une seule source, images et sons restent calés.",
+  "seconds": 20,
+  "bpm": 120,
+  "typing": { "from": 0.3, "to": 1.72, "text": { "fr": "const ia = toutesLesMeilleures();", "en": "const ai = allTheBest();" } },
+  "impact": 2.0,
+  "burst": [2.0, 2.5, 3.0, 3.5, 4.0, 4.5],
+  "magnet": 5.0,
+  "pills": [5.0, 5.5, 6.0],
+  "pillFlight": 0.4,
+  "words": [6.5, 7.0, 7.5],
+  "key": { "from": 8.0, "hit": 9.0 },
+  "nothing": 9.25,
+  "stamp": { "from": 11.0, "hit": 11.5 },
+  "everywhere": [12.0, 12.5],
+  "counters": { "from": 14.0, "lands": [14.9, 15.4, 15.9] },
+  "control": 16.0,
+  "silence": [17.0, 18.0],
+  "finale": 18.0,
+  "logo": 18.9,
+  "fadeOut": 19.55
+}

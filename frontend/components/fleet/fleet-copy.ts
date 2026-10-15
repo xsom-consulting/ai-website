@@ -2,18 +2,22 @@ import type { FilmMedia } from "@/components/home/HomeFilm";
 import type { Lang } from "@/lib/i18n";
 
 /**
- * La page xSOM Fleet. La promesse d'abord, avec son illustration animée : les
- * meilleures IA pour toute l'entreprise, la sécurité chez le client. Puis la phrase qui
- * définit la plateforme et ses trois modules, le film, les raisons de la choisir en
- * grille, le fonctionnement, les licences et engagements en badges, enfin les questions.
- * Une phrase par bloc ; le reste est visuel. Les chiffres des tuiles viennent des
- * données de démonstration (`fleet-ops demo-data generate`) et le disent. Règles : aucun client nommé,
- * aucun prix de licence publié, aucun chiffre de gain sans simulation sourcée, aucune
+ * La page xSOM Fleet. La promesse d'abord, avec son illustration animée : les meilleurs
+ * modèles d'IA du marché, aux standards de sécurité de l'entreprise. Puis la phrase qui
+ * définit la plateforme (piloter toute l'architecture IA en un seul endroit), la ligne
+ * « Pris en charge » et les trois solutions, le film, les raisons de la choisir en
+ * grille, le film « Comment ça marche », les licences et engagements en badges, enfin
+ * les questions. Une phrase par bloc ; le reste est visuel.
+ *
+ * Règles : aucun client nommé, aucun prix de licence publié, aucun chiffre sans source
+ * (la mesure de la tuile Coût est datée, sourcée et montrée, `FLEET_MEASUREMENT`) ; aucune
  * promesse de « conformité » ; toute simulation porte « Simulation · hypothèses
- * affichées » ; tout film tiré de la console porte « Démonstration · données
- * illustratives ». Assistants couverts : Claude Code et Codex sur le Poste, les
- * applications API par Fleet Gateway ; rien d'autre n'est annoncé, ni daté.
- * Vocabulaire : glossaire du PRD (§3).
+ * affichées » ; toute donnée tirée de la console porte « Démonstration · données
+ * illustratives ». Les logos des fournisseurs sont cités en usage nominatif seulement.
+ * Assistants couverts : Claude Code et Codex sur le Poste ; les modèles par API et les
+ * modèles hébergés chez le client passent par la passerelle (Fleet Gateway, disponible
+ * pour pilote) ; aucun fournisseur d'API n'est nommé tant que la version de LiteLLM
+ * n'est pas épinglée. Vocabulaire : glossaire du PRD (§3).
  */
 
 export const FLEET_CONTACT = "mailto:julian.talou@xsom.fr?subject=xSOM%20Fleet";
@@ -25,64 +29,96 @@ export const FLEET_ORIGIN = "https://fleet.xsom.fr";
 
 const MEDIA = "/signal-media";
 
-/** Le film d'ouverture (Remotion : `films/src/fleet/`), un par langue. */
+/** Le film d'ouverture (Remotion : `films/src/fleet/v2/FleetAd.tsx`), un par langue. */
 export const FLEET_HERO_MEDIA: FilmMedia = {
   fr: {
-    mp4: `${MEDIA}/xsom-fleet-hero-fr.mp4`,
-    poster: `${MEDIA}/xsom-fleet-hero-fr.jpg`,
+    mp4: `${MEDIA}/xsom-fleet-hero-v2-fr.mp4`,
+    poster: `${MEDIA}/xsom-fleet-hero-v2-fr.jpg`,
     name: "Film d’introduction xSOM Fleet",
-    label: "Film d’introduction de xSOM Fleet, sans parole : plusieurs Organisations fournisseur réunies dans une console, une Politique signée appliquée sur chaque Poste, un secret bloqué avant envoi, l’État de chaque Poste, puis la Facture réelle à côté de l’Équivalent API estimé.",
+    label: "Film d’introduction de xSOM Fleet, vingt secondes sans parole : toutes les meilleures IA réunies, une clé masquée arrêtée sur le Poste, une Politique signée appliquée partout, les coûts du Groupe de démonstration, puis la promesse : les meilleures IA pour toute votre entreprise, la sécurité reste chez vous.",
   },
   en: {
-    mp4: `${MEDIA}/xsom-fleet-hero-en.mp4`,
-    poster: `${MEDIA}/xsom-fleet-hero-en.jpg`,
+    mp4: `${MEDIA}/xsom-fleet-hero-v2-en.mp4`,
+    poster: `${MEDIA}/xsom-fleet-hero-v2-en.jpg`,
     name: "xSOM Fleet introduction film",
-    label: "xSOM Fleet introduction film, without speech: several provider organizations brought together in one console, a signed Policy applied on every workstation, a secret blocked before sending, the status of every workstation, then the actual invoice next to the estimated API equivalent.",
+    label: "xSOM Fleet introduction film, twenty seconds without speech: all the best AI brought together, a masked key stopped on the workstation, a signed Policy applied everywhere, the costs of the demonstration group, then the promise: the best AI for your whole company, security stays with you.",
   },
 };
 
-export const FLEET_STEP_IDS = ["orgs", "policy", "block", "coverage", "costs"] as const;
-export type FleetStepId = (typeof FLEET_STEP_IDS)[number];
-
-/** Les films « Comment ça marche » : muets, en boucle, une affiche chacun. */
-export const fleetStepMedia = (id: FleetStepId, lang: Lang) => ({
-  mp4: `${MEDIA}/xsom-fleet-how-${id}-${lang}.mp4`,
-  poster: `${MEDIA}/xsom-fleet-how-${id}-${lang}.jpg`,
+/** Le film « Comment ça marche » (Remotion : `films/src/fleet/v2/HowV2.tsx`), avec voix off. */
+export const fleetHowMedia = (lang: Lang) => ({
+  mp4: `${MEDIA}/xsom-fleet-how-v2-${lang}.mp4`,
+  poster: `${MEDIA}/xsom-fleet-how-v2-${lang}.jpg`,
 });
 
-type Step = { readonly id: FleetStepId; readonly title: string; readonly body: string; readonly film: string };
+/**
+ * Le prix du forfait Codex de xSOM (septembre 2026), dans sa devise : 103 € TTC par
+ * mois, à confirmer sur la facture avant la mise en ligne. `null` : la ligne Codex
+ * n'affiche que l'usage. Jamais converti, jamais additionné aux dollars : aucun ratio
+ * global n'est calculé.
+ */
+export const CODEX_PLAN: { amount: number; currency: "EUR"; taxIncluded: boolean } | null = { amount: 103, currency: "EUR", taxIncluded: true };
+
+/**
+ * La mesure de la tuile Coût : l'usage réel de xSOM en septembre 2026, relevé par l'outil
+ * libre ccusage (`ccusage monthly --since 20260901 --until 20260930`) sur les journaux
+ * d'un seul Poste, aux tarifs API de l'outil (capture `xsom-ccusage-2026-09.png`, texte
+ * exact) : Claude 7814,73 $, Codex 1173,27 $, total 8988,00 $. Forfait Claude : 200 $ par
+ * mois (216 € TTC). Montants en cents ; les longueurs des barres en viennent (Claude : 1
+ * pour 39).
+ */
+export const FLEET_MEASUREMENT = {
+  totalUsageCents: 898_800,
+  claude: { planCents: 20_000, usageCents: 781_473 },
+  codex: { usageCents: 117_327 },
+  capture: { webp: `${MEDIA}/xsom-ccusage-2026-09.webp`, png: `${MEDIA}/xsom-ccusage-2026-09.png`, width: 2362, height: 1200 },
+} as const;
+
+/** La ligne Codex de la tuile Coût, selon `CODEX_PLAN` ; aucun ratio entre devises. */
+export const codexMeasureLine = (lang: Lang) => {
+  if (!CODEX_PLAN) return lang === "fr" ? "Codex : 1 173 $ d’usage au tarif API." : "Codex: $1,173 of usage at API rates.";
+  const price = lang === "fr"
+    ? `${CODEX_PLAN.amount} €${CODEX_PLAN.taxIncluded ? " TTC" : " HT"}`
+    : `€${CODEX_PLAN.amount}${CODEX_PLAN.taxIncluded ? " incl. VAT" : " excl. VAT"}`;
+  return lang === "fr"
+    ? `Forfait Codex à ${price} par mois : 1 173 $ d’usage au tarif API.`
+    : `Codex plan at ${price} per month: $1,173 of usage at API rates.`;
+};
 
 /**
  * Chiffres des tuiles « Pourquoi » : ceux du Groupe de démonstration de xSOM Fleet
- * (450 Développeurs, 6 Équipes, Organisations Claude Team à 150 Sièges, 438 Postes
- * sains sur 450). Affichés avec « Démonstration · données illustratives ».
+ * (`fleet-ops demo-data generate` : 450 Développeurs, 6 Équipes, 438 Postes sains sur
+ * 450) et, pour les barres FinOps, sa page Coûts, vue Groupe, septembre 2026 : Facture
+ * réelle 25 476,00 $, Équivalent API estimé 44 043,62 $ (en cents, comme les films).
+ * Affichés avec « Démonstration · données illustratives ».
  */
 export const FLEET_DEMO_FIGURES = {
-  seatCap: 150,
   developers: 450,
   teams: 6,
   healthyPostes: 438,
   postes: 450,
+  realInvoiceCents: 2_547_600,
+  apiEquivalentCents: 4_404_362,
 } as const;
+
+type Chapter = { readonly id: string; readonly at: number; readonly title: string; readonly body: string };
 
 export const FLEET_COPY = {
   fr: {
     meta: {
-      title: "xSOM Fleet · la plateforme de gouvernance de vos IA",
-      description: "Claude Code et Codex sur chaque Poste, vos applications API par une passerelle installée chez vous : Sièges, coût réel, Contrôle avant envoi et preuves pour l’audit.",
-      ogAlt: "xSOM Fleet : les meilleures IA pour toute votre entreprise, la sécurité reste chez vous",
+      title: "xSOM Fleet · les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise",
+      description: "Pilotez toute votre architecture IA en un seul endroit : abonnements (Claude Code et Codex sur chaque Poste), clés API et modèles hébergés chez vous. Coût réel, Contrôle avant envoi et preuves pour l’audit.",
+      ogAlt: "xSOM Fleet : les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise",
     },
     film: {
-      fallback: "xSOM Fleet gouverne toutes vos IA.",
+      fallback: "Pilotez toute votre architecture IA en un seul endroit.",
     },
     hero: {
       badge: "Programme pilote 2026",
-      title: ["Les meilleures IA pour toute votre entreprise.", "La sécurité reste chez vous."],
-      lead: "Des Sièges pour ceux qui s’en servent, le coût réel par Développeur, un contrôle sur chaque Poste avant envoi, des preuves pour l’audit.",
+      title: ["Les meilleurs modèles d’IA du marché,", "aux standards de sécurité de l’entreprise."],
+      lead: "Coût maîtrisé, contrôle sur chaque Poste, preuves pour l’audit.",
       contact: "Demander une démonstration",
       how: "Comment ça marche",
-      hosts: "Fonctionne avec",
-      apps: "vos applications API",
       visual: {
         label: "Illustration animée : une grille de Postes s’allume ; un prompt qui porte une clé masquée se brise sur la ligne du Poste ; le cachet « Politique signée » se propage à tous les Postes.",
         poste: "Poste",
@@ -92,13 +128,22 @@ export const FLEET_COPY = {
       },
     },
     platform: {
-      punch: "xSOM Fleet gouverne toutes vos IA.",
-      sub: "Claude Code et Codex sur chaque Poste, vos applications API par une passerelle installée chez vous. D’autres assistants suivront.",
+      punch: "Pilotez toute votre architecture IA en un seul endroit :",
+      rest: "abonnements, clés API et modèles hébergés chez vous.",
+      supported: {
+        label: "Pris en charge",
+        subscriptions: "Abonnements",
+        gateway: "Par la passerelle",
+        claude: { name: "Claude", product: "Claude Code" },
+        chatgpt: { name: "ChatGPT", product: "Codex" },
+        api: { name: "Modèles par API", detail: "vos clés" },
+        hosted: { name: "Vos modèles", detail: "hébergés chez vous" },
+      },
       badge: "Disponible pour pilote",
       modules: [
-        { name: "Fleet Sièges", line: "Sièges, Plafonds et coût réel de chaque organisation." },
-        { name: "Fleet Guard", line: "Les secrets restent sur le Poste.", engine: "Moteur open source : Secret Guard" },
-        { name: "Fleet Gateway", line: "Vos applications API, par une passerelle chez vous." },
+        { name: "Fleet Sièges", title: "Solution FinOps", line: "Sièges, Facture réelle, Équivalent API estimé et Paliers de siège." },
+        { name: "Fleet Guard", title: "Solution cybersécurité", line: "Contrôle avant envoi sur le Poste, Politique signée, Journal des blocages et Dossier de preuves.", engine: "Moteur open source : Secret Guard" },
+        { name: "Fleet Gateway", title: "Solution architecture et stratégie IA", line: "Gestion et pilotage de la stratégie IA de l’entreprise : Applications API, Budgets API, modèles hébergés chez vous." },
       ],
     },
     why: {
@@ -106,8 +151,19 @@ export const FLEET_COPY = {
       demo: "Démonstration · données illustratives",
       cost: {
         name: "Coût",
-        line: "Payer les Sièges utilisés, pas les Sièges dormants.",
-        gauge: "Sièges d’une organisation Claude Team : le 151e est refusé.",
+        line: "Profitez des forfaits d’abonnement entreprise : un forfait vaut souvent bien plus que son prix en équivalent API. xSOM Fleet le mesure, Développeur par Développeur.",
+        measure: "Mesuré chez xSOM en septembre 2026, sur deux assistants : 8 988 $ d’usage au tarif API.",
+        claudeLine: "Forfait Claude à 200 $ par mois (216 € TTC) : 7 815 $ d’usage au tarif API, 39 fois son prix.",
+        measureNote: "Relevé avec ccusage (outil libre) sur les journaux d’un seul Poste, un utilisateur intensif. Les tarifs API sont ceux de l’outil ; c’est une estimation, pas une moyenne.",
+        plan: "Forfait",
+        usage: "Usage au tarif API",
+        claudePlan: "200 $",
+        claudeUsage: "7 815 $",
+        codexUsage: "1 173 $",
+        ratio: "× 39",
+        capture: "Voir le relevé ccusage",
+        captureAlt: "Sortie de ccusage dans un terminal, commande ccusage monthly --since 20260901 --until 20260930 : rapport mensuel 2026-09 de Claude, Codex et OpenClaw ; Cost (USD) $7814.73 pour Claude et $1173.27 pour Codex, mis en évidence, $0.00 pour OpenClaw, total $8988.00.",
+        captureClose: "Fermer le relevé",
         action: "Demander la simulation pour votre entreprise",
         actionNote: "Simulation · hypothèses affichées",
       },
@@ -133,40 +189,20 @@ export const FLEET_COPY = {
     how: {
       title: "De la console au Poste.",
       demo: "Démonstration · données illustratives",
+      film: "Film « Comment ça marche » de xSOM Fleet, avec voix off et sous-titres incrustés : choisir ses IA, une Politique signée pour tous les Postes, la supervision de chaque Poste, un secret arrêté sur le Poste, la facture IA, puis le Dossier de preuves. Captures de la console sur des données de démonstration.",
       play: "Lire le film",
       pause: "Mettre le film en pause",
+      unmute: "Activer le son",
+      mute: "Couper le son",
+      chapters: "Chapitres du film",
       steps: [
-        {
-          id: "orgs",
-          title: "Toutes vos organisations",
-          body: "Vos organisations Claude Team et espaces ChatGPT Business dans une seule console, et le 151e Siège refusé.",
-          film: "Film de démonstration sans son : la page Organisations fournisseur liste trois organisations Claude Team à 150 Sièges sur 150 ; l’affectation d’un 151e Siège est refusée et la console propose une autre organisation.",
-        },
-        {
-          id: "policy",
-          title: "Une Politique signée",
-          body: "Réglages, serveurs MCP et modèles autorisés : chaque agent vérifie la signature avant d’appliquer.",
-          film: "Film de démonstration sans son : la page Politique affiche l’aperçu des Postes sous la version minimale, puis la publication d’une nouvelle version signée.",
-        },
-        {
-          id: "block",
-          title: "Le secret reste sur le Poste",
-          body: "Un secret détecté bloque l’envoi, sans réseau ni modèle d’IA ; le message nomme la règle, jamais la valeur.",
-          film: "Film de démonstration sans son : dans le terminal de l’assistant, un prompt qui contient une clé fictive est bloqué ; le message de xSOM Fleet nomme la règle sans afficher la valeur.",
-        },
-        {
-          id: "coverage",
-          title: "L’État de chaque Poste",
-          body: "Sain, dégradé, en échec ou inconnu, avec ses motifs, et la liste des Postes en écart à exporter.",
-          film: "Film de démonstration sans son : la page Couverture compte les Postes sains, dégradés, en échec et inconnus, par Équipe, puis liste les Postes en écart avec leurs motifs.",
-        },
-        {
-          id: "costs",
-          title: "Le coût réel, à part l’estimation",
-          body: "La Facture réelle par Développeur, Équipe et Groupe, à côté de l’Équivalent API estimé et daté.",
-          film: "Film de démonstration sans son : la page Coûts montre, onglet par onglet, la Facture réelle et, dans des colonnes séparées, l’Équivalent API estimé et le Ratio de coût.",
-        },
-      ] satisfies readonly Step[],
+        { id: "choose", at: 0, title: "Choisissez vos IA", body: "Abonnements et API réunis au même endroit, sans dépendre d’un seul fournisseur." },
+        { id: "policy", at: 10.55, title: "Une seule Politique pour tous les Postes", body: "Une Politique signée, vérifiée puis appliquée sur chaque Poste." },
+        { id: "coverage", at: 19.55, title: "Supervisez", body: "L’état de chaque Poste, et la liste de ceux qui sont en écart." },
+        { id: "invisible", at: 28.55, title: "Rien ne change pour vos équipes", body: "Un secret détecté est arrêté sur le Poste, sans réseau ni modèle d’IA." },
+        { id: "costs", at: 41.07, title: "Maîtrisez votre facture IA", body: "La Facture réelle à côté de l’Équivalent API estimé, et le bon forfait pour chaque Développeur." },
+        { id: "proof", at: 53.78, title: "Prouvez votre maîtrise", body: "Le Dossier de preuves, prêt en un clic pour vos auditeurs." },
+      ] satisfies readonly Chapter[],
     },
     commitments: {
       title: "Licences, sources et engagements.",
@@ -186,7 +222,7 @@ export const FLEET_COPY = {
       items: [
         ["xSOM voit-il nos prompts ou nos clés ?", "Non. Le Contrôle avant envoi tourne sur le Poste, sans réseau ni modèle d’IA, et la passerelle reste chez vous. Seuls remontent des métriques d’usage et des Événements sans contenu."],
         ["Est-ce permis par les fournisseurs ?", "Vos développeurs gardent l’outil officiel, non modifié, avec leur propre connexion ; aucun identifiant n’est collecté, aucun compte n’est revendu. L’agent écrit seulement les réglages que chaque fournisseur documente pour les entreprises."],
-        ["Quels assistants sont couverts ?", "Claude Code et Codex, sur les Postes Windows, macOS et Linux, et vos applications API par Fleet Gateway. ChatGPT sur le web, Copilot et les modèles locaux ne le sont pas encore : d’autres assistants suivront, sans date annoncée."],
+        ["Quels assistants sont couverts ?", "Claude Code et Codex, sur les Postes Windows, macOS et Linux ; par la passerelle Fleet Gateway, vos applications API et vos modèles hébergés chez vous. ChatGPT sur le web, Copilot et les modèles lancés sur le Poste lui-même ne le sont pas encore : d’autres assistants suivront, sans date annoncée."],
         ["À partir de combien de développeurs ?", "150 et plus. En dessous, une seule organisation Claude Team suffit."],
         ["Et si le contrôle échoue ?", "L’envoi est bloqué, avec un message clair. Un contenu trop gros, une analyse incomplète ou un délai dépassé ne laissent jamais partir un envoi partiel. Le contrôle ne fait aucun appel réseau vers xSOM."],
         ["Comment se déroule le déploiement ?", "Votre outil de gestion de flotte, Intune ou un autre, installe l’agent xSOM. D’abord une démonstration gratuite sur nos propres comptes, puis un pilote de deux à trois mois chez vous, puis le Groupe entier."],
@@ -197,21 +233,19 @@ export const FLEET_COPY = {
   },
   en: {
     meta: {
-      title: "xSOM Fleet · the governance platform for your AI",
-      description: "Claude Code and Codex on every workstation, your API applications through a gateway installed on your side: seats, real cost, pre-send check and evidence for audit.",
-      ogAlt: "xSOM Fleet: the best AI for your whole company, security stays with you",
+      title: "xSOM Fleet · the best AI models, at enterprise security standards",
+      description: "Steer your whole AI architecture from one place: subscriptions (Claude Code and Codex on every workstation), API keys and models hosted on your side. Real cost, pre-send check and evidence for audit.",
+      ogAlt: "xSOM Fleet: the best AI models on the market, at enterprise security standards",
     },
     film: {
-      fallback: "xSOM Fleet governs all your AI.",
+      fallback: "Steer your whole AI architecture from one place.",
     },
     hero: {
       badge: "2026 pilot programme",
-      title: ["The best AI for your whole company.", "Security stays with you."],
-      lead: "Seats for the people who use them, the real cost per developer, a check on every workstation before anything is sent, evidence for audit.",
+      title: ["The best AI models on the market,", "at enterprise security standards."],
+      lead: "Controlled cost, a check on every workstation, evidence for audit.",
       contact: "Request a demo",
       how: "How it works",
-      hosts: "Works with",
-      apps: "your API applications",
       visual: {
         label: "Animated illustration: a grid of workstations lights up; a prompt carrying a masked key breaks on the workstation line; the “Signed Policy” seal spreads to every workstation.",
         poste: "Workstation",
@@ -221,13 +255,22 @@ export const FLEET_COPY = {
       },
     },
     platform: {
-      punch: "xSOM Fleet governs all your AI.",
-      sub: "Claude Code and Codex on every workstation, your API applications through a gateway installed on your side. Other assistants will follow.",
+      punch: "Steer your whole AI architecture from one place:",
+      rest: "subscriptions, API keys and models hosted on your side.",
+      supported: {
+        label: "Supported",
+        subscriptions: "Subscriptions",
+        gateway: "Through the gateway",
+        claude: { name: "Claude", product: "Claude Code" },
+        chatgpt: { name: "ChatGPT", product: "Codex" },
+        api: { name: "API models", detail: "your keys" },
+        hosted: { name: "Your models", detail: "hosted on your side" },
+      },
       badge: "Available for pilot",
       modules: [
-        { name: "Fleet Sièges", line: "Seats, caps and the real cost of every organization." },
-        { name: "Fleet Guard", line: "Secrets stay on the workstation.", engine: "Open-source engine: Secret Guard" },
-        { name: "Fleet Gateway", line: "Your API applications, through a gateway on your side." },
+        { name: "Fleet Sièges", title: "FinOps solution", line: "Seats, actual invoice, estimated API equivalent and seat tiers." },
+        { name: "Fleet Guard", title: "Cybersecurity solution", line: "Pre-send check on the workstation, signed Policy, block log and evidence dossier.", engine: "Open-source engine: Secret Guard" },
+        { name: "Fleet Gateway", title: "AI architecture and strategy solution", line: "Managing and steering the company’s AI strategy: API applications, API budgets, models hosted on your side." },
       ],
     },
     why: {
@@ -235,8 +278,19 @@ export const FLEET_COPY = {
       demo: "Demonstration · illustrative data",
       cost: {
         name: "Cost",
-        line: "Pay for the seats in use, not the idle ones.",
-        gauge: "Seats of a Claude Team organization: the 151st is refused.",
+        line: "Make the most of enterprise subscription plans: a plan is often worth far more than its price in API equivalent. xSOM Fleet measures it, developer by developer.",
+        measure: "Measured at xSOM in September 2026, across two assistants: $8,988 of usage at API rates.",
+        claudeLine: "Claude plan at $200 per month (€216 incl. VAT): $7,815 of usage at API rates, 39 times its price.",
+        measureNote: "Read with ccusage (a free tool) from the logs of a single workstation, one heavy user. API rates are the tool’s own; this is an estimate, not an average.",
+        plan: "Plan",
+        usage: "Usage at API rates",
+        claudePlan: "$200",
+        claudeUsage: "$7,815",
+        codexUsage: "$1,173",
+        ratio: "× 39",
+        capture: "See the ccusage report",
+        captureAlt: "ccusage output in a terminal, command ccusage monthly --since 20260901 --until 20260930: monthly report for 2026-09 of Claude, Codex and OpenClaw; Cost (USD) $7814.73 for Claude and $1173.27 for Codex, highlighted, $0.00 for OpenClaw, total $8988.00.",
+        captureClose: "Close the report",
         action: "Request the simulation for your company",
         actionNote: "Simulation · assumptions shown",
       },
@@ -262,40 +316,20 @@ export const FLEET_COPY = {
     how: {
       title: "From console to workstation.",
       demo: "Demonstration · illustrative data",
+      film: "xSOM Fleet “How it works” film, with voice-over and burned-in subtitles: choosing your AI, one signed Policy for every workstation, supervising every workstation, a secret stopped on the workstation, the AI bill, then the evidence dossier. Console captures on demonstration data.",
       play: "Play the film",
       pause: "Pause the film",
+      unmute: "Turn sound on",
+      mute: "Turn sound off",
+      chapters: "Film chapters",
       steps: [
-        {
-          id: "orgs",
-          title: "All your organizations",
-          body: "Your Claude Team organizations and ChatGPT Business workspaces in one console, and the 151st seat refused.",
-          film: "Demonstration film without sound: the Provider organizations page lists three Claude Team organizations at 150 of 150 seats; assigning a 151st seat is refused and the console suggests another organization.",
-        },
-        {
-          id: "policy",
-          title: "A signed Policy",
-          body: "Settings, allowed MCP servers and models: every agent checks the signature before applying anything.",
-          film: "Demonstration film without sound: the Policy page shows the preview of workstations below the minimum version, then the publication of a new signed version.",
-        },
-        {
-          id: "block",
-          title: "The secret stays on the workstation",
-          body: "A detected secret blocks the send, with no network and no AI model; the message names the rule, never the value.",
-          film: "Demonstration film without sound: in the assistant’s terminal, a prompt containing a fictitious key is blocked; the xSOM Fleet message names the rule without showing the value.",
-        },
-        {
-          id: "coverage",
-          title: "The status of every workstation",
-          body: "Healthy, degraded, failing or unknown, with its reasons, and the list of workstations out of line to export.",
-          film: "Demonstration film without sound: the Coverage page counts healthy, degraded, failing and unknown workstations by team, then lists the workstations out of line with their reasons.",
-        },
-        {
-          id: "costs",
-          title: "The real cost, apart from the estimate",
-          body: "The actual invoice per developer, team and group, next to the dated estimated API equivalent.",
-          film: "Demonstration film without sound: the Costs page shows, tab by tab, the actual invoice and, in separate columns, the estimated API equivalent and the cost ratio.",
-        },
-      ] satisfies readonly Step[],
+        { id: "choose", at: 0, title: "Choose your AI", body: "Subscriptions and APIs brought together in one place, without depending on a single provider." },
+        { id: "policy", at: 13.71, title: "One Policy for every workstation", body: "A signed Policy, checked then applied on every workstation." },
+        { id: "coverage", at: 23.3, title: "Supervise", body: "The status of every workstation, and the list of those out of line." },
+        { id: "invisible", at: 32.3, title: "Nothing changes for your teams", body: "A detected secret is stopped on the workstation, with no network and no AI model." },
+        { id: "costs", at: 46.25, title: "Control your AI bill", body: "The actual invoice next to the estimated API equivalent, and the right plan for every developer." },
+        { id: "proof", at: 60.36, title: "Prove you are in control", body: "The evidence dossier, ready in one click for your auditors." },
+      ] satisfies readonly Chapter[],
     },
     commitments: {
       title: "Licences, sources and commitments.",
@@ -315,7 +349,7 @@ export const FLEET_COPY = {
       items: [
         ["Does xSOM see our prompts or keys?", "No. The pre-send check runs on the workstation, with no network and no AI model, and the gateway stays on your side. Only usage metrics and events without content are sent."],
         ["Do the providers allow it?", "Your developers keep the official, unmodified tool with their own sign-in; no credential is collected and no account is resold. The agent only writes the settings each provider documents for enterprises."],
-        ["Which assistants are covered?", "Claude Code and Codex, on Windows, macOS and Linux workstations, and your API applications through Fleet Gateway. ChatGPT on the web, Copilot and local models are not covered yet: other assistants will follow, with no date announced."],
+        ["Which assistants are covered?", "Claude Code and Codex, on Windows, macOS and Linux workstations; through the Fleet Gateway, your API applications and your models hosted on your side. ChatGPT on the web, Copilot and models run on the workstation itself are not covered yet: other assistants will follow, with no date announced."],
         ["From how many developers?", "150 and more. Below that, a single Claude Team organization is enough."],
         ["What if the check fails?", "The send is blocked, with a clear message. Oversized content, an incomplete scan or a timeout never lets a partial send through. The check makes no network call to xSOM."],
         ["How does the rollout work?", "Your fleet management tool, Intune or another, installs the xSOM agent. First a free demo on our own accounts, then a two-to-three-month pilot on your side, then the whole group."],

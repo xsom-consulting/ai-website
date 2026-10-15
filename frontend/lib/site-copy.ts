@@ -176,8 +176,8 @@ export const SITE_DEFAULT_META: Record<Site, Record<Lang, { readonly title: stri
     en: { title: "xSOM · AI", description: "The AI division of xSOM Consulting: AI consulting services and products for using AI in the enterprise." },
   },
   fleet: {
-    fr: { title: "xSOM Fleet", description: "xSOM Fleet : la plateforme de gouvernance de vos IA. Sièges, coûts, sécurité sur le Poste, preuves." },
-    en: { title: "xSOM Fleet", description: "xSOM Fleet: the governance platform for your AI. Seats, costs, security on the workstation, evidence." },
+    fr: { title: "xSOM Fleet", description: "xSOM Fleet : les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise. Coûts, sécurité sur le Poste, preuves." },
+    en: { title: "xSOM Fleet", description: "xSOM Fleet: the best AI models, at enterprise security standards. Costs, security on the workstation, evidence." },
   },
   guard: {
     fr: { title: "Secret Guard", description: "Secret Guard : le moteur open source (Apache-2.0) de détection de secrets de xSOM. Analyse locale, sans réseau ni modèle de langage." },

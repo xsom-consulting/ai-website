@@ -1,0 +1,21 @@
+{
+  "_note": "Scènes du film « Comment ça marche » v2. `text` est dit par la voix off et incrusté en sous-titres ; `say`, s'il existe, remplace `text` pour la voix seulement (prononciation) ; `hold` ajoute des secondes d'image après la voix. Lu par scripts/voiceover.mjs et src/fleet/v2/HowV2.tsx.",
+  "fr": [
+    { "id": "choose", "hold": 1.2, "title": "Choisissez vos IA", "text": "Les meilleurs modèles du marché pour chaque métier, sans dépendre d’un seul fournisseur. Vos abonnements et vos API, réunis au même endroit." },
+    { "id": "policy", "title": "Une seule Politique pour tous les Postes", "text": "Les règles et les risques cyber de tous vos collaborateurs, pilotés d’un seul endroit. Une Politique signée, appliquée partout." },
+    { "id": "coverage", "title": "Supervisez", "text": "Chaque Poste, son état, en temps réel. Vous savez où vous êtes protégés, et où vous ne l’êtes pas encore." },
+    { "id": "invisible", "hold": 2.6, "title": "Rien ne change pour vos équipes", "text": "Vos Développeurs travaillent comme avant. La sécurité est invisible, jusqu’au jour où un secret allait partir : là, elle l’arrête sur le Poste." },
+    { "id": "costs", "hold": 1.5, "title": "Maîtrisez votre facture IA", "text": "Comprenez, suivez et surtout optimisez votre facture IA : chaque Siège utile, chaque euro expliqué, et le bon forfait pour chaque Développeur." },
+    { "id": "proof", "hold": 1.5, "title": "Prouvez votre maîtrise", "text": "Pour vos auditeurs comme pour vos clients : la preuve d’un usage de l’IA maîtrisé, prête en un clic." },
+    { "id": "signature", "title": "xSOM Fleet", "text": "xSOM Fleet. Les meilleures IA pour toute votre entreprise. La sécurité reste chez vous.", "say": "Ix-Somme Fleet. Les meilleures IA pour toute votre entreprise. La sécurité reste chez vous." }
+  ],
+  "en": [
+    { "id": "choose", "hold": 1.2, "title": "Choose your AI", "text": "The best models on the market for every role, without depending on a single provider. Your subscriptions and your APIs, brought together in one place." },
+    { "id": "policy", "title": "One Policy for every Poste", "text": "The rules and cyber risks of all your people, managed from one place. A signed Policy, applied everywhere." },
+    { "id": "coverage", "title": "Supervise", "text": "Every Poste and its state, in real time. You know where you are protected, and where you are not yet." },
+    { "id": "invisible", "hold": 2.6, "title": "Nothing changes for your teams", "text": "Your developers work as before. Security stays invisible, until the day a secret is about to leave: then it stops it on the Poste." },
+    { "id": "costs", "hold": 1.5, "title": "Control your AI bill", "text": "Understand, track and above all optimise your AI bill: every useful Seat, every euro explained, and the right plan for every developer." },
+    { "id": "proof", "hold": 1.5, "title": "Prove you are in control", "text": "For your auditors as for your clients: proof of a controlled use of AI, ready in one click." },
+    { "id": "signature", "title": "xSOM Fleet", "text": "xSOM Fleet. The best AI for your whole company. Security stays with you.", "say": "Ex-Som Fleet. The best AI for your whole company. Security stays with you." }
+  ]
+}
