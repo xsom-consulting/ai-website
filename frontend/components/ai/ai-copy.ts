@@ -9,7 +9,7 @@ import { MAIN_SITE_ORIGIN } from "@/lib/sites";
  * (`www.xsom.fr`, pages « IA & Souveraineté » et « Expertises ») : aucune prestation,
  * aucun chiffre et aucune référence client n'est ajouté ici. Les produits sont ceux
  * de la plateforme xSOM Fleet et du moteur open source Secret Guard ; Fleet Gateway
- * n'existe pas encore et n'est présenté qu'au futur, sans date.
+ * est présenté comme disponible pour pilote, sans autre promesse.
  */
 
 export const AI_CONTACT = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("xSOM · IA")}`;
@@ -37,7 +37,7 @@ export const AI_COPY = {
   fr: {
     meta: {
       title: "xSOM · IA · la division IA de xSOM Consulting",
-      description: "Prestations de conseil IA et produits pour utiliser l’IA en entreprise : xSOM Fleet, la plateforme des assistants de code, et Secret Guard, le moteur open source de détection de secrets.",
+      description: "Prestations de conseil IA et produits pour utiliser l’IA en entreprise : xSOM Fleet, la plateforme de gouvernance des IA, et Secret Guard, le moteur open source de détection de secrets.",
       ogAlt: "xSOM · IA, la division IA de xSOM Consulting",
     },
     film: { fallback: "La division IA de xSOM Consulting." },
@@ -76,15 +76,15 @@ export const AI_COPY = {
     products: {
       kicker: "02 · Produits IA",
       title: "Nos produits IA.",
-      lead: "Une plateforme pour gouverner les assistants de code d’une entreprise, et le moteur open source qui y détecte les secrets.",
+      lead: "Une plateforme pour gouverner les IA d’une entreprise, et le moteur open source qui y détecte les secrets.",
       fleet: {
         badge: "Plateforme · programme pilote 2026",
         name: "xSOM Fleet",
-        body: "Vos abonnements d’assistants de code, à l’échelle de toute l’entreprise : une console, un agent sur chaque Poste, le coût réel par développeur et des preuves pour l’audit.",
+        body: "La plateforme de gouvernance de vos IA : Claude Code et Codex sur chaque Poste, vos applications API par une passerelle installée chez vous. D’autres assistants suivront.",
         modules: [
           ["Fleet Sièges", "Abonnements, coûts, couverture."],
           ["Fleet Guard", "Secrets bloqués sur le Poste, Journal des blocages, Dossier de preuves."],
-          ["Fleet Gateway", "Passerelle API et agents, chez le client. À venir, sans date."],
+          ["Fleet Gateway", "Passerelle API installée chez le client, Budgets API par application. Disponible pour pilote."],
         ],
         action: "Découvrir xSOM Fleet",
       },
@@ -112,7 +112,7 @@ export const AI_COPY = {
   en: {
     meta: {
       title: "xSOM · AI · the AI division of xSOM Consulting",
-      description: "AI consulting services and products for using AI in the enterprise: xSOM Fleet, the coding-assistant platform, and Secret Guard, the open-source secret-detection engine.",
+      description: "AI consulting services and products for using AI in the enterprise: xSOM Fleet, the AI governance platform, and Secret Guard, the open-source secret-detection engine.",
       ogAlt: "xSOM · AI, the AI division of xSOM Consulting",
     },
     film: { fallback: "The AI division of xSOM Consulting." },
@@ -151,15 +151,15 @@ export const AI_COPY = {
     products: {
       kicker: "02 · AI products",
       title: "Our AI products.",
-      lead: "A platform to govern an enterprise’s coding assistants, and the open-source engine that detects secrets in it.",
+      lead: "A platform to govern a company’s AI, and the open-source engine that detects secrets in it.",
       fleet: {
         badge: "Platform · 2026 pilot programme",
         name: "xSOM Fleet",
-        body: "Your coding-assistant subscriptions, across the whole company: one console, an agent on every workstation, the real cost per developer and evidence for audit.",
+        body: "The governance platform for your AI: Claude Code and Codex on every workstation, your API applications through a gateway installed on your side. Other assistants will follow.",
         modules: [
           ["Fleet Sièges", "Seat subscriptions, costs, coverage."],
           ["Fleet Guard", "Secrets blocked on the workstation, block log, evidence dossier."],
-          ["Fleet Gateway", "API gateway and agents, on the customer’s side. Coming, no date."],
+          ["Fleet Gateway", "API gateway installed on the customer’s side, API budgets per application. Available for pilot."],
         ],
         action: "Discover xSOM Fleet",
       },
