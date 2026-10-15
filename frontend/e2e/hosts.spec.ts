@@ -26,7 +26,7 @@ function watch(page: Page) {
 
 const sites = [
   { host: "ai.xsom.fr", brand: "xSOM · IA", heading: "La division IA de xSOM.", nav: ["Prestations", "Produits", "Menaces IA", "xSOM Consulting"], paths: ["/", "/menaces", "/mentions-legales"] },
-  { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "Vos abonnements d’assistants de code, à l’échelle de toute l’entreprise.", nav: ["Comment ça marche", "Modules", "Questions", "Division IA", "xSOM Consulting"], paths: ["/"] },
+  { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "Les meilleures IA pour toute votre entreprise.", nav: ["Pourquoi Fleet", "Comment ça marche", "Engagements", "Questions", "Division IA", "xSOM Consulting"], paths: ["/"] },
   { host: "guard.xsom.fr", brand: "Secret Guard", heading: "Repérer les secrets avant qu’ils ne partent.", nav: ["Comment ça marche", "Open source", "Dans xSOM Fleet", "Division IA", "xSOM Consulting"], paths: ["/", "/cookies"] },
 ] as const;
 

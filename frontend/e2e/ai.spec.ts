@@ -34,13 +34,13 @@ test("the services come from the consulting site and invent nothing", async ({ p
   expect(text).not.toMatch(/\d\s?(%|€|\$|clients?)/);
 });
 
-test("the two products point to their own sites, and Fleet Gateway is only announced", async ({ page }) => {
+test("the two products point to their own sites, and Fleet Gateway is offered for pilot only", async ({ page }) => {
   await page.goto("/");
   const products = page.locator("#produits");
   const fleet = products.locator(".ai-product").nth(0);
   await expect(fleet.getByRole("heading", { name: "xSOM Fleet" })).toBeVisible();
   await expect(fleet.locator(".ai-modules strong")).toHaveText(["Fleet Sièges", "Fleet Guard", "Fleet Gateway"]);
-  await expect(fleet.locator(".ai-modules li").nth(2)).toContainText("À venir, sans date.");
+  await expect(fleet.locator(".ai-modules li").nth(2)).toContainText("Disponible pour pilote.");
   await expect(fleet.getByRole("link", { name: /Découvrir xSOM Fleet/ })).toHaveAttribute("href", "/fleet");
   const guard = products.locator(".ai-product").nth(1);
   await expect(guard.getByRole("heading", { name: "Secret Guard" })).toBeVisible();
@@ -82,7 +82,7 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("The AI division of xSOM.");
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · AI");
   await expect(page.locator("#prestations .ai-card")).toHaveCount(3);
-  await expect(page.locator("#produits .ai-modules li").nth(2)).toContainText("Coming, no date.");
+  await expect(page.locator("#produits .ai-modules li").nth(2)).toContainText("Available for pilot.");
   await expect(page.locator("#home-film video")).toHaveAttribute("src", "/signal-media/xsom-ia-home-en.mp4");
   await context.close();
 });
