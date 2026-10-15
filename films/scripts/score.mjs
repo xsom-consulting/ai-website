@@ -46,6 +46,11 @@ const smooth = x => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
 export function score(name, file) {
   const cue = CUES[name];
   if (!cue) throw new Error(`No music cue for ${name}`);
+  return renderCue(cue, file);
+}
+
+/** Renders any cue `{seconds, chords}` (see CUES) to a WAV: films whose acts move build theirs. */
+export function renderCue(cue, file) {
   const { seconds, chords } = cue;
   const ends = chords.map((chord, index) => chords[index + 1]?.at ?? seconds);
   const length = seconds * RATE;
@@ -184,13 +189,13 @@ export function score(name, file) {
   return file;
 }
 
-function polyBlep(t, dt) {
+export function polyBlep(t, dt) {
   if (t < dt) { t /= dt; return t + t - t * t - 1; }
   if (t > 1 - dt) { t = (t - 1) / dt; return t * t + t + t + 1; }
   return 0;
 }
 
-function freeverb(inL, inR, room, damping) {
+export function freeverb(inL, inR, room, damping) {
   const tune = n => Math.round(n * RATE / 44100);
   const combs = [1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617];
   const allpasses = [556, 441, 341, 225];
@@ -222,7 +227,7 @@ function freeverb(inL, inR, room, damping) {
   return [channel(inL, 0), channel(inR, 23)];
 }
 
-function writeWav(file, left, right) {
+export function writeWav(file, left, right) {
   const frames = left.length;
   const buffer = Buffer.alloc(44 + frames * 8);
   buffer.write('RIFF', 0); buffer.writeUInt32LE(36 + frames * 8, 4); buffer.write('WAVE', 8);

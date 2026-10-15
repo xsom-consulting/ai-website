@@ -1,0 +1,30 @@
+/* "How it works" v2: scene title top left, the console window in the middle, burned-in
+   subtitles at the bottom, all on the 1920 × 1080 frame. */
+.how-v2 .how-scene-title { position: absolute; left: 190px; top: 54px; display: flex; align-items: center; gap: 22px; }
+.how-v2 .how-scene-title b { font: 500 30px Mono, monospace; color: #050d1b; background: #7cc0ff; padding: 6px 12px; border-radius: 6px; }
+.how-v2 .how-scene-title span { font: 800 54px Saira, sans-serif; text-transform: uppercase; letter-spacing: -.01em; color: #f5f8ff; white-space: nowrap; }
+
+.how-v2 .how-subtitle-wrap { position: absolute; left: 120px; right: 120px; top: 918px; display: flex; justify-content: center; }
+.how-v2 .how-subtitle { max-width: 1640px; text-align: center; font: 600 42px/1.25 Source, sans-serif; color: #fff; background: rgba(2,8,18,.86); padding: 12px 30px 14px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+
+.how-v2 .how-type { position: absolute; left: 190px; top: 150px; width: 1540px; height: 742px; border-radius: 16px; background: radial-gradient(ellipse 90% 90% at 30% 30%, #12305a, #071225 75%); box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(124,192,255,.25); padding: 96px 110px; box-sizing: border-box; }
+.how-v2 .how-type-kicker { font: 500 30px Mono, monospace; letter-spacing: .14em; text-transform: uppercase; color: #a9c8ef; }
+.how-v2 .how-type-title { margin-top: 18px; font: 800 92px/1.02 Saira, sans-serif; text-transform: uppercase; letter-spacing: -.02em; color: #f5f8ff; }
+.how-v2 .how-type-items { margin-top: 56px; display: grid; gap: 26px; }
+.how-v2 .how-type-item { display: flex; align-items: center; gap: 26px; font: 600 50px Source, sans-serif; color: #e6efff; }
+.how-v2 .how-type-item i { width: 22px; height: 22px; border-radius: 6px; background: #7cc0ff; box-shadow: 0 0 18px rgba(124,192,255,.7); flex: none; }
+
+.how-v2 .how-terminal { left: 190px; top: 150px; width: 1540px; height: 742px; }
+.how-v2 .how-terminal .term-body { top: 58px; padding: 34px 48px; font-size: 30px; }
+.how-v2 .how-terminal .blocked { margin-top: 16px; padding: 18px 28px; font-size: 26px; }
+.how-v2 .how-terminal .blocked .tag { font-size: 22px; margin-bottom: 8px; }
+.how-v2 .how-ok { color: #7fe0a8; }
+.how-v2 .how-prompt { position: absolute; left: 48px; right: 48px; bottom: 34px; }
+.how-v2 .how-term-note { position: absolute; right: 30px; top: 14px; font: 500 22px Mono, monospace; color: #8fa6c4; }
+
+.how-v2 .how-signature { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 18px; }
+.how-v2 .how-logo { display: flex; align-items: center; gap: 36px; margin-bottom: 40px; }
+.how-v2 .how-logo span { font: 800 140px Manrope, sans-serif; letter-spacing: -.03em; color: #f5f8ff; }
+.how-v2 .how-logo em { font-style: normal; font-weight: 300; color: #7cc0ff; }
+.how-v2 .how-signature-line { font: 700 66px Manrope, sans-serif; letter-spacing: -.02em; color: #f5f8ff; }
+.how-v2 .how-signature-line.accent { color: #7cc0ff; }

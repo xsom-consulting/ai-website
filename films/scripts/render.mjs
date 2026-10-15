@@ -10,7 +10,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bundle } from '@remotion/bundler';
 import { renderMedia, renderStill, selectComposition } from '@remotion/renderer';
-import { score, cues } from './score.mjs';
+import { score, cues, renderCue } from './score.mjs';
+import { adScore } from './ad-score.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const media = path.resolve(root, '../frontend/public/signal-media');
@@ -50,6 +51,36 @@ const JOBS = [
   }))),
 ];
 
+/** Music bed of the "how it works" v2 film: one chord per scene, on the voice-over's timings. */
+const HOW_V2_CHORDS = [[38, [50, 57, 64, 65, 69]], [34, [58, 62, 65, 69, 72]], [41, [53, 57, 60, 64, 67, 72]], [40, [52, 58, 62, 67, 70]], [33, [57, 62, 64, 67, 69]], [36, [55, 60, 64, 67, 71]], [38, [50, 57, 62, 64, 66, 69]]];
+const howTiming = () => JSON.parse(fs.readFileSync(path.join(root, 'src/fleet/v2/voice-timing.json'), 'utf8'));
+function howV2Music(lang) {
+  const { seconds, scenes } = howTiming()[lang];
+  const chords = scenes.map((scene, i) => ({ at: scene.start, bass: HOW_V2_CHORDS[i % HOW_V2_CHORDS.length][0], pad: HOW_V2_CHORDS[i % HOW_V2_CHORDS.length][1] }));
+  renderCue({ seconds: Math.ceil(seconds), chords }, path.join(root, 'public/score', `fleet-how-v2-${lang}.wav`));
+}
+/** Poster of the "how it works" v2 film: the key blocked on the Poste, one second after the block. */
+function howV2Poster(lang) {
+  const scene = howTiming()[lang].scenes.find(s => s.id === 'invisible');
+  return scene.start + scene.voiceAt + scene.cues[2].start + 1.2;
+}
+
+// Version 2 of the fleet.xsom.fr films, under new names (the first versions stay in place).
+JOBS.push(
+  ...['fr', 'en'].map(lang => ({
+    name: 'fleet-ad', id: `fleet-ad-${lang}`, budget: 8 * MB,
+    prepare: () => adScore(lang, path.join(root, 'public/score', `fleet-ad-${lang}.wav`)),
+    outputs: [[path.join(media, `xsom-fleet-hero-v2-${lang}.mp4`), { ...film, crf: 22, audioBitrate: '160k' }]],
+    poster: [path.join(media, `xsom-fleet-hero-v2-${lang}.jpg`), 19.3, 'jpeg'],
+  })),
+  ...['fr', 'en'].map(lang => ({
+    name: 'fleet-how-v2', id: `fleet-how-v2-${lang}`, budget: 15 * MB,
+    prepare: () => howV2Music(lang),
+    outputs: [[path.join(media, `xsom-fleet-how-v2-${lang}.mp4`), { ...film, crf: 24 }]],
+    poster: [path.join(media, `xsom-fleet-how-v2-${lang}.jpg`), () => howV2Poster(lang), 'jpeg'],
+  })),
+);
+
 const wanted = process.argv.slice(2);
 const jobs = JOBS.filter(job => !wanted.length || wanted.includes(job.name) || wanted.includes(job.id));
 if (!jobs.length) throw new Error(`No job matches ${wanted.join(', ')}`);
@@ -60,6 +91,7 @@ for (const cue of cues) score(cue, path.join(root, 'public/score', `${cue}.wav`)
 
 const serveUrl = await bundle({ entryPoint: path.join(root, 'src/index.ts') });
 for (const job of jobs) {
+  job.prepare?.();
   const composition = await selectComposition({ serveUrl, id: job.id });
   for (const [output, encoding] of job.outputs) {
     const probe = new Map();
@@ -85,7 +117,8 @@ for (const job of jobs) {
     }
     console.log(`${job.id} → ${path.relative(path.resolve(root, '..'), output)} (${(size / MB).toFixed(2)} MB${note})`);
   }
-  const [poster, seconds, imageFormat] = job.poster;
+  const [poster, at, imageFormat] = job.poster;
+  const seconds = typeof at === 'function' ? at() : at;
   const frame = Math.min(composition.durationInFrames - 1, Math.round(seconds * composition.fps));
   await renderStill({ serveUrl, composition, frame, output: poster, imageFormat, ...(imageFormat === 'jpeg' && { jpegQuality: 82 }) });
   for (const destination of job.copies ?? []) {
