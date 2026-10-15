@@ -51,8 +51,8 @@ npm run render -- fleet-ad fleet-how-v2
 ```
 
 Une scène déjà en cache n’est jamais renvoyée ; `--silent` construit le film sans voix.
-Les noms de Fournisseur visibles sur les captures sont floutés à l’image (`redact` d’un
-`TourPage`).
+Les noms de Fournisseur visibles sur les captures restent lisibles (usage nominatif) ;
+`redact` d’un `TourPage` sait encore masquer une zone si besoin.
 
 ## Sources
 

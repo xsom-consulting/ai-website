@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { AbsoluteFill, Audio, Img, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { clamp, outExpo } from "../../kit";
-import { ScreenTour, type Focus, type TourPage, type TourWindow } from "../screen-tour";
+import { ScreenTour, type TourPage, type TourWindow } from "../screen-tour";
 import SCRIPT from "./how-script.json";
 import TIMING from "./voice-timing.json";
 import "../../titles.css";
@@ -23,24 +23,6 @@ const MENTION = { fr: "Démonstration · données illustratives", en: "Demonstra
 
 /** Where the console window sits: under the scene title, above the subtitles. */
 const WINDOW: TourWindow = { left: 190, top: 150, width: 1540, height: 742, chrome: 58 };
-
-/**
- * Boxes hidden on the captures (CSS pixels): the provider and product names the demonstration
- * data and the forms carry. No AI provider is named in the films; nothing else is changed.
- */
-const REDACT = {
-  orgs: {
-    fr: [{ x: 28, y: 338, w: 702, h: 258 }, { x: 46, y: 748, w: 582, h: 42 }],
-    en: [{ x: 28, y: 338, w: 738, h: 258 }, { x: 46, y: 748, w: 582, h: 42 }],
-  },
-  policy: [
-    { x: 16, y: 322, w: 1568, h: 275 },
-    { x: 46, y: 1226, w: 536, h: 118 },
-    { x: 46, y: 1384, w: 536, h: 46 },
-    { x: 56, y: 1686, w: 530, h: 30 },
-    { x: 56, y: 1815, w: 530, h: 30 },
-  ],
-} satisfies Record<string, Focus[] | Record<HowV2Lang, Focus[]>>;
 
 /** Text of the scenes drawn without a console capture (the screen does not exist yet). */
 const COPY = {
@@ -254,7 +236,6 @@ function Visual({ id, lang, scene }: { id: string; lang: HowV2Lang; scene: Scene
         width: 1600,
         height: 1000,
         path: "/organisations-fournisseur",
-        redact: REDACT.orgs[lang],
         steps: [
           { at: 0 },
           { at: at(0.12), focus: { x: 24, y: 278, w: 1556, h: 320 }, zoom: 1.05, pointer: false },
@@ -269,7 +250,6 @@ function Visual({ id, lang, scene }: { id: string; lang: HowV2Lang; scene: Scene
         width: 1600,
         height: 2404,
         path: "/politique",
-        redact: REDACT.policy,
         steps: [
           { at: 0 },
           { at: at(0.1), focus: { x: 20, y: 258, w: 900, h: 36 }, zoom: 1.7 },

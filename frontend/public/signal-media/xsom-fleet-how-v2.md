@@ -14,8 +14,8 @@
 
 | Scène | Écran |
 |---|---|
-| 1 Choisissez vos IA | capture « Organisations fournisseur » (noms des Fournisseurs et des offres floutés), puis plan typographique « Applications API » (écran non capturé) |
-| 2 Une seule Politique pour tous les Postes | capture « Politique » et aperçu de publication (configuration et modèles propres à un assistant floutés) |
+| 1 Choisissez vos IA | capture « Organisations fournisseur » (noms des Fournisseurs et des offres en usage nominatif), puis plan typographique « Applications API » (écran non capturé) |
+| 2 Une seule Politique pour tous les Postes | capture « Politique » et aperçu de publication |
 | 3 Supervisez | capture « Couverture » |
 | 4 Rien ne change pour vos équipes | terminal dessiné : envoi normal, clé fictive `AKIA••••` bloquée avec le texte réel de l’Agent xSOM (`hook.blocked`, règle `aws_access_key_id`, `hook.remedy.cloud_credential`), envoi corrigé par variable d’environnement |
 | 5 Maîtrisez votre facture IA | capture « Coûts » par Développeur, puis plan typographique « Recommandations de Palier de siège » (écran non capturé) |

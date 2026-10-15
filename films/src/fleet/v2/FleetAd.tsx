@@ -26,7 +26,7 @@ const COPY = {
       { label: "Équivalent API estimé", value: "44 043,62 $", note: "estimation · Catalogue de prix du 2026-07-01" },
     ],
     period: "Coûts · Groupe · septembre 2026",
-    control: "Chaque euro maîtrisé.",
+    control: "Chaque dépense maîtrisée.",
     mention: "Démonstration · données illustratives",
     finale: ["Les meilleures IA", "pour toute votre entreprise."],
     secure: "La sécurité reste chez vous.",
@@ -45,7 +45,7 @@ const COPY = {
       { label: "Estimated API equivalent", value: "44 043,62 $", note: "estimate · Price catalog of 2026-07-01" },
     ],
     period: "Costs · Group · September 2026",
-    control: "Every euro under control.",
+    control: "Every dollar under control.",
     mention: "Demonstration · illustrative data",
     finale: ["The best AI", "for your whole company."],
     secure: "Security stays with you.",
@@ -608,7 +608,7 @@ function Counters({ t, lang }: { t: number; lang: AdLang }) {
         })}
       </div>
       <div className="ad-center" style={{ top: 735 }}>
-        <Slam t={t} at={CUES.control} className="ad-title">
+        <Slam t={t} at={CUES.control} className="ad-title" style={{ fontSize: 104 }}>
           {copy.control}
         </Slam>
       </div>

@@ -19,7 +19,7 @@
 | 5–8 s | pastilles « modèle », « assistant », « API » aimantées sur une grille de Postes · TOUTES LES MEILLEURES IA. | model, assistant, API · ALL THE BEST AI. |
 | 8–11 s | une clé `AKIA••••` se brise sur la ligne du Poste · RIEN NE SORT. | NOTHING LEAVES. |
 | 11–14 s | cachet POLITIQUE SIGNÉE, onde sur des milliers de Postes · PARTOUT. TOUT DE SUITE. | SIGNED POLICY · EVERYWHERE. INSTANTLY. |
-| 14–17 s | compteurs de la console (Sièges, Facture réelle, Équivalent API estimé « estimation · Catalogue de prix du 2026-07-01 ») avec « Démonstration · données illustratives » · CHAQUE EURO MAÎTRISÉ. | Seats, Actual invoice, Estimated API equivalent (« estimate ») · EVERY EURO UNDER CONTROL. |
+| 14–17 s | compteurs de la console (Sièges, Facture réelle, Équivalent API estimé « estimation · Catalogue de prix du 2026-07-01 ») avec « Démonstration · données illustratives » · CHAQUE DÉPENSE MAÎTRISÉE. | Seats, Actual invoice, Estimated API equivalent (« estimate ») · EVERY DOLLAR UNDER CONTROL. |
 | 17–18 s | noir, silence | |
 | 18–20 s | Les meilleures IA pour toute votre entreprise. La sécurité reste chez vous. · logo xSOM Fleet | The best AI for your whole company. Security stays with you. |
 
