@@ -28,7 +28,7 @@ export function sitemapXml(site: Site | null): string {
 }
 
 const FLEET_SUMMARY =
-  "xSOM Fleet : la plateforme qui gouverne les assistants de code d’une entreprise (Claude Code, Codex). Trois modules : Fleet Sièges (abonnements, coûts, couverture), Fleet Guard (secrets bloqués sur le Poste, Journal des blocages, Dossier de preuves) et Fleet Gateway (passerelle API et agents, chez le client : à venir, sans date).";
+  "xSOM Fleet : la plateforme de gouvernance des IA d’une entreprise. Claude Code et Codex sur chaque Poste (Windows, macOS, Linux), les applications API par une passerelle installée chez le client. Trois modules, disponibles pour pilote : Fleet Sièges (Sièges, coûts, couverture), Fleet Guard (Contrôle avant envoi sur le Poste, Journal des blocages, Dossier de preuves) et Fleet Gateway (passerelle LiteLLM installée chez le client, Budgets API par application). D’autres assistants suivront.";
 
 /** Le texte `llms.txt` de chaque site : ce que c'est, et où lire le détail. */
 export function llmsTxt(site: Site | null): string {
@@ -58,11 +58,11 @@ export function llmsTxt(site: Site | null): string {
   if (site === "fleet") {
     return `# xSOM Fleet
 
-> ${FLEET_SUMMARY} (EN: the platform that governs an enterprise’s coding assistants.)
+> ${FLEET_SUMMARY} (EN: the governance platform for a company’s AI: Claude Code and Codex on every workstation, API applications through a gateway installed on the customer’s side.)
 
 ## Pages
 
-- [xSOM Fleet](${origin("fleet")}/) : la plateforme, ses trois modules, le constat des deux factures (Facture réelle et Équivalent API estimé), cinq films « Comment ça marche », les limites de xSOM, les preuves pour l’audit, le déploiement et les questions fréquentes.
+- [xSOM Fleet](${origin("fleet")}/) : la plateforme et ses trois modules, pourquoi la choisir (coût des Sièges, pilotage FinOps avec la Facture réelle face à l’Équivalent API estimé, sécurité), cinq films « Comment ça marche », les licences, sources et engagements (Secret Guard en Apache-2.0, LiteLLM en partie MIT, SBOM CycloneDX, ce que xSOM ne voit jamais, Dossier de preuves) et les questions fréquentes.
 
 ## Liens
 

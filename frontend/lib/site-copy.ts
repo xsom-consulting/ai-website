@@ -54,15 +54,17 @@ export const NAV: Record<Site, Record<Lang, readonly NavItem[]>> = {
   },
   fleet: {
     fr: [
+      { label: "Pourquoi Fleet", to: { site: "fleet", path: "/#pourquoi" } },
       { label: "Comment ça marche", to: { site: "fleet", path: "/#fonctionnement" } },
-      { label: "Modules", to: { site: "fleet", path: "/#modules" } },
+      { label: "Engagements", to: { site: "fleet", path: "/#engagements" } },
       { label: "Questions", to: { site: "fleet", path: "/#questions" } },
       { label: "Division IA", to: { site: "ai" } },
       WWW.fr,
     ],
     en: [
+      { label: "Why Fleet", to: { site: "fleet", path: "/#pourquoi" } },
       { label: "How it works", to: { site: "fleet", path: "/#fonctionnement" } },
-      { label: "Modules", to: { site: "fleet", path: "/#modules" } },
+      { label: "Commitments", to: { site: "fleet", path: "/#engagements" } },
       { label: "Questions", to: { site: "fleet", path: "/#questions" } },
       { label: "AI division", to: { site: "ai" } },
       WWW.en,
@@ -93,8 +95,8 @@ export const FOOTER_TAGLINE: Record<Site, Record<Lang, string>> = {
     en: "The AI division of xSOM Consulting: services and products for using AI in the enterprise.",
   },
   fleet: {
-    fr: "La plateforme qui gouverne les assistants de code d’une entreprise : abonnements, secrets, preuves.",
-    en: "The platform that governs an enterprise’s coding assistants: subscriptions, secrets, evidence.",
+    fr: "La plateforme de gouvernance de vos IA : Sièges, coûts, sécurité sur le Poste, preuves.",
+    en: "The governance platform for your AI: seats, costs, security on the workstation, evidence.",
   },
   guard: {
     fr: "Le moteur de détection de secrets de xSOM, open source (Apache-2.0).",
@@ -174,8 +176,8 @@ export const SITE_DEFAULT_META: Record<Site, Record<Lang, { readonly title: stri
     en: { title: "xSOM · AI", description: "The AI division of xSOM Consulting: AI consulting services and products for using AI in the enterprise." },
   },
   fleet: {
-    fr: { title: "xSOM Fleet", description: "xSOM Fleet : la plateforme qui gouverne les assistants de code d’une entreprise. Abonnements, secrets, preuves." },
-    en: { title: "xSOM Fleet", description: "xSOM Fleet: the platform that governs an enterprise’s coding assistants. Subscriptions, secrets, evidence." },
+    fr: { title: "xSOM Fleet", description: "xSOM Fleet : la plateforme de gouvernance de vos IA. Sièges, coûts, sécurité sur le Poste, preuves." },
+    en: { title: "xSOM Fleet", description: "xSOM Fleet: the governance platform for your AI. Seats, costs, security on the workstation, evidence." },
   },
   guard: {
     fr: { title: "Secret Guard", description: "Secret Guard : le moteur open source (Apache-2.0) de détection de secrets de xSOM. Analyse locale, sans réseau ni modèle de langage." },

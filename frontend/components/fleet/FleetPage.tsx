@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, type CSSProperties } from "react";
 import { XsomMark } from "@/components/brand";
 import { HomeFilm } from "@/components/home/HomeFilm";
@@ -11,21 +10,20 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
-import { FLEET_CONTACT, FLEET_COPY, FLEET_HERO_MEDIA, fleetStepMedia } from "./fleet-copy";
-import { HOSTS } from "./hosts";
+import { SECRET_GUARD_REPOSITORY } from "@/lib/sites";
+import { FLEET_CONTACT, FLEET_COPY, FLEET_HERO_MEDIA, FLEET_SIMULATION_CONTACT, fleetStepMedia } from "./fleet-copy";
 import { LoopFilm } from "./LoopFilm";
 
-const NEVER_ICONS = [TerminalIcon, ShieldCheckIcon, ActivityIcon, CodeIcon];
-const DEPLOY_ICONS = [ServerIcon, ShieldCheckIcon, SlidersIcon];
 const MODULE_ICONS = [SlidersIcon, ShieldCheckIcon, ServerIcon];
+const WHY_ICONS = [ActivityIcon, SlidersIcon, ShieldCheckIcon];
+const COMMITMENT_ICONS = [CodeIcon, ServerIcon, TerminalIcon, ShieldCheckIcon, ServerIcon, ActivityIcon];
 
 /**
- * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`. Le film d'ouverture
- * plein cadre (`HomeFilm`), la promesse, la plateforme et ses trois modules, le
- * constat des deux factures, cinq films « Comment ça marche », les limites que xSOM
- * s'impose, les preuves, le déploiement, les questions fréquentes et l'appel final.
- * En-tête et style de l'accueil (`.xhome`), tuiles de logos des assistants ; ce qui est
- * propre à Fleet vit sous `.xfl`.
+ * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`. Le film d'ouverture plein
+ * cadre (`HomeFilm`), la promesse, la définition de la plateforme et ses trois modules,
+ * « Pourquoi choisir xSOM Fleet » en trois cartes, les films « Comment ça marche », les
+ * licences, sources et engagements, puis les questions fréquentes et le contact.
+ * En-tête et style de l'accueil (`.xhome`) ; ce qui est propre à Fleet vit sous `.xfl`.
  */
 export function FleetPage() {
   const root = useRef<HTMLDivElement>(null);
@@ -38,6 +36,7 @@ export function FleetPage() {
     <div ref={root} className="guard-landing xhome xfl">
       <SiteHeader site="fleet" />
       <main>
+        {/* Le film d'ouverture reste celui-ci jusqu'au rendu du nouveau scénario. */}
         <HomeFilm
           media={FLEET_HERO_MEDIA}
           next="#promesse"
@@ -57,35 +56,30 @@ export function FleetPage() {
             </div>
             <div className="fl-hero__hosts">
               <p>{copy.hero.hosts}</p>
-              <ul>
-                {HOSTS.map((host) => (
-                  <li key={host.id}>
-                    <span className="fl-logo" data-host={host.id}><Image src={host.logo} alt="" width={44} height={44} /></span>
-                    {host.name}
-                  </li>
-                ))}
-              </ul>
+              <ul>{copy.hero.hostList.map((host) => <li key={host}>{host}</li>)}</ul>
             </div>
           </div>
         </section>
 
-        <section id="modules" className="fl-section" aria-labelledby="fl-modules-title">
+        <section id="modules" className="fl-section" aria-labelledby="fl-platform-title">
           <div className="guard-wrap">
             <header className="fl-head">
-              <p className="home-kicker" data-reveal>{copy.modules.kicker}</p>
-              <h2 id="fl-modules-title" className="home-title" data-reveal style={title(copy.modules.title)}>{copy.modules.title}</h2>
-              <p className="home-lead" data-reveal>{copy.modules.lead}</p>
+              <p className="home-kicker" data-reveal>{copy.platform.kicker}</p>
+              <h2 id="fl-platform-title" className="fl-definition" data-reveal>
+                {copy.platform.definition[0]} <span>{copy.platform.definition[1]}</span>
+              </h2>
+              <p className="fl-definition__next" data-reveal>{copy.platform.next}</p>
             </header>
             <ul className="fl-modules">
-              {copy.modules.items.map((module, index) => {
+              {copy.platform.items.map((module, index) => {
                 const Glyph = MODULE_ICONS[index];
                 return (
-                  <li key={module.name} className="fl-module" data-status={module.status} data-reveal>
+                  <li key={module.name} className="fl-module" data-reveal>
                     <span className="fl-card__icon" aria-hidden="true"><Glyph /></span>
                     <p className="fl-module__status">{module.badge}</p>
                     <h3>{module.name}</h3>
                     <p className="fl-module__lead">{module.lead}</p>
-                    <ul>{module.points.map((point) => <li key={point}>{point}</li>)}</ul>
+                    <ul className="fl-ticks">{module.points.map((point) => <li key={point}>{point}</li>)}</ul>
                     {"engine" in module && module.engine ? (
                       <SiteLink to={{ site: "guard" }} className="fl-module__link">{module.engine} <span aria-hidden="true">↗</span></SiteLink>
                     ) : null}
@@ -93,32 +87,43 @@ export function FleetPage() {
                 );
               })}
             </ul>
-            <p className="fl-split" data-reveal>{copy.modules.note}</p>
+            <p className="fl-split" data-reveal>{copy.platform.note}</p>
           </div>
         </section>
 
-        <section className="fl-section" aria-labelledby="fl-cost-title">
+        <section id="pourquoi" className="fl-section fl-section--tint" aria-labelledby="fl-why-title">
           <div className="guard-wrap">
             <header className="fl-head">
-              <p className="home-kicker" data-reveal>{copy.cost.kicker}</p>
-              <h2 id="fl-cost-title" className="home-title" data-reveal style={title(copy.cost.title)}>{copy.cost.title}</h2>
+              <p className="home-kicker" data-reveal>{copy.why.kicker}</p>
+              <h2 id="fl-why-title" className="home-title" data-reveal style={title(copy.why.title)}>{copy.why.title}</h2>
             </header>
-            <div className="fl-bills" data-reveal>
-              {([["api", copy.cost.api], ["seat", copy.cost.seat]] as const).map(([id, bill]) => (
-                <article key={id} className="fl-bill" data-bill={id}>
-                  <p className="fl-bill__label">{bill.label}</p>
-                  <p className="fl-bill__value">{bill.value}</p>
-                  <p className="fl-bill__unit">{bill.unit}</p>
-                  <p className="fl-bill__source">{bill.source}</p>
-                </article>
-              ))}
-            </div>
-            <p className="fl-note" data-reveal>{copy.cost.note}</p>
-            <p className="fl-split" data-reveal>{copy.cost.split}</p>
+            <ul className="fl-why">
+              {copy.why.items.map((item, index) => {
+                const Glyph = WHY_ICONS[index];
+                return (
+                  <li key={item.id} className="fl-why__card" data-why={item.id} data-reveal>
+                    <span className="fl-card__icon" aria-hidden="true"><Glyph /></span>
+                    <h3>{item.name}</h3>
+                    <p className="fl-why__lead">{item.lead}</p>
+                    <ul className="fl-ticks">{item.points.map((point) => <li key={point}>{point}</li>)}</ul>
+                    {"action" in item && item.action ? (
+                      <div className="fl-why__action">
+                        <a className="guard-button" href={FLEET_SIMULATION_CONTACT}>{item.action}</a>
+                        <p>{item.actionNote}</p>
+                      </div>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </section>
 
-        <section id="fonctionnement" className="fl-section fl-section--tint" aria-labelledby="fl-how-title">
+        {/* Comment ça marche : cinq films courts pour l'instant. Un film unique les
+            remplacera ; son emplacement sera ici, au-dessus de la liste, avec le même
+            lecteur (`LoopFilm`) et la même mention « Démonstration · données
+            illustratives ». Aucun lecteur n'est dessiné tant que le rendu n'existe pas. */}
+        <section id="fonctionnement" className="fl-section" aria-labelledby="fl-how-title">
           <div className="guard-wrap">
             <header className="fl-head">
               <p className="home-kicker" data-reveal>{copy.how.kicker}</p>
@@ -151,76 +156,31 @@ export function FleetPage() {
           </div>
         </section>
 
-        <section className="fl-section" aria-labelledby="fl-never-title">
+        <section id="engagements" className="fl-section fl-section--ink" aria-labelledby="fl-commitments-title">
           <div className="guard-wrap">
             <header className="fl-head">
-              <p className="home-kicker" data-reveal>{copy.never.kicker}</p>
-              <h2 id="fl-never-title" className="home-title" data-reveal style={title(copy.never.title)}>{copy.never.title}</h2>
+              <p className="home-kicker" data-reveal>{copy.commitments.kicker}</p>
+              <h2 id="fl-commitments-title" className="home-title" data-reveal style={title(copy.commitments.title)}>{copy.commitments.title}</h2>
+              <p className="home-lead" data-reveal>{copy.commitments.lead}</p>
             </header>
-            <ul className="fl-grid">
-              {copy.never.items.map(([name, body], index) => {
-                const Glyph = NEVER_ICONS[index];
+            <ul className="fl-commitments">
+              {copy.commitments.items.map((item, index) => {
+                const Glyph = COMMITMENT_ICONS[index];
                 return (
-                  <li key={name} className="fl-card" data-reveal>
+                  <li key={item.name} data-reveal>
                     <span className="fl-card__icon" aria-hidden="true"><Glyph /></span>
-                    <h3>{name}</h3>
-                    <p>{body}</p>
+                    <h3>{item.name}</h3>
+                    <p>{item.body}</p>
+                    {"link" in item && item.link ? (
+                      <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="fl-commitments__link">
+                        {item.link} <span aria-hidden="true">↗</span>
+                      </SiteLink>
+                    ) : null}
                   </li>
                 );
               })}
             </ul>
-            <p className="fl-split" data-reveal>{copy.never.sent}</p>
-          </div>
-        </section>
-
-        <section id="preuves" className="fl-section fl-section--ink" aria-labelledby="fl-proof-title">
-          <div className="guard-wrap">
-            <header className="fl-head">
-              <p className="home-kicker" data-reveal>{copy.proof.kicker}</p>
-              <h2 id="fl-proof-title" className="home-title" data-reveal style={title(copy.proof.title)}>{copy.proof.title}</h2>
-              <p className="home-lead" data-reveal>{copy.proof.lead}</p>
-            </header>
-            <ol className="fl-pieces">
-              {copy.proof.items.map(([name, body], index) => (
-                <li key={name} data-reveal>
-                  <span className="fl-pieces__index" aria-hidden="true">{index + 1}</span>
-                  <h3>{name}</h3>
-                  <p>{body}</p>
-                </li>
-              ))}
-            </ol>
-            <p className="fl-split" data-reveal>{copy.proof.note}</p>
-          </div>
-        </section>
-
-        <section className="fl-section" aria-labelledby="fl-deploy-title">
-          <div className="guard-wrap">
-            <header className="fl-head">
-              <p className="home-kicker" data-reveal>{copy.deploy.kicker}</p>
-              <h2 id="fl-deploy-title" className="home-title" data-reveal style={title(copy.deploy.title)}>{copy.deploy.title}</h2>
-            </header>
-            <ul className="fl-principles">
-              {copy.deploy.items.map(([name, body], index) => {
-                const Glyph = DEPLOY_ICONS[index];
-                return (
-                  <li key={name} data-reveal>
-                    <span className="fl-card__icon" aria-hidden="true"><Glyph /></span>
-                    <h3>{name}</h3>
-                    <p>{body}</p>
-                  </li>
-                );
-              })}
-            </ul>
-            <h3 className="fl-subtitle" data-reveal>{copy.deploy.stepsTitle}</h3>
-            <ol className="fl-steps">
-              {copy.deploy.steps.map(([name, body], index) => (
-                <li key={name} data-reveal>
-                  <span className="fl-steps__index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-                  <h4>{name}</h4>
-                  <p>{body}</p>
-                </li>
-              ))}
-            </ol>
+            <p className="fl-split" data-reveal>{copy.commitments.note}</p>
           </div>
         </section>
 
@@ -238,14 +198,9 @@ export function FleetPage() {
                 </details>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="fl-cta" aria-labelledby="fl-cta-title">
-          <div className="guard-wrap fl-cta__inner" data-reveal>
-            <h2 id="fl-cta-title">{copy.cta.title}</h2>
-            <p>{copy.cta.body}</p>
-            <a className="guard-button" href={FLEET_CONTACT}>{copy.cta.button}</a>
+            <div className="fl-faq__contact" data-reveal>
+              <a className="guard-button" href={FLEET_CONTACT}>{copy.faq.contact}</a>
+            </div>
           </div>
         </section>
       </main>
