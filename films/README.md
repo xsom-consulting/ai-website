@@ -10,7 +10,7 @@ musique de synthèse. Aucune étape FFmpeg à la main, aucun clip généré par 
 | `extension` | `frontend/public/signal-media/secret-guard-loop.webm` + `.jpg` (10 s en boucle, muet) | Ouverture de guard.xsom.fr |
 | `fleet-hero-fr`, `fleet-hero-en` | `frontend/public/signal-media/xsom-fleet-hero-{fr,en}.mp4` + `.jpg` (16 s en boucle, 24 fps, ≤ 6 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
 | `fleet-how-{orgs,policy,block,coverage,costs}-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-<sujet>-{fr,en}.mp4` + `.jpg` (10 s en boucle, muets, 30 fps, ≤ 2,5 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
-| `fleet-ad-{fr,en}` | `frontend/public/signal-media/xsom-fleet-hero-v2-{fr,en}.mp4` + `.jpg` (20 s en boucle, 60 fps, 120 BPM, bruitages synthétisés, ≤ 8 Mo) | Film d’ouverture de fleet.xsom.fr (version 2) |
+| `fleet-ad-{fr,en}` | `frontend/public/signal-media/xsom-fleet-hero-v2-{fr,en}.mp4` + `.jpg` (20 s en boucle, 60 fps, 120 BPM, bruitages synthétisés, ≤ 8 Mo) | Version 2, retirée de fleet.xsom.fr le 2026-10-15 (fichiers supprimés ; à recréer par `npm run render -- fleet-ad` si besoin) |
 | `fleet-how-v2-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-v2-{fr,en}.mp4` + `.jpg` (≈ 72 et 80 s, 30 fps, voix off et sous-titres, ≤ 15 Mo) | « Comment ça marche » de fleet.xsom.fr (version 2, film unique avec chapitres) |
 
 Ce dépôt est public : il ne contient aucun film de démarchage (présentation d'un prospect, séquence

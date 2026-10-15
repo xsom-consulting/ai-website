@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { FleetPage } from "@/components/fleet/FleetPage";
-import { FLEET_COPY, FLEET_HERO_MEDIA, FLEET_ORIGIN } from "@/components/fleet/fleet-copy";
+import { FLEET_COPY, FLEET_ORIGIN, fleetOgImage } from "@/components/fleet/fleet-copy";
 import { getLang } from "@/lib/lang";
 import "../guard-landing.css";
 import "../guard-home.css";
@@ -10,12 +10,12 @@ import "../fleet.css";
 
 /**
  * Titre absolu : le gabarit du site (« · xSOM Fleet ») ne s'applique pas à
- * la page d'accueil de fleet.xsom.fr. L'affiche du film d'ouverture sert d'image Open Graph.
+ * la page d'accueil de fleet.xsom.fr. Une capture du haut de page sert d'image Open Graph.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const lang = await getLang();
   const copy = FLEET_COPY[lang].meta;
-  const poster = `${FLEET_ORIGIN}${FLEET_HERO_MEDIA[lang].poster}`;
+  const poster = `${FLEET_ORIGIN}${fleetOgImage(lang)}`;
   return {
     title: { absolute: copy.title },
     description: copy.description,
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "xSOM Fleet",
       locale: lang === "fr" ? "fr_FR" : "en_US",
       type: "website",
-      images: [{ url: poster, width: 1920, height: 1080, alt: copy.ogAlt }],
+      images: [{ url: poster, width: 1920, height: 992, alt: copy.ogAlt }],
     },
     twitter: { card: "summary_large_image", title: copy.title, description: copy.description, images: [poster] },
   };
@@ -46,7 +46,7 @@ function structuredData(lang: "fr" | "en") {
     applicationSubCategory: "SecurityApplication",
     operatingSystem: "Windows, macOS, Linux",
     inLanguage: lang,
-    image: `${FLEET_ORIGIN}${FLEET_HERO_MEDIA[lang].poster}`,
+    image: `${FLEET_ORIGIN}${fleetOgImage(lang)}`,
     publisher: {
       "@type": "Organization",
       name: "xSOM Consulting",

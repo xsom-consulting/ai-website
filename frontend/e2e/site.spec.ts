@@ -67,9 +67,9 @@ test("chaque film déclaré et chaque affiche existent", async ({ page, request 
     );
     for (const url of urls) declared.add(url);
   }
-  // Accueil IA, Fleet (film d'ouverture et « Comment ça marche »), Secret Guard : au moins
-  // huit fichiers, vidéos et affiches.
-  expect(declared.size).toBeGreaterThanOrEqual(8);
+  // Accueil IA, Fleet (« Comment ça marche » seul), Secret Guard : au moins six fichiers,
+  // vidéos et affiches.
+  expect(declared.size).toBeGreaterThanOrEqual(6);
   for (const url of declared) {
     // Les premiers octets suffisent : on prouve que le fichier est servi, sans le télécharger.
     const reponse = await request.get(url, { headers: { range: "bytes=0-1" } });
