@@ -3,7 +3,7 @@
 - Rendu avec Remotion : composition `fleet-ad-fr` / `fleet-ad-en` de
   `films/src/fleet/v2/FleetAd.tsx` (`npm --prefix films run render -- fleet-ad`).
 - Fichiers : `xsom-fleet-hero-v2-fr.mp4`, `xsom-fleet-hero-v2-en.mp4` et leurs affiches `.jpg`
-  (19,3 s : la promesse et le logo). La version 1 (`xsom-fleet-hero-*`) reste en place.
+  (19,3 s : la promesse et le logo). Film d’ouverture de fleet.xsom.fr ; la version 1 est retirée du site.
 - Format : 20 secondes, 1920 × 1080, 60 images/s, H.264 BT.709 (yuv420p) avec démarrage
   progressif (`+faststart`), AAC stéréo 160 kbit/s ; ≤ 8 Mo (6,8 Mo). Lecture muette par défaut
   sur le site.

@@ -80,11 +80,11 @@ export const AI_COPY = {
       fleet: {
         badge: "Plateforme · programme pilote 2026",
         name: "xSOM Fleet",
-        body: "La plateforme de gouvernance de vos IA : Claude Code et Codex sur chaque Poste, vos applications API par une passerelle installée chez vous. D’autres assistants suivront.",
+        body: "Les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise : pilotez toute votre architecture IA en un seul endroit, abonnements (Claude Code et Codex sur chaque Poste), clés API et modèles hébergés chez vous.",
         modules: [
-          ["Fleet Sièges", "Abonnements, coûts, couverture."],
-          ["Fleet Guard", "Secrets bloqués sur le Poste, Journal des blocages, Dossier de preuves."],
-          ["Fleet Gateway", "Passerelle API installée chez le client, Budgets API par application. Disponible pour pilote."],
+          ["Fleet Sièges", "Solution FinOps : Sièges, Facture réelle, Équivalent API estimé."],
+          ["Fleet Guard", "Solution cybersécurité : secrets bloqués sur le Poste, Journal des blocages, Dossier de preuves."],
+          ["Fleet Gateway", "Solution architecture et stratégie IA : passerelle installée chez le client, Budgets API, modèles hébergés chez vous. Disponible pour pilote."],
         ],
         action: "Découvrir xSOM Fleet",
       },
@@ -155,11 +155,11 @@ export const AI_COPY = {
       fleet: {
         badge: "Platform · 2026 pilot programme",
         name: "xSOM Fleet",
-        body: "The governance platform for your AI: Claude Code and Codex on every workstation, your API applications through a gateway installed on your side. Other assistants will follow.",
+        body: "The best AI models on the market, at enterprise security standards: steer your whole AI architecture from one place, subscriptions (Claude Code and Codex on every workstation), API keys and models hosted on your side.",
         modules: [
-          ["Fleet Sièges", "Seat subscriptions, costs, coverage."],
-          ["Fleet Guard", "Secrets blocked on the workstation, block log, evidence dossier."],
-          ["Fleet Gateway", "API gateway installed on the customer’s side, API budgets per application. Available for pilot."],
+          ["Fleet Sièges", "FinOps solution: seats, actual invoice, estimated API equivalent."],
+          ["Fleet Guard", "Cybersecurity solution: secrets blocked on the workstation, block log, evidence dossier."],
+          ["Fleet Gateway", "AI architecture and strategy solution: gateway installed on the customer’s side, API budgets, models hosted on your side. Available for pilot."],
         ],
         action: "Discover xSOM Fleet",
       },

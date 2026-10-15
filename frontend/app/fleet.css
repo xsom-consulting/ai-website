@@ -14,31 +14,45 @@
   --fl-loop: 10s;
 }
 
-/* ---- Les logos des assistants, sur une tuile claire (usage nominatif seulement). */
-.xfl .fl-logo {
-  display: grid;
+/* ---- Les marques des services pris en charge (usage nominatif seulement) : tracé de la
+   marque sur une tuile claire ; les entrées génériques (API, vos modèles) en filigrane. */
+.xfl .fl-brand {
+  display: inline-grid;
   flex: none;
   place-items: center;
-  width: 2.25rem;
+  width: 1.75rem;
   aspect-ratio: 1;
-  overflow: hidden;
   border-radius: 24%;
   background: white;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal-text) 10%, transparent);
 }
-.xfl .fl-logo img {
-  width: 76%;
+.xfl .fl-brand svg {
+  width: 66%;
   height: auto;
 }
-.xfl .fl-logo[data-host="codex"] img {
-  width: 100%;
+.xfl .fl-brand[data-brand="claude"] svg {
+  fill: #d97757;
 }
-.xfl .fl-logo--api {
-  background: color-mix(in srgb, var(--fl-glow) 18%, transparent);
-  color: var(--fl-glow);
+.xfl .fl-brand[data-brand="chatgpt"] svg {
+  fill: #0d0d0d;
+}
+.xfl .fl-brand--generic {
+  background: var(--signal-accent-wash);
+  color: var(--signal-accent-text);
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fl-glow) 45%, transparent);
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal-accent) 35%, transparent);
+}
+.xfl .fl-brand--generic svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+.xfl .fl-brand--generic svg circle {
+  fill: currentColor;
+  stroke: none;
 }
 
 /* ---- Film d'ouverture : le repli dessiné sous la vidéo ne se voit que si l'affiche
@@ -143,25 +157,21 @@
 .xfl .fl-hero__title {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2.6rem, 4.7vw, 4.9rem);
+  font-size: clamp(2.3rem, 3.9vw, 4.1rem);
   font-weight: 800;
-  line-height: 0.98;
+  line-height: 1;
   letter-spacing: -0.045em;
   color: var(--home-ink-text);
   text-wrap: balance;
 }
-.xfl .fl-hero__title span {
-  display: block;
-}
 .xfl .fl-hero__title span + span {
-  margin-top: 0.18em;
   background: linear-gradient(100deg, var(--home-ink-text) 10%, var(--fl-glow) 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 .xfl .fl-hero__lead {
-  max-width: 46ch;
+  max-width: 62ch;
   margin: var(--sp-8) 0 0;
   color: var(--home-ink-muted);
   font-size: var(--fs-lead);
@@ -188,33 +198,6 @@
 .xfl .fl-hero__how:hover {
   text-decoration-color: currentColor;
 }
-.xfl .fl-hero__hosts {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--sp-3) var(--sp-5);
-  margin-top: var(--sp-12);
-}
-.xfl .fl-hero__hosts p {
-  margin: 0;
-  color: var(--home-ink-muted);
-  font-size: var(--fs-sm);
-}
-.xfl .fl-hero__hosts ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-3) var(--sp-5);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.xfl .fl-hero__hosts li {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  font-weight: 600;
-}
-
 /* ---- L'illustration animée du haut de page (`FleetHeroVisual`). */
 .xfl .fl-visual {
   position: relative;
@@ -436,24 +419,78 @@
   scroll-margin-top: var(--home-header);
 }
 .xfl .fl-platform__punch {
-  max-width: 18ch;
+  max-width: 24ch;
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2.75rem, 8.4vw, 7.75rem);
+  font-size: clamp(2.3rem, 5.6vw, 5.25rem);
   font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.05em;
+  line-height: 1;
+  letter-spacing: -0.045em;
   background: linear-gradient(115deg, var(--signal-text) 30%, var(--signal-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-wrap: balance;
 }
-.xfl .fl-platform__sub {
-  max-width: 58ch;
-  margin: var(--sp-8) 0 0;
+.xfl .fl-platform__punch span {
+  background: none;
+  -webkit-text-fill-color: var(--signal-muted);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+/* « Pris en charge » : une ligne en petit, deux groupes (abonnements, passerelle). */
+.xfl .fl-supported {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-8);
+  margin-top: var(--sp-8);
   color: var(--signal-muted);
-  font-size: var(--fs-lead);
-  line-height: var(--signal-leading);
+  font-size: var(--fs-sm);
+}
+.xfl .fl-supported p {
+  margin: 0;
+}
+.xfl .fl-supported__label {
+  color: var(--signal-text);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.xfl .fl-supported__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-4);
+}
+.xfl .fl-supported__group > p {
+  font-size: var(--fs-xs);
+}
+.xfl .fl-supported__group > p::after {
+  content: " ·";
+}
+.xfl .fl-supported ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.xfl .fl-supported li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--signal-text);
+  font-weight: 600;
+}
+.xfl .fl-supported small {
+  color: var(--signal-muted);
+  font-size: var(--fs-xs);
+  font-weight: 500;
 }
 .xfl .fl-modules {
   display: grid;
@@ -482,6 +519,13 @@
   font-weight: 700;
   line-height: 1.2;
 }
+.xfl .fl-module p.fl-module__name {
+  margin-top: calc(var(--sp-1) * -1);
+  color: var(--signal-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+}
 .xfl .fl-module p:not(.fl-module__status) {
   margin: 0;
   color: var(--signal-muted);
@@ -508,7 +552,7 @@
 }
 
 /* ---- Pourquoi choisir xSOM Fleet : une grille de tuiles de tailles différentes.
-   Ordinateur : coût (4/6) et tarif (2/6), puis FinOps et sécurité (3/6 chacune). */
+   Ordinateur : coût sur toute la largeur, puis tarif, FinOps et sécurité (2/6 chacune). */
 .xfl .fl-bento {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -554,9 +598,9 @@
 }
 
 .xfl .fl-tile--cost {
-  grid-column: span 4;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
-  align-items: center;
+  grid-column: span 6;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+  align-items: start;
   gap: var(--sp-8);
   background:
     radial-gradient(28rem 18rem at 100% 0%, color-mix(in srgb, var(--signal-accent) 12%, transparent), transparent 70%),
@@ -577,54 +621,177 @@
   color: var(--signal-muted);
   font-size: var(--fs-xs);
 }
-.xfl .fl-gauge {
+/* La mesure de xSOM : par assistant, le forfait et l'usage au tarif API en barres (une
+   seule échelle, celle de l'usage Claude), la phrase, puis le relevé en vignette. */
+.xfl .fl-plan {
   display: grid;
-  justify-items: center;
-  gap: var(--sp-1);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-5) var(--sp-8);
   margin: 0;
-  text-align: center;
+  padding: var(--sp-5);
+  border-radius: var(--home-radius);
+  background: color-mix(in srgb, var(--signal-bg) 70%, var(--signal-surface));
+  box-shadow: inset 0 0 0 1px var(--signal-line);
 }
-.xfl .fl-gauge svg {
-  width: 100%;
-  max-width: 15rem;
-  overflow: visible;
+.xfl .fl-plan p {
+  margin: 0;
 }
-.xfl .fl-gauge path {
-  fill: none;
-  stroke-width: 14;
-  stroke-linecap: round;
+.xfl .fl-plan__head,
+.xfl .fl-plan figcaption {
+  grid-column: 1 / -1;
 }
-.xfl .fl-gauge__track {
-  stroke: var(--signal-accent-wash);
+.xfl .fl-plan .fl-capture {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: center;
 }
-.xfl .fl-gauge__fill {
-  stroke: var(--signal-accent);
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 1.4s var(--ease), filter var(--t-mid) var(--ease);
+.xfl .fl-plan__head {
+  color: var(--signal-text);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1.35;
 }
-[data-motion="on"] .xfl .fl-tile--cost:not([data-shown]) .fl-gauge__fill {
-  stroke-dashoffset: 252;
+.xfl .fl-plan__agent {
+  display: grid;
+  gap: var(--sp-2);
 }
-.xfl .fl-tile--cost:hover .fl-gauge__fill {
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--signal-accent) 60%, transparent));
+.xfl .fl-plan__name {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-weight: 700;
 }
-.xfl .fl-gauge__value {
-  margin: calc(var(--sp-12) * -1) 0 0;
+.xfl .fl-plan__ratio {
+  margin-left: auto;
+  color: var(--signal-accent-text);
   font-family: var(--font-display), sans-serif;
-  font-size: var(--fs-metric);
+  font-size: 1.6rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
 }
-.xfl .fl-gauge__value span:last-child {
-  color: var(--signal-muted);
-  font-size: 0.5em;
+.xfl .fl-plan__bars {
+  display: grid;
+  gap: var(--sp-1);
 }
-.xfl .fl-gauge figcaption {
-  max-width: 22ch;
+.xfl .fl-plan__row {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) 4.2rem;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+}
+.xfl .fl-plan__row span {
+  color: var(--signal-muted);
+}
+.xfl .fl-plan__row i {
+  display: block;
+  width: var(--w);
+  min-width: 4px;
+  height: 0.7rem;
+  border-radius: 999px;
+  transition: width 1.2s var(--ease);
+}
+[data-motion="on"] .xfl .fl-tile--cost:not([data-shown]) .fl-plan__row i {
+  width: 0;
+}
+.xfl .fl-plan__row[data-bar="plan"] i {
+  background: linear-gradient(90deg, var(--signal-accent), var(--fl-glow));
+}
+.xfl .fl-plan__row[data-bar="usage"] i {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--signal-accent) 30%, transparent) 0 6px,
+    color-mix(in srgb, var(--signal-accent) 12%, transparent) 6px 12px
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal-accent) 40%, transparent);
+}
+.xfl .fl-plan__row b {
+  color: var(--signal-text);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.xfl .fl-plan__line {
   color: var(--signal-text);
   font-size: var(--fs-sm);
-  line-height: 1.4;
+  line-height: 1.45;
+}
+.xfl .fl-plan figcaption {
+  color: var(--signal-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+/* Le relevé ccusage : une vignette qui s'ouvre en grand ; l'image défile dans son cadre. */
+.xfl .fl-capture__thumb {
+  display: grid;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--signal-accent-text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-align: left;
+  cursor: zoom-in;
+}
+.xfl .fl-capture__thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--home-radius) * 0.6);
+  box-shadow: 0 var(--sp-2) var(--sp-6) color-mix(in srgb, var(--home-ink) 22%, transparent);
+  transition: transform var(--t-mid) var(--ease);
+}
+.xfl .fl-capture__thumb:hover img {
+  transform: scale(1.015);
+}
+.xfl .fl-capture__thumb span {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.xfl .fl-capture__dialog {
+  width: min(78rem, calc(100vw - 2 * var(--gutter)));
+  max-width: none;
+  max-height: calc(100svh - 2 * var(--gutter));
+  padding: 0;
+  border: 0;
+  border-radius: var(--home-radius);
+  background: #0d1117;
+  overflow: hidden;
+}
+.xfl .fl-capture__dialog::backdrop {
+  background: color-mix(in srgb, var(--home-ink) 78%, transparent);
+  backdrop-filter: blur(4px);
+}
+.xfl .fl-capture__frame {
+  display: grid;
+  max-height: calc(100svh - 2 * var(--gutter));
+}
+.xfl .fl-capture__close {
+  justify-self: end;
+  min-height: var(--signal-touch);
+  margin: var(--sp-2);
+  padding: 0 var(--sp-4);
+  border: var(--signal-border) solid color-mix(in srgb, white 28%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: white;
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.xfl .fl-capture__scroll {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.xfl .fl-capture__scroll img {
+  display: block;
+  width: 100%;
+  min-width: 56rem;
+  height: auto;
 }
 
 .xfl .fl-tile--price {
@@ -658,7 +825,7 @@
 
 .xfl .fl-tile--finops,
 .xfl .fl-tile--security {
-  grid-column: span 3;
+  grid-column: span 2;
 }
 .xfl .fl-bars {
   display: grid;
@@ -765,60 +932,86 @@
   to { opacity: 0; transform: scale(1.25); }
 }
 
-/* ---- Comment ça marche : cinq films, en quinconce sur ordinateur. */
-.xfl .fl-how {
+/* ---- Comment ça marche : un film avec voix off, ses chapitres à côté. */
+.xfl .fl-howfilm {
   display: grid;
-  gap: var(--sp-24);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--sp-10);
 }
-.xfl .fl-how__step {
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+.xfl .fl-howfilm__media {
+  margin: 0;
+}
+.xfl .fl-howfilm__bar {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-12);
-  scroll-margin-top: var(--home-header);
-}
-.xfl .fl-how__step:nth-child(even) {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
-}
-.xfl .fl-how__step:nth-child(even) .fl-how__media {
-  order: 2;
-}
-.xfl .fl-how__media {
-  margin: 0;
-}
-.xfl .fl-how__media figcaption {
+  justify-content: space-between;
+  gap: var(--sp-3);
   margin-top: var(--sp-3);
+}
+.xfl .fl-howfilm__bar > span {
   color: var(--signal-muted);
   font-family: var(--font-mono), monospace;
   font-size: var(--fs-xs);
   letter-spacing: 0.06em;
 }
-.xfl .fl-how__text {
+.xfl .fl-chapters {
   display: grid;
-  gap: var(--sp-3);
+  gap: var(--sp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
 }
-.xfl .fl-how__index {
+.xfl .fl-chapters li {
+  scroll-margin-top: var(--home-header);
+}
+.xfl .fl-chapter {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-3) var(--sp-3);
+  border: 0;
+  border-left: 2px solid var(--signal-line);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.xfl .fl-chapter:hover {
+  background: color-mix(in srgb, var(--signal-accent) 6%, transparent);
+}
+.xfl .fl-chapter[aria-current] {
+  border-left-color: var(--signal-accent);
+  background: color-mix(in srgb, var(--signal-accent) 8%, transparent);
+}
+.xfl .fl-chapter:disabled {
+  cursor: default;
+}
+.xfl .fl-chapter__index {
   color: var(--signal-accent-text);
   font-family: var(--font-mono), monospace;
   font-size: var(--fs-sm);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
 }
-.xfl .fl-how__text h3 {
-  margin: 0;
-  font-size: var(--fs-h2);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+.xfl .fl-chapter__text {
+  display: grid;
+  gap: 2px;
 }
-.xfl .fl-how__text p {
-  max-width: 44ch;
-  margin: 0;
+.xfl .fl-chapter__text strong {
+  font-size: var(--fs-body);
+  line-height: 1.3;
+}
+.xfl .fl-chapter__text span {
   color: var(--signal-muted);
-  font-size: var(--fs-lead);
-  line-height: var(--signal-leading);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
 }
 
 /* Le cadre d'un film : 16:9, fond nuit quadrillé sous la vidéo en guise de repli. */
@@ -855,28 +1048,47 @@
   height: 100%;
   object-fit: cover;
 }
+.xfl .fl-film__controls {
+  display: flex;
+  gap: var(--sp-2);
+}
+.xfl .fl-film__sound {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: var(--signal-touch);
+  padding: 0 var(--sp-4);
+  border: var(--signal-border) solid var(--home-ink);
+  border-radius: 999px;
+  background: var(--home-ink);
+  color: var(--home-ink-text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.xfl .fl-film__sound[aria-pressed="false"] {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--signal-accent) 22%, transparent);
+}
+.xfl .fl-film__sound:hover {
+  background: color-mix(in srgb, var(--home-ink) 85%, var(--signal-accent));
+}
 .xfl .fl-film__toggle {
-  position: absolute;
-  right: var(--sp-3);
-  bottom: var(--sp-3);
   display: grid;
   place-items: center;
   width: var(--signal-touch);
   height: var(--signal-touch);
   padding: 0;
-  border: var(--signal-border) solid color-mix(in srgb, var(--home-ink-text) 28%, transparent);
+  border: var(--signal-border) solid var(--home-ink);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--home-ink) 62%, transparent);
-  color: var(--home-ink-text);
+  background: transparent;
+  color: var(--home-ink);
   cursor: pointer;
-  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  transition: background var(--t-fast) var(--ease);
 }
 .xfl .fl-film__toggle:hover {
-  background: var(--home-ink);
-  border-color: var(--home-ink-text);
-}
-.xfl .fl-film__toggle:focus-visible {
-  outline-color: var(--home-ink-text);
+  background: color-mix(in srgb, var(--home-ink) 8%, transparent);
 }
 .xfl .fl-film__toggle svg {
   display: block;
@@ -1027,10 +1239,14 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .xfl .fl-tile--cost {
-    grid-column: span 6;
+    grid-template-columns: minmax(0, 1fr);
   }
   .xfl .fl-tile--price {
     grid-column: span 6;
+  }
+  .xfl .fl-tile--finops,
+  .xfl .fl-tile--security {
+    grid-column: span 3;
   }
 }
 @media (max-width: 900px) {
@@ -1065,19 +1281,9 @@
   .xfl .fl-tile--security {
     grid-column: span 6;
   }
-  .xfl .fl-how {
-    gap: var(--sp-16);
-  }
-  .xfl .fl-how__step,
-  .xfl .fl-how__step:nth-child(even) {
+  .xfl .fl-howfilm {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-6);
-  }
-  .xfl .fl-how__step:nth-child(even) .fl-how__media {
-    order: 0;
-  }
-  .xfl .fl-how__text h3 {
-    font-size: var(--fs-h3);
   }
 }
 @media (max-width: 760px) {
@@ -1087,6 +1293,18 @@
   .xfl .fl-tile--cost {
     grid-template-columns: minmax(0, 1fr);
   }
+  .xfl .fl-plan {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--sp-4);
+  }
+  .xfl .fl-plan .fl-capture {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .xfl .fl-plan__row {
+    grid-template-columns: 6.5rem minmax(0, 1fr) 3.6rem;
+  }
+
   .xfl .fl-badges {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

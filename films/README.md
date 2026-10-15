@@ -8,10 +8,10 @@ musique de synthèse. Aucune étape FFmpeg à la main, aucun clip généré par 
 |---|---|---|
 | `home-fr`, `home-en` | `frontend/public/signal-media/xsom-ia-home-{fr,en}.mp4` + `.jpg` (15 s, 24 fps) | Accueil de ai.xsom.fr |
 | `extension` | `frontend/public/signal-media/secret-guard-loop.webm` + `.jpg` (10 s en boucle, muet) | Ouverture de guard.xsom.fr |
-| `fleet-hero-fr`, `fleet-hero-en` | `frontend/public/signal-media/xsom-fleet-hero-{fr,en}.mp4` + `.jpg` (16 s en boucle, 24 fps, ≤ 6 Mo) | Accueil de fleet.xsom.fr |
-| `fleet-how-{orgs,policy,block,coverage,costs}-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-<sujet>-{fr,en}.mp4` + `.jpg` (10 s en boucle, muets, 30 fps, ≤ 2,5 Mo) | « Comment ça marche » de fleet.xsom.fr |
-| `fleet-ad-{fr,en}` | `frontend/public/signal-media/xsom-fleet-hero-v2-{fr,en}.mp4` + `.jpg` (20 s en boucle, 60 fps, 120 BPM, bruitages synthétisés, ≤ 8 Mo) | Publicité de fleet.xsom.fr (version 2) |
-| `fleet-how-v2-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-v2-{fr,en}.mp4` + `.jpg` (≈ 72 et 80 s, 30 fps, voix off et sous-titres, ≤ 15 Mo) | « Comment ça marche » de fleet.xsom.fr (version 2) |
+| `fleet-hero-fr`, `fleet-hero-en` | `frontend/public/signal-media/xsom-fleet-hero-{fr,en}.mp4` + `.jpg` (16 s en boucle, 24 fps, ≤ 6 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
+| `fleet-how-{orgs,policy,block,coverage,costs}-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-<sujet>-{fr,en}.mp4` + `.jpg` (10 s en boucle, muets, 30 fps, ≤ 2,5 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
+| `fleet-ad-{fr,en}` | `frontend/public/signal-media/xsom-fleet-hero-v2-{fr,en}.mp4` + `.jpg` (20 s en boucle, 60 fps, 120 BPM, bruitages synthétisés, ≤ 8 Mo) | Film d’ouverture de fleet.xsom.fr (version 2) |
+| `fleet-how-v2-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-v2-{fr,en}.mp4` + `.jpg` (≈ 72 et 80 s, 30 fps, voix off et sous-titres, ≤ 15 Mo) | « Comment ça marche » de fleet.xsom.fr (version 2, film unique avec chapitres) |
 
 Ce dépôt est public : il ne contient aucun film de démarchage (présentation d'un prospect, séquence
 où paraît une marque). Les films de présentation commerciale de xSOM Fleet se font hors de ce dépôt.

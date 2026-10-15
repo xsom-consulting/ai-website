@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, type CSSProperties } from "react";
 import { XsomMark } from "@/components/brand";
 import { HomeFilm } from "@/components/home/HomeFilm";
@@ -11,29 +10,40 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_REPOSITORY } from "@/lib/sites";
+import { CHATGPT_MARK, CLAUDE_MARK } from "./brand-marks";
 import { CountUp } from "./CountUp";
 import {
   FLEET_CONTACT,
   FLEET_COPY,
   FLEET_DEMO_FIGURES,
   FLEET_HERO_MEDIA,
+  FLEET_MEASUREMENT,
   FLEET_PRICE_CONTACT,
   FLEET_SIMULATION_CONTACT,
-  fleetStepMedia,
+  codexMeasureLine,
+  fleetHowMedia,
 } from "./fleet-copy";
+import { FleetCapture } from "./FleetCapture";
 import { FleetHeroVisual } from "./FleetHeroVisual";
-import { HOSTS } from "./hosts";
-import { LoopFilm } from "./LoopFilm";
+import { FleetHowFilm } from "./FleetHowFilm";
 
-/** Longueur de l'arc de la jauge des Sièges (demi-cercle de rayon 80). */
-const GAUGE_LENGTH = Math.PI * 80;
+/** Une longueur de barre, en pourcentage de la plus longue (au moins un trait visible). */
+const share = (part: number, whole: number) => `${Math.max((100 * part) / whole, 1.5).toFixed(1)}%`;
+/** Tuile Coût : forfait et usage au tarif API mesurés chez xSOM, à l'échelle de l'usage Claude. */
+const SCALE = FLEET_MEASUREMENT.claude.usageCents;
+const CLAUDE_PLAN_WIDTH = share(FLEET_MEASUREMENT.claude.planCents, SCALE);
+const CODEX_USAGE_WIDTH = share(FLEET_MEASUREMENT.codex.usageCents, SCALE);
+/** Tuile FinOps : la Facture réelle contre l'Équivalent API estimé du Groupe de démonstration. */
+const REAL_INVOICE_WIDTH = share(FLEET_DEMO_FIGURES.realInvoiceCents, FLEET_DEMO_FIGURES.apiEquivalentCents);
+
+const vars = (value: Record<string, string>) => value as CSSProperties;
 
 /**
  * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`. La promesse et son
- * illustration animée (`FleetHeroVisual`), la phrase qui définit la plateforme et ses
- * trois modules, le film d'ouverture, « Pourquoi choisir xSOM Fleet » en grille, les
- * films « Comment ça marche », les licences et engagements en badges, puis les
- * questions et le contact. En-tête et style de l'accueil (`.xhome`) ; ce qui est
+ * illustration animée (`FleetHeroVisual`), la phrase qui définit la plateforme, la ligne
+ * « Pris en charge » et les trois solutions, le film d'ouverture, « Pourquoi choisir
+ * xSOM Fleet » en grille, le film « Comment ça marche » et ses chapitres, les licences
+ * et engagements en badges, puis les questions et le contact. En-tête et style de l'accueil (`.xhome`) ; ce qui est
  * propre à Fleet vit sous `.xfl`.
  */
 export function FleetPage() {
@@ -44,6 +54,8 @@ export function FleetPage() {
   const locale = lang === "fr" ? "fr-FR" : "en-GB";
   const title = (text: string) => ({ "--chars": text.length }) as CSSProperties;
   const healthy = FLEET_DEMO_FIGURES.healthyPostes / FLEET_DEMO_FIGURES.postes;
+  const supported = copy.platform.supported;
+  const cost = copy.why.cost;
 
   return (
     <div ref={root} className="guard-landing xhome xfl">
@@ -61,18 +73,6 @@ export function FleetPage() {
                 <a className="guard-button" href={FLEET_CONTACT}>{copy.hero.contact}</a>
                 <a className="fl-hero__how" href="#fonctionnement" onClick={glideTo}>{copy.hero.how}</a>
               </div>
-              <div className="fl-hero__hosts">
-                <p>{copy.hero.hosts}</p>
-                <ul>
-                  {HOSTS.map((host) => (
-                    <li key={host.id}>
-                      <span className="fl-logo" data-host={host.id}><Image src={host.logo} alt="" width={44} height={44} /></span>
-                      {host.name}
-                    </li>
-                  ))}
-                  <li><span className="fl-logo fl-logo--api" aria-hidden="true">API</span>{copy.hero.apps}</li>
-                </ul>
-              </div>
             </div>
             <FleetHeroVisual labels={copy.hero.visual} />
           </div>
@@ -80,13 +80,46 @@ export function FleetPage() {
 
         <section id="modules" className="fl-platform" aria-labelledby="fl-platform-title">
           <div className="guard-wrap">
-            <h2 id="fl-platform-title" className="fl-platform__punch" data-reveal>{copy.platform.punch}</h2>
-            <p className="fl-platform__sub" data-reveal>{copy.platform.sub}</p>
+            <h2 id="fl-platform-title" className="fl-platform__punch" data-reveal>
+              {copy.platform.punch} <span>{copy.platform.rest}</span>
+            </h2>
+            <div className="fl-supported" data-reveal>
+              <p className="fl-supported__label">{supported.label}</p>
+              <div className="fl-supported__group">
+                <p>{supported.subscriptions}</p>
+                <ul>
+                  <li>
+                    <span className="fl-brand" data-brand="claude" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CLAUDE_MARK} /></svg></span>
+                    <span>{supported.claude.name} <small>{supported.claude.product}</small></span>
+                  </li>
+                  <li>
+                    <span className="fl-brand" data-brand="chatgpt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CHATGPT_MARK} /></svg></span>
+                    <span>{supported.chatgpt.name} <small>{supported.chatgpt.product}</small></span>
+                  </li>
+                </ul>
+              </div>
+              <div className="fl-supported__group">
+                <p>{supported.gateway}</p>
+                <ul>
+                  <li>
+                    <span className="fl-brand fl-brand--generic" aria-hidden="true">API</span>
+                    <span>{supported.api.name} <small>{supported.api.detail}</small></span>
+                  </li>
+                  <li>
+                    <span className="fl-brand fl-brand--generic" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="6" rx="1.5" /><rect x="4" y="14.5" width="16" height="6" rx="1.5" /><circle cx="8" cy="6.5" r="1" /><circle cx="8" cy="17.5" r="1" /></svg>
+                    </span>
+                    <span>{supported.hosted.name} <small>{supported.hosted.detail}</small></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
             <ul className="fl-modules">
               {copy.platform.modules.map((module) => (
                 <li key={module.name} className="fl-module" data-reveal>
                   <p className="fl-module__status">{copy.platform.badge}</p>
-                  <h3>{module.name}</h3>
+                  <h3>{module.title}</h3>
+                  <p className="fl-module__name">{module.name}</p>
                   <p>{module.line}</p>
                   {"engine" in module && module.engine ? (
                     <SiteLink to={{ site: "guard" }} className="fl-module__link">{module.engine} <span aria-hidden="true">↗</span></SiteLink>
@@ -97,7 +130,6 @@ export function FleetPage() {
           </div>
         </section>
 
-        {/* Le film d'ouverture reste celui-ci jusqu'au rendu du nouveau scénario. */}
         <HomeFilm
           media={FLEET_HERO_MEDIA}
           next="#pourquoi"
@@ -110,24 +142,42 @@ export function FleetPage() {
             <div className="fl-bento">
               <article className="fl-tile fl-tile--cost" data-reveal>
                 <div className="fl-tile__text">
-                  <h3>{copy.why.cost.name}</h3>
-                  <p className="fl-tile__line">{copy.why.cost.line}</p>
+                  <h3>{cost.name}</h3>
+                  <p className="fl-tile__line">{cost.line}</p>
                   <div className="fl-tile__action">
-                    <a className="guard-button" href={FLEET_SIMULATION_CONTACT}>{copy.why.cost.action}</a>
-                    <p>{copy.why.cost.actionNote}</p>
+                    <a className="guard-button" href={FLEET_SIMULATION_CONTACT}>{cost.action}</a>
+                    <p>{cost.actionNote}</p>
                   </div>
                 </div>
-                <figure className="fl-gauge">
-                  <svg viewBox="0 0 180 100" aria-hidden="true">
-                    <path className="fl-gauge__track" d="M10 90 A80 80 0 0 1 170 90" />
-                    <path className="fl-gauge__fill" d="M10 90 A80 80 0 0 1 170 90" style={{ strokeDasharray: GAUGE_LENGTH }} />
-                  </svg>
-                  <p className="fl-gauge__value">
-                    <CountUp value={FLEET_DEMO_FIGURES.seatCap} locale={locale} />
-                    <span>/{FLEET_DEMO_FIGURES.seatCap}</span>
-                  </p>
-                  <figcaption>{copy.why.cost.gauge}</figcaption>
-                  <p className="fl-demo">{copy.why.demo}</p>
+                {/* Mesure réelle de xSOM, datée, sourcée et montrée (relevé ccusage,
+                    `FLEET_MEASUREMENT`, `CODEX_PLAN`) : ni moyenne, ni promesse. Un autre chiffre ne
+                    s'ajoute qu'avec sa source. */}
+                <figure className="fl-plan">
+                  <p className="fl-plan__head">{cost.measure}</p>
+                  <div className="fl-plan__agent">
+                    <p className="fl-plan__name">
+                      <span className="fl-brand" data-brand="claude" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CLAUDE_MARK} /></svg></span>
+                      Claude
+                      <b className="fl-plan__ratio" aria-hidden="true">{cost.ratio}</b>
+                    </p>
+                    <div className="fl-plan__bars" aria-hidden="true">
+                      <div className="fl-plan__row" data-bar="plan"><span>{cost.plan}</span><i style={vars({ "--w": CLAUDE_PLAN_WIDTH })} /><b>{cost.claudePlan}</b></div>
+                      <div className="fl-plan__row" data-bar="usage"><span>{cost.usage}</span><i style={vars({ "--w": "100%" })} /><b>{cost.claudeUsage}</b></div>
+                    </div>
+                    <p className="fl-plan__line">{cost.claudeLine}</p>
+                  </div>
+                  <div className="fl-plan__agent">
+                    <p className="fl-plan__name">
+                      <span className="fl-brand" data-brand="chatgpt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CHATGPT_MARK} /></svg></span>
+                      Codex
+                    </p>
+                    <div className="fl-plan__bars" aria-hidden="true">
+                      <div className="fl-plan__row" data-bar="usage"><span>{cost.usage}</span><i style={vars({ "--w": CODEX_USAGE_WIDTH })} /><b>{cost.codexUsage}</b></div>
+                    </div>
+                    <p className="fl-plan__line">{codexMeasureLine(lang)}</p>
+                  </div>
+                  <FleetCapture image={FLEET_MEASUREMENT.capture} alt={cost.captureAlt} open={cost.capture} close={cost.captureClose} />
+                  <figcaption>{cost.measureNote}</figcaption>
                 </figure>
               </article>
 
@@ -143,11 +193,11 @@ export function FleetPage() {
                 <div className="fl-bars" aria-hidden="true">
                   <div className="fl-bars__row" data-bar="real">
                     <span>{copy.why.finops.real}</span>
-                    <i style={{ "--w": "58%" } as CSSProperties} />
+                    <i style={vars({ "--w": REAL_INVOICE_WIDTH })} />
                   </div>
                   <div className="fl-bars__row" data-bar="estimate">
                     <span>{copy.why.finops.estimate} <em>{copy.why.finops.estimateTag}</em></span>
-                    <i style={{ "--w": "100%" } as CSSProperties} />
+                    <i style={vars({ "--w": "100%" })} />
                   </div>
                 </div>
                 <p className="fl-stat">
@@ -176,36 +226,12 @@ export function FleetPage() {
           </div>
         </section>
 
-        {/* Comment ça marche : cinq films courts pour l'instant. Un film unique les
-            remplacera ; son emplacement sera ici, au-dessus de la liste, avec le même
-            lecteur (`LoopFilm`) et la même mention « Démonstration · données
-            illustratives ». Aucun lecteur n'est dessiné tant que le rendu n'existe pas. */}
         <section id="fonctionnement" className="fl-section fl-section--tint" aria-labelledby="fl-how-title">
           <div className="guard-wrap">
             <h2 id="fl-how-title" className="home-title fl-title" data-reveal style={title(copy.how.title)}>{copy.how.title}</h2>
-            <ol className="fl-how">
-              {copy.how.steps.map((step, index) => {
-                const number = String(index + 1).padStart(2, "0");
-                return (
-                  <li key={step.id} id={`etape-${step.id}`} className="fl-how__step" data-reveal>
-                    <figure className="fl-how__media">
-                      <LoopFilm
-                        media={{ ...fleetStepMedia(step.id, lang), label: step.film }}
-                        play={`${copy.how.play} · ${step.title}`}
-                        pause={`${copy.how.pause} · ${step.title}`}
-                        fallback={<span>{number}</span>}
-                      />
-                      <figcaption>{copy.how.demo}</figcaption>
-                    </figure>
-                    <div className="fl-how__text">
-                      <span className="fl-how__index" aria-hidden="true">{number}</span>
-                      <h3>{step.title}</h3>
-                      <p>{step.body}</p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+            <div data-reveal>
+              <FleetHowFilm key={lang} media={fleetHowMedia(lang)} chapters={copy.how.steps} labels={copy.how} />
+            </div>
           </div>
         </section>
 
