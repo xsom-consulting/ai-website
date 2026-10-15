@@ -13,11 +13,13 @@ export type Focus = { x: number; y: number; w: number; h: number };
 export type TourStep = { at: number; focus?: Focus; zoom?: number; callout?: string; pointer?: boolean };
 
 /** One capture and its plans; a later page dissolves over the previous one at its first step. */
-export type TourPage = { src: string; width?: number; height?: number; path: string; steps: TourStep[] };
+export type TourPage = { src: string; width?: number; height?: number; path: string; steps: TourStep[]; redact?: Focus[] };
 
 /** Where the browser window sits in the 1920 × 1080 frame, and its title bar. */
-const WINDOW = { left: 100, top: 46, width: 1720, height: 988, chrome: 64 };
-const VIEW = { width: WINDOW.width, height: WINDOW.height - WINDOW.chrome };
+export type TourWindow = { left: number; top: number; width: number; height: number; chrome: number };
+const DEFAULT_WINDOW: TourWindow = { left: 100, top: 46, width: 1720, height: 988, chrome: 64 };
+type View = { width: number; height: number };
+const viewOf = (w: TourWindow): View => ({ width: w.width, height: w.height - w.chrome });
 
 /** Motion: the camera eases over 0.9 s, everything that appears takes 250 ms. */
 const CAMERA_SECONDS = 0.9;
@@ -26,7 +28,7 @@ const APPEAR = 0.25;
 type Camera = { cx: number; cy: number; zoom: number };
 
 /** The camera that shows a step, kept inside the page. */
-function cameraFor(step: TourStep, page: Capture): Camera {
+function cameraFor(step: TourStep, page: Capture, VIEW: View): Camera {
   const base = VIEW.width / page.width;
   const focus = step.focus;
   const zoom = focus ? (step.zoom ?? Math.min(2.4, Math.max(1, Math.min(VIEW.width / (focus.w * 1.5), VIEW.height / (focus.h * 1.9)) / base))) : 1;
@@ -42,14 +44,14 @@ function cameraFor(step: TourStep, page: Capture): Camera {
 const mix = (a: number, b: number, p: number) => a + (b - a) * p;
 
 /** Page → window coordinates for a camera. */
-function project(camera: Camera, page: Capture) {
+function project(camera: Camera, page: Capture, VIEW: View) {
   const scale = (VIEW.width / page.width) * camera.zoom;
   const ox = VIEW.width / 2 - camera.cx * scale;
   const oy = VIEW.height / 2 - camera.cy * scale;
   return { scale, ox, oy, at: (x: number, y: number) => ({ x: ox + x * scale, y: oy + y * scale }) };
 }
 
-function Page({ page }: { page: TourPage }) {
+function Page({ page, VIEW }: { page: TourPage; VIEW: View }) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -58,14 +60,14 @@ function Page({ page }: { page: TourPage }) {
   const ease = (from: number) => spring({ frame: frame - Math.round(from * fps), fps, config: { damping: 200 }, durationInFrames: Math.round(CAMERA_SECONDS * fps) });
 
   // The camera: each step pulls it from wherever it was towards its own target.
-  let camera = cameraFor(steps[0], capture);
+  let camera = cameraFor(steps[0], capture, VIEW);
   steps.slice(1).forEach((step) => {
     const p = ease(step.at);
     if (p <= 0) return;
-    const target = cameraFor(step, capture);
+    const target = cameraFor(step, capture, VIEW);
     camera = { cx: mix(camera.cx, target.cx, p), cy: mix(camera.cy, target.cy, p), zoom: Math.exp(mix(Math.log(camera.zoom), Math.log(target.zoom), p)) };
   });
-  const view = project(camera, capture);
+  const view = project(camera, capture, VIEW);
 
   // The current step, and how far into it the highlight and callout are.
   const index = steps.reduce((found, step, i) => (t >= step.at ? i : found), 0);
@@ -98,6 +100,7 @@ function Page({ page }: { page: TourPage }) {
     <AbsoluteFill>
       <div style={{ position: "absolute", left: 0, top: 0, transformOrigin: "0 0", transform: `translate(${view.ox}px, ${view.oy}px) scale(${view.scale})` }}>
         <CaptureImage capture={capture} />
+        {page.redact?.map((r, i) => <Redaction key={i} capture={capture} box={r} />)}
       </div>
       {box && (
         <svg width={VIEW.width} height={VIEW.height} style={{ position: "absolute", inset: 0 }}>
@@ -133,7 +136,9 @@ function Page({ page }: { page: TourPage }) {
  * in over 300 ms at their first step. The window's title bar carries the console's address
  * and the demonstration notice, readable on every frame.
  */
-export function ScreenTour({ pages, mention }: { pages: TourPage[]; mention: string }) {
+export function ScreenTour({ pages, mention, window: WINDOW_IN }: { pages: TourPage[]; mention: string; window?: TourWindow }) {
+  const WINDOW = WINDOW_IN ?? DEFAULT_WINDOW;
+  const VIEW = viewOf(WINDOW);
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -149,11 +154,27 @@ export function ScreenTour({ pages, mention }: { pages: TourPage[]; mention: str
           const opacity = i ? interpolate(t, [start, start + 0.3], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 1;
           return (
             <AbsoluteFill key={i} style={{ opacity }}>
-              <Page page={page} />
+              <Page page={page} VIEW={VIEW} />
             </AbsoluteFill>
           );
         })}
       </div>
+    </div>
+  );
+}
+
+/**
+ * A box of the capture made unreadable: the same pixels, heavily blurred, in place. Used to
+ * hide a provider's name or product (no AI provider is named in the films), never to change
+ * what the console shows.
+ */
+function Redaction({ capture, box }: { capture: Capture; box: Focus }) {
+  return (
+    <div style={{ position: "absolute", left: box.x, top: box.y, width: box.w, height: box.h, overflow: "hidden", borderRadius: 4 }}>
+      <div style={{ position: "absolute", left: -box.x, top: -box.y, filter: "blur(7px)" }}>
+        <CaptureImage capture={capture} />
+      </div>
+      <div style={{ position: "absolute", inset: 0, background: "rgba(225,230,238,.45)" }} />
     </div>
   );
 }

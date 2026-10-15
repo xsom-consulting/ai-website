@@ -1,0 +1,339 @@
+{
+  "model": "eleven_multilingual_v2",
+  "format": "mp3_44100_192",
+  "voices": {
+    "fr": "Nicolas - Narrator (bibliothèque ElevenLabs, voix française parisienne)",
+    "en": "Daniel - Steady Broadcaster (voix standard ElevenLabs, accent britannique)"
+  },
+  "voiced": true,
+  "fr": {
+    "seconds": 71.633,
+    "scenes": [
+      {
+        "id": "choose",
+        "start": 0,
+        "length": 10.555,
+        "voiceAt": 0.6,
+        "voice": "voice/fr/choose-0e2f69adec5d.mp3",
+        "voiceLength": 7.755,
+        "cues": [
+          {
+            "text": "Les meilleurs modèles du marché pour chaque métier,",
+            "start": 0,
+            "end": 2.299
+          },
+          {
+            "text": "sans dépendre d’un seul fournisseur.",
+            "start": 2.461,
+            "end": 4.272
+          },
+          {
+            "text": "Vos abonnements et vos API, réunis au même endroit.",
+            "start": 4.435,
+            "end": 7.755
+          }
+        ]
+      },
+      {
+        "id": "policy",
+        "start": 10.555,
+        "length": 9,
+        "voiceAt": 0.654,
+        "voice": "voice/fr/policy-6542b0c7c235.mp3",
+        "voiceLength": 7.291,
+        "cues": [
+          {
+            "text": "Les règles et les risques cyber de tous vos collaborateurs,",
+            "start": 0,
+            "end": 3.274
+          },
+          {
+            "text": "pilotés d’un seul endroit.",
+            "start": 3.309,
+            "end": 4.656
+          },
+          {
+            "text": "Une Politique signée, appliquée partout.",
+            "start": 4.702,
+            "end": 7.291
+          }
+        ]
+      },
+      {
+        "id": "coverage",
+        "start": 19.555,
+        "length": 9,
+        "voiceAt": 0.933,
+        "voice": "voice/fr/coverage-6554fb03d9c2.mp3",
+        "voiceLength": 6.734,
+        "cues": [
+          {
+            "text": "Chaque Poste, son état, en temps réel.",
+            "start": 0,
+            "end": 2.635
+          },
+          {
+            "text": "Vous savez où vous êtes protégés, et où vous ne l’êtes pas encore.",
+            "start": 2.949,
+            "end": 6.734
+          }
+        ]
+      },
+      {
+        "id": "invisible",
+        "start": 28.555,
+        "length": 12.513,
+        "voiceAt": 0.6,
+        "voice": "voice/fr/invisible-77040ec74884.mp3",
+        "voiceLength": 8.313,
+        "cues": [
+          {
+            "text": "Vos Développeurs travaillent comme avant.",
+            "start": 0,
+            "end": 1.95
+          },
+          {
+            "text": "La sécurité est invisible, jusqu’au jour où un secret allait partir :",
+            "start": 2.113,
+            "end": 6.026
+          },
+          {
+            "text": "là, elle l’arrête sur le Poste.",
+            "start": 6.339,
+            "end": 8.313
+          }
+        ]
+      },
+      {
+        "id": "costs",
+        "start": 41.068,
+        "length": 12.713,
+        "voiceAt": 0.6,
+        "voice": "voice/fr/costs-2a5e277806e8.mp3",
+        "voiceLength": 9.613,
+        "cues": [
+          {
+            "text": "Comprenez, suivez et surtout optimisez votre facture IA :",
+            "start": 0,
+            "end": 3.901
+          },
+          {
+            "text": "chaque Siège utile, chaque euro expliqué,",
+            "start": 4.214,
+            "end": 7.059
+          },
+          {
+            "text": "et le bon forfait pour chaque Développeur.",
+            "start": 7.256,
+            "end": 9.613
+          }
+        ]
+      },
+      {
+        "id": "proof",
+        "start": 53.781,
+        "length": 9,
+        "voiceAt": 0.717,
+        "voice": "voice/fr/proof-7e8a11a06aa2.mp3",
+        "voiceLength": 5.666,
+        "cues": [
+          {
+            "text": "Pour vos auditeurs comme pour vos clients :",
+            "start": 0,
+            "end": 2.043
+          },
+          {
+            "text": "la preuve d’un usage de l’IA maîtrisé, prête en un clic.",
+            "start": 2.357,
+            "end": 5.666
+          }
+        ]
+      },
+      {
+        "id": "signature",
+        "start": 62.781,
+        "length": 8.851,
+        "voiceAt": 0.6,
+        "voice": "voice/fr/signature-c1479d5c57d2.mp3",
+        "voiceLength": 5.851,
+        "cues": [
+          {
+            "text": "xSOM Fleet.",
+            "start": 0,
+            "end": 0.975
+          },
+          {
+            "text": "Les meilleures IA pour toute votre entreprise.",
+            "start": 1.335,
+            "end": 3.68
+          },
+          {
+            "text": "La sécurité reste chez vous.",
+            "start": 3.947,
+            "end": 5.851
+          }
+        ]
+      }
+    ]
+  },
+  "en": {
+    "seconds": 79.741,
+    "scenes": [
+      {
+        "id": "choose",
+        "start": 0,
+        "length": 13.713,
+        "voiceAt": 0.6,
+        "voice": "voice/en/choose-ca1e9f382fb8.mp3",
+        "voiceLength": 10.913,
+        "cues": [
+          {
+            "text": "The best models on the market for every role,",
+            "start": 0,
+            "end": 2.531
+          },
+          {
+            "text": "without depending on a single provider.",
+            "start": 2.856,
+            "end": 5.294
+          },
+          {
+            "text": "Your subscriptions and your APIs, brought together in one place.",
+            "start": 5.805,
+            "end": 10.913
+          }
+        ]
+      },
+      {
+        "id": "policy",
+        "start": 13.713,
+        "length": 9.588,
+        "voiceAt": 0.6,
+        "voice": "voice/en/policy-491f3cc3346a.mp3",
+        "voiceLength": 7.988,
+        "cues": [
+          {
+            "text": "The rules and cyber risks of all your people, managed from one place.",
+            "start": 0,
+            "end": 4.516
+          },
+          {
+            "text": "A signed Policy, applied everywhere.",
+            "start": 4.795,
+            "end": 7.988
+          }
+        ]
+      },
+      {
+        "id": "coverage",
+        "start": 23.301,
+        "length": 9,
+        "voiceAt": 0.701,
+        "voice": "voice/en/coverage-4941a4ee901b.mp3",
+        "voiceLength": 7.198,
+        "cues": [
+          {
+            "text": "Every Poste and its state, in real time.",
+            "start": 0,
+            "end": 3.17
+          },
+          {
+            "text": "You know where you are protected, and where you are not yet.",
+            "start": 3.611,
+            "end": 7.198
+          }
+        ]
+      },
+      {
+        "id": "invisible",
+        "start": 32.301,
+        "length": 13.952,
+        "voiceAt": 0.6,
+        "voice": "voice/en/invisible-56d3548f914f.mp3",
+        "voiceLength": 9.752,
+        "cues": [
+          {
+            "text": "Your developers work as before.",
+            "start": 0,
+            "end": 2.171
+          },
+          {
+            "text": "Security stays invisible, until the day a secret is about to leave:",
+            "start": 2.682,
+            "end": 7.268
+          },
+          {
+            "text": "then it stops it on the Poste.",
+            "start": 7.593,
+            "end": 9.752
+          }
+        ]
+      },
+      {
+        "id": "costs",
+        "start": 46.253,
+        "length": 14.106,
+        "voiceAt": 0.6,
+        "voice": "voice/en/costs-d5e61f38c930.mp3",
+        "voiceLength": 11.006,
+        "cues": [
+          {
+            "text": "Understand, track and above all optimise your AI bill:",
+            "start": 0,
+            "end": 4.563
+          },
+          {
+            "text": "every useful Seat, every euro explained, and the right plan for every developer.",
+            "start": 4.946,
+            "end": 11.006
+          }
+        ]
+      },
+      {
+        "id": "proof",
+        "start": 60.36,
+        "length": 10.298,
+        "voiceAt": 0.6,
+        "voice": "voice/en/proof-f530a061cbbc.mp3",
+        "voiceLength": 7.198,
+        "cues": [
+          {
+            "text": "For your auditors as for your clients:",
+            "start": 0,
+            "end": 2.566
+          },
+          {
+            "text": "proof of a controlled use of AI, ready in one click.",
+            "start": 2.891,
+            "end": 7.198
+          }
+        ]
+      },
+      {
+        "id": "signature",
+        "start": 70.658,
+        "length": 9.084,
+        "voiceAt": 0.6,
+        "voice": "voice/en/signature-37500a02d349.mp3",
+        "voiceLength": 6.084,
+        "cues": [
+          {
+            "text": "xSOM Fleet.",
+            "start": 0,
+            "end": 1.057
+          },
+          {
+            "text": "The best AI for your whole company.",
+            "start": 1.382,
+            "end": 3.727
+          },
+          {
+            "text": "Security stays with you.",
+            "start": 4.052,
+            "end": 6.084
+          }
+        ]
+      }
+    ]
+  }
+}
