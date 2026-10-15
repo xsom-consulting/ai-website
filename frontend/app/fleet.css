@@ -55,57 +55,6 @@
   stroke: none;
 }
 
-/* ---- Film d'ouverture : le repli dessiné sous la vidéo ne se voit que si l'affiche
-   manque (la vidéo sans image est transparente). */
-.xfl .home-film__fallback {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-16) var(--gutter);
-  background:
-    linear-gradient(var(--home-ink-line) 1px, transparent 1px) 0 0 / 4rem 4rem,
-    linear-gradient(90deg, var(--home-ink-line) 1px, transparent 1px) 0 0 / 4rem 4rem,
-    radial-gradient(50rem 26rem at 70% 30%, color-mix(in srgb, var(--signal-accent) 30%, transparent), transparent 70%),
-    var(--home-ink);
-  color: var(--home-ink-text);
-  text-align: center;
-}
-.xfl .home-film__fallback .fl-mark {
-  display: block;
-  width: clamp(2.5rem, 6vw, 4.5rem);
-  height: auto;
-}
-.xfl .home-film__fallback .fl-mark img {
-  width: 100%;
-  height: auto;
-}
-.xfl .home-film__fallback .xsom-brand-mark__dark {
-  display: block;
-}
-.xfl .home-film__fallback .xsom-brand-mark__light {
-  display: none;
-}
-.xfl .home-film__fallback p {
-  margin: 0;
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(2rem, 7vw, 5.5rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-.xfl .home-film__fallback span {
-  max-width: 34ch;
-  color: var(--home-ink-muted);
-  font-size: var(--fs-lead);
-}
-.xfl .home-film__video {
-  z-index: 0;
-}
-
 /* ---- La promesse : plein écran, le titre à gauche, l'illustration à droite. */
 .xfl .fl-hero {
   position: relative;
@@ -1263,16 +1212,6 @@
     max-width: 36rem;
     margin-inline: auto;
   }
-  /* Le film passe en 16:9 dans le flux, la barre dessous : le repli ne couvre que
-     l'image, et la vidéo reste au-dessus de lui. */
-  .xfl .home-film__fallback {
-    inset: 0 0 auto;
-    aspect-ratio: 16 / 9;
-    padding: var(--sp-6) var(--gutter);
-  }
-  .xfl .home-film__video {
-    position: relative;
-  }
   .xfl .fl-modules {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-6);
@@ -1310,8 +1249,5 @@
   }
   .xfl .fl-badges li:last-child {
     grid-column: span 2;
-  }
-  .xfl .home-film__fallback span {
-    display: none;
   }
 }

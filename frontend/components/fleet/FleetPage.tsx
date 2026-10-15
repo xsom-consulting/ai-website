@@ -1,8 +1,6 @@
 "use client";
 
 import { useRef, type CSSProperties } from "react";
-import { XsomMark } from "@/components/brand";
-import { HomeFilm } from "@/components/home/HomeFilm";
 import { glideTo } from "@/components/home/motion";
 import { useHomeReveal } from "@/components/home/useHomeReveal";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -16,7 +14,6 @@ import {
   FLEET_CONTACT,
   FLEET_COPY,
   FLEET_DEMO_FIGURES,
-  FLEET_HERO_MEDIA,
   FLEET_MEASUREMENT,
   FLEET_PRICE_CONTACT,
   FLEET_SIMULATION_CONTACT,
@@ -41,7 +38,7 @@ const vars = (value: Record<string, string>) => value as CSSProperties;
 /**
  * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`. La promesse et son
  * illustration animée (`FleetHeroVisual`), la phrase qui définit la plateforme, la ligne
- * « Pris en charge » et les trois solutions, le film d'ouverture, « Pourquoi choisir
+ * « Pris en charge » et les trois solutions, « Pourquoi choisir
  * xSOM Fleet » en grille, le film « Comment ça marche » et ses chapitres, les licences
  * et engagements en badges, puis les questions et le contact. En-tête et style de l'accueil (`.xhome`) ; ce qui est
  * propre à Fleet vit sous `.xfl`.
@@ -129,12 +126,6 @@ export function FleetPage() {
             </ul>
           </div>
         </section>
-
-        <HomeFilm
-          media={FLEET_HERO_MEDIA}
-          next="#pourquoi"
-          fallback={<><XsomMark className="fl-mark" /><p>xSOM Fleet</p><span>{copy.film.fallback}</span></>}
-        />
 
         <section id="pourquoi" className="fl-section" aria-labelledby="fl-why-title">
           <div className="guard-wrap">

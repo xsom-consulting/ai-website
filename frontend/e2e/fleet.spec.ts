@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * La page xSOM Fleet : film d'ouverture, promesse, définition de la plateforme, ligne
+ * La page xSOM Fleet : promesse et illustration animée, définition de la plateforme, ligne
  * « Pris en charge » et trois solutions, « Pourquoi choisir xSOM Fleet », le film
  * « Comment ça marche » avec voix off et chapitres,
  * licences et engagements, questions, métadonnées et données structurées. Les films sont produits à part (`films/`) : la page doit
@@ -9,13 +9,11 @@ import { expect, test } from "@playwright/test";
  */
 const CHAPTERS = ["choose", "policy", "coverage", "invisible", "costs", "proof"];
 
-test("the Fleet page declares its films without downloading them up front", async ({ page }) => {
+test("the Fleet page declares its single film without downloading it up front", async ({ page }) => {
   await page.goto("/fleet");
-  const hero = page.locator("#home-film video");
-  await expect(hero).toHaveAttribute("src", "/signal-media/xsom-fleet-hero-v2-fr.mp4");
-  await expect(hero).toHaveAttribute("poster", "/signal-media/xsom-fleet-hero-v2-fr.jpg");
-  await expect(hero).toHaveAttribute("preload", "none");
-  expect(await hero.evaluate((v: HTMLVideoElement) => v.muted)).toBe(true);
+  // Aucun film d'accueil : seul « Comment ça marche » est une vidéo.
+  await expect(page.locator("video")).toHaveCount(1);
+  await expect(page.locator("#home-film")).toHaveCount(0);
   // « Comment ça marche » : un seul film, avec voix off, son activable, et ses chapitres.
   const how = page.locator("#fonctionnement video");
   await expect(how).toHaveCount(1);
@@ -34,8 +32,8 @@ test("the old films are gone from the page and from the media folder", async ({ 
   await page.goto("/fleet");
   const html = await page.content();
   for (const id of ["orgs", "block"]) expect(html).not.toContain(`xsom-fleet-how-${id}-`);
-  expect(html).not.toContain("xsom-fleet-hero-fr");
-  for (const file of ["xsom-fleet-hero-fr.mp4", "xsom-fleet-how-orgs-fr.mp4"]) {
+  expect(html).not.toContain("xsom-fleet-hero");
+  for (const file of ["xsom-fleet-hero-fr.mp4", "xsom-fleet-how-orgs-fr.mp4", "xsom-fleet-hero-v2-fr.mp4", "xsom-fleet-hero-v2-en.mp4", "xsom-fleet-hero-v2-fr.jpg", "xsom-fleet-hero-v2-en.jpg"]) {
     expect((await request.get(`/signal-media/${file}`)).status()).toBe(404);
   }
 });
@@ -62,7 +60,9 @@ test("under reduced motion, no film is requested and the page still renders", as
 test("the Fleet page carries its own title, Open Graph poster and JSON-LD", async ({ request }) => {
   const html = await (await request.get("/", { headers: { host: "fleet.xsom.fr" } })).text();
   expect(html).toContain("<title>xSOM Fleet · les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise</title>");
-  expect(html).toContain('property="og:image" content="https://fleet.xsom.fr/signal-media/xsom-fleet-hero-v2-fr.jpg"');
+  expect(html).toContain('property="og:image" content="https://fleet.xsom.fr/signal-media/xsom-fleet-og-fr.jpg"');
+  expect((await request.get("/signal-media/xsom-fleet-og-fr.jpg")).status()).toBe(200);
+  expect((await request.get("/signal-media/xsom-fleet-og-en.jpg")).status()).toBe(200);
   const json = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)?.[1];
   expect(json).toBeTruthy();
   const data = JSON.parse(json!);
@@ -82,7 +82,6 @@ test("the Fleet page speaks English with the same sections", async ({ browser, b
   await expect(page.locator("#modules .fl-module").nth(2)).toContainText("Available for pilot");
   await expect(page.locator("#pourquoi .fl-tile h3")).toHaveText(["Cost", "Pricing", "FinOps steering", "One security layer for all your AI"]);
   await expect(page.locator("#engagements h2")).toHaveText("Licences, sources and commitments.");
-  await expect(page.locator("#home-film video")).toHaveAttribute("src", "/signal-media/xsom-fleet-hero-v2-en.mp4");
   await expect(page.locator("#fonctionnement video")).toHaveAttribute("src", "/signal-media/xsom-fleet-how-v2-en.mp4");
   await expect(page.locator("#fonctionnement").getByRole("button", { name: "Turn sound on" })).toBeVisible();
   await expect(page.locator("#fonctionnement figcaption", { hasText: "Demonstration · illustrative data" })).toHaveCount(1);

@@ -1,11 +1,10 @@
-import type { FilmMedia } from "@/components/home/HomeFilm";
 import type { Lang } from "@/lib/i18n";
 
 /**
  * La page xSOM Fleet. La promesse d'abord, avec son illustration animée : les meilleurs
  * modèles d'IA du marché, aux standards de sécurité de l'entreprise. Puis la phrase qui
  * définit la plateforme (piloter toute l'architecture IA en un seul endroit), la ligne
- * « Pris en charge » et les trois solutions, le film, les raisons de la choisir en
+ * « Pris en charge » et les trois solutions, les raisons de la choisir en
  * grille, le film « Comment ça marche », les licences et engagements en badges, enfin
  * les questions. Une phrase par bloc ; le reste est visuel.
  *
@@ -29,21 +28,8 @@ export const FLEET_ORIGIN = "https://fleet.xsom.fr";
 
 const MEDIA = "/signal-media";
 
-/** Le film d'ouverture (Remotion : `films/src/fleet/v2/FleetAd.tsx`), un par langue. */
-export const FLEET_HERO_MEDIA: FilmMedia = {
-  fr: {
-    mp4: `${MEDIA}/xsom-fleet-hero-v2-fr.mp4`,
-    poster: `${MEDIA}/xsom-fleet-hero-v2-fr.jpg`,
-    name: "Film d’introduction xSOM Fleet",
-    label: "Film d’introduction de xSOM Fleet, vingt secondes sans parole : toutes les meilleures IA réunies, une clé masquée arrêtée sur le Poste, une Politique signée appliquée partout, les coûts du Groupe de démonstration, puis la promesse : les meilleures IA pour toute votre entreprise, la sécurité reste chez vous.",
-  },
-  en: {
-    mp4: `${MEDIA}/xsom-fleet-hero-v2-en.mp4`,
-    poster: `${MEDIA}/xsom-fleet-hero-v2-en.jpg`,
-    name: "xSOM Fleet introduction film",
-    label: "xSOM Fleet introduction film, twenty seconds without speech: all the best AI brought together, a masked key stopped on the workstation, a signed Policy applied everywhere, the costs of the demonstration group, then the promise: the best AI for your whole company, security stays with you.",
-  },
-};
+/** L'image Open Graph : le haut de la page (la promesse et son illustration), un fichier par langue. */
+export const fleetOgImage = (lang: Lang) => `${MEDIA}/xsom-fleet-og-${lang}.jpg`;
 
 /** Le film « Comment ça marche » (Remotion : `films/src/fleet/v2/HowV2.tsx`), avec voix off. */
 export const fleetHowMedia = (lang: Lang) => ({
@@ -109,9 +95,6 @@ export const FLEET_COPY = {
       title: "xSOM Fleet · les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise",
       description: "Pilotez toute votre architecture IA en un seul endroit : abonnements (Claude Code et Codex sur chaque Poste), clés API et modèles hébergés chez vous. Coût réel, Contrôle avant envoi et preuves pour l’audit.",
       ogAlt: "xSOM Fleet : les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise",
-    },
-    film: {
-      fallback: "Pilotez toute votre architecture IA en un seul endroit.",
     },
     hero: {
       badge: "Programme pilote 2026",
@@ -236,9 +219,6 @@ export const FLEET_COPY = {
       title: "xSOM Fleet · the best AI models, at enterprise security standards",
       description: "Steer your whole AI architecture from one place: subscriptions (Claude Code and Codex on every workstation), API keys and models hosted on your side. Real cost, pre-send check and evidence for audit.",
       ogAlt: "xSOM Fleet: the best AI models on the market, at enterprise security standards",
-    },
-    film: {
-      fallback: "Steer your whole AI architecture from one place.",
     },
     hero: {
       badge: "2026 pilot programme",
