@@ -44,7 +44,7 @@ function structuredData(lang: "fr" | "en") {
     description: copy.description,
     applicationCategory: "BusinessApplication",
     applicationSubCategory: "SecurityApplication",
-    operatingSystem: "Windows",
+    operatingSystem: "Windows, macOS, Linux",
     inLanguage: lang,
     image: `${FLEET_ORIGIN}${FLEET_HERO_MEDIA[lang].poster}`,
     publisher: {

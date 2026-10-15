@@ -1,18 +1,25 @@
 /* Page xSOM Fleet. Elle reprend l'accueil (`home.css`, sous `.xhome` : en-tête, film
    d'ouverture, titres, révélation) ; ce qui lui est propre vit sous `.xfl`. Couleurs et
-   durées viennent des jetons ; les transparences passent par color-mix. */
+   durées viennent des jetons ; les transparences passent par color-mix. Tout mouvement
+   qui n'est pas une réponse à un geste ne joue que sous `[data-motion="on"]` (posé avant
+   peinture, absent si le mouvement est réduit) : sans lui, chaque dessin montre son état
+   final. */
 
 .xfl {
   --fl-glow: color-mix(in srgb, var(--signal-accent) 55%, white);
   --fl-tint: color-mix(in srgb, var(--signal-accent) 5%, var(--signal-bg));
+  --fl-deny: color-mix(in srgb, var(--signal-deny) 35%, #ff9d9d);
+  --fl-ok: color-mix(in srgb, var(--signal-allow) 30%, #8ff0c9);
+  --fl-ink-2: color-mix(in srgb, var(--home-ink) 82%, var(--signal-accent));
+  --fl-loop: 10s;
 }
 
-/* ---- Les logos des assistants, sur une tuile claire. */
+/* ---- Les logos des assistants, sur une tuile claire (usage nominatif seulement). */
 .xfl .fl-logo {
   display: grid;
   flex: none;
   place-items: center;
-  width: 2.75rem;
+  width: 2.25rem;
   aspect-ratio: 1;
   overflow: hidden;
   border-radius: 24%;
@@ -24,6 +31,14 @@
 }
 .xfl .fl-logo[data-host="codex"] img {
   width: 100%;
+}
+.xfl .fl-logo--api {
+  background: color-mix(in srgb, var(--fl-glow) 18%, transparent);
+  color: var(--fl-glow);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fl-glow) 45%, transparent);
 }
 
 /* ---- Film d'ouverture : le repli dessiné sous la vidéo ne se voit que si l'affiche
@@ -77,17 +92,21 @@
   z-index: 0;
 }
 
-/* ---- La promesse, sur le fond nuit du film qu'elle prolonge. */
+/* ---- La promesse : plein écran, le titre à gauche, l'illustration à droite. */
 .xfl .fl-hero {
   position: relative;
   isolation: isolate;
-  padding-block: var(--sp-20) var(--sp-24);
+  display: grid;
+  align-items: center;
+  min-height: min(100svh, 62rem);
+  padding-block: calc(var(--home-header) + var(--sp-12)) var(--sp-16);
   overflow: hidden;
   background:
-    radial-gradient(60rem 30rem at 85% 0%, color-mix(in srgb, var(--signal-accent) 24%, transparent), transparent 70%),
-    var(--home-ink);
+    radial-gradient(46rem 34rem at 78% 42%, color-mix(in srgb, var(--signal-accent) 34%, transparent), transparent 68%),
+    radial-gradient(40rem 30rem at 8% 100%, color-mix(in srgb, #5ad1ff 12%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--home-ink), var(--fl-ink-2));
   color: var(--home-ink-text);
-  scroll-margin-top: var(--home-header);
+  scroll-margin-top: 0;
 }
 .xfl .fl-hero::before {
   content: "";
@@ -98,34 +117,52 @@
     linear-gradient(var(--home-ink-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--home-ink-line) 1px, transparent 1px);
   background-size: 4rem 4rem;
-  opacity: 0.35;
-  mask-image: linear-gradient(180deg, transparent, black 30%, transparent 95%);
+  opacity: 0.28;
+  mask-image: radial-gradient(ellipse 70% 60% at 60% 45%, black, transparent 75%);
 }
-.xfl .fl-hero h1 {
-  color: var(--home-ink-text);
-}
-.xfl .fl-hero .home-kicker {
-  color: var(--home-ink-muted);
-}
-.xfl :is(.fl-hero, .fl-section--ink, .fl-cta) :is(a, button, summary):focus-visible {
+.xfl :is(.fl-hero, .fl-section--ink) :is(a, button, summary):focus-visible {
   outline-color: var(--home-ink-text);
 }
+.xfl .fl-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: var(--sp-12);
+}
+.xfl .fl-hero__badge {
+  display: inline-flex;
+  margin: 0 0 var(--sp-6);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid color-mix(in srgb, var(--fl-glow) 40%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fl-glow) 10%, transparent);
+  color: var(--fl-glow);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
 .xfl .fl-hero__title {
-  max-width: 22ch;
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: var(--fs-display);
+  font-size: clamp(2.6rem, 4.7vw, 4.9rem);
   font-weight: 800;
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  color: var(--home-ink-text);
   text-wrap: balance;
 }
 .xfl .fl-hero__title span {
-  color: var(--fl-glow);
+  display: block;
+}
+.xfl .fl-hero__title span + span {
+  margin-top: 0.18em;
+  background: linear-gradient(100deg, var(--home-ink-text) 10%, var(--fl-glow) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .xfl .fl-hero__lead {
-  max-width: 56ch;
-  margin: var(--sp-6) 0 0;
+  max-width: 46ch;
+  margin: var(--sp-8) 0 0;
   color: var(--home-ink-muted);
   font-size: var(--fs-lead);
   line-height: var(--signal-leading);
@@ -136,6 +173,9 @@
   align-items: center;
   gap: var(--sp-6);
   margin-top: var(--sp-8);
+}
+.xfl .fl-hero__actions .guard-button {
+  box-shadow: 0 var(--sp-3) var(--sp-10) color-mix(in srgb, var(--signal-accent) 45%, transparent);
 }
 .xfl .fl-hero__how {
   color: var(--home-ink-text);
@@ -149,20 +189,21 @@
   text-decoration-color: currentColor;
 }
 .xfl .fl-hero__hosts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-5);
   margin-top: var(--sp-12);
 }
 .xfl .fl-hero__hosts p {
-  margin: 0 0 var(--sp-3);
+  margin: 0;
   color: var(--home-ink-muted);
-  font-family: var(--font-mono), monospace;
-  font-size: var(--fs-label);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: var(--fs-sm);
 }
 .xfl .fl-hero__hosts ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-4) var(--sp-8);
+  gap: var(--sp-3) var(--sp-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -170,58 +211,270 @@
 .xfl .fl-hero__hosts li {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
-  font-size: var(--fs-lead);
+  gap: var(--sp-2);
   font-weight: 600;
 }
 
-/* ---- Sections claires, en alternance avec une teinte légère. */
-.xfl .fl-section {
-  padding-block: var(--section-y);
+/* ---- L'illustration animée du haut de page (`FleetHeroVisual`). */
+.xfl .fl-visual {
+  position: relative;
+  margin: 0;
+  color: var(--fl-glow);
 }
-.xfl .fl-section--tint {
-  background: var(--fl-tint);
+.xfl .fl-visual::before {
+  content: "";
+  position: absolute;
+  inset: 8% 4%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--signal-accent) 30%, transparent), transparent);
+  filter: blur(24px);
 }
-.xfl .fl-head {
-  display: grid;
-  justify-items: center;
-  margin-bottom: var(--sp-12);
-  text-align: center;
+.xfl .fl-visual svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-body), sans-serif;
+}
+.xfl .fl-visual :is(rect, path, circle, line) {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.xfl .fl-visual__tile rect {
+  fill: color-mix(in srgb, var(--fl-glow) 16%, transparent);
+  stroke: color-mix(in srgb, var(--fl-glow) 70%, transparent);
+  stroke-width: 1.2;
+}
+.xfl .fl-visual__tile line {
+  stroke: color-mix(in srgb, var(--fl-glow) 45%, transparent);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.xfl .fl-visual__check {
+  fill: none;
+  stroke: var(--fl-ok);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.xfl .fl-visual__line {
+  color: var(--fl-glow);
+}
+.xfl .fl-visual__poste text {
+  fill: var(--home-ink-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.xfl .fl-visual__prompt rect {
+  fill: color-mix(in srgb, var(--home-ink) 70%, black);
+  stroke: var(--fl-deny);
+  stroke-width: 1.4;
+  opacity: 0.4;
+}
+.xfl .fl-visual__prompt text {
+  fill: var(--home-ink-text);
+  opacity: 0.4;
+}
+.xfl .fl-visual__prompt-label {
+  fill: var(--home-ink-muted);
+  font-size: 11px;
+}
+.xfl .fl-visual__prompt-text {
+  font-family: var(--font-mono), monospace;
+  font-size: 15px;
+}
+.xfl .fl-visual__shards rect {
+  fill: color-mix(in srgb, var(--fl-deny) 26%, var(--home-ink));
+  stroke: var(--fl-deny);
+  stroke-width: 1.2;
+  transform: translate(var(--dx), var(--dy)) rotate(var(--r));
+  opacity: 0.9;
+}
+.xfl .fl-visual__blocked rect {
+  fill: color-mix(in srgb, var(--fl-deny) 16%, var(--home-ink));
+  stroke: color-mix(in srgb, var(--fl-deny) 70%, transparent);
+}
+.xfl .fl-visual__blocked circle {
+  fill: var(--fl-deny);
+}
+.xfl .fl-visual__blocked path {
+  stroke: var(--home-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.xfl .fl-visual__blocked text {
+  fill: var(--home-ink-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+.xfl .fl-visual__ring {
+  fill: none;
+  stroke: var(--fl-glow);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+}
+.xfl .fl-visual__stamp-disc {
+  fill: var(--signal-accent);
+  stroke: var(--fl-glow);
+  stroke-width: 2;
+}
+.xfl .fl-visual__stamp-edge {
+  fill: none;
+  stroke: color-mix(in srgb, white 55%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.xfl .fl-visual__stamp-check {
+  fill: none;
+  stroke: white;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.xfl .fl-visual__stamp text {
+  fill: var(--home-ink-text);
+  font-size: 14px;
+  font-weight: 700;
 }
 
-/* ---- La plateforme et ses trois modules. Le module à venir est en pointillés : il
-   n'existe pas encore, et rien ne le fait passer pour livré. */
+/* Le mouvement : une boucle de dix secondes. Le prompt arrive et se brise sur la ligne
+   du Poste (0 à 40 %), le refus s'affiche, puis le cachet frappe et son onde passe de
+   Poste en Poste (50 à 75 %). Seuls opacité et transformations sont animées. */
+[data-motion="on"] .xfl .fl-visual__tile {
+  animation: fl-tile-on 0.9s var(--on) both;
+}
+[data-motion="on"] .xfl .fl-visual__tile rect {
+  animation: fl-tile-seal var(--fl-loop) var(--wave) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__check {
+  animation: fl-check var(--fl-loop) var(--wave) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__prompt {
+  animation: fl-prompt var(--fl-loop) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__prompt :is(rect, text) {
+  opacity: 1;
+}
+[data-motion="on"] .xfl .fl-visual__shards rect {
+  animation: fl-shard var(--fl-loop) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__blocked {
+  animation: fl-blocked var(--fl-loop) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__line {
+  animation: fl-impact var(--fl-loop) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__stamp {
+  animation: fl-stamp var(--fl-loop) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__ring {
+  animation: fl-ring var(--fl-loop) infinite;
+}
+[data-motion="on"] .xfl .fl-visual__ring:nth-child(2) {
+  animation-delay: 0.35s;
+}
+[data-motion="on"] .xfl .fl-visual__ring:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+@keyframes fl-tile-on {
+  from { opacity: 0.12; }
+  to { opacity: 1; }
+}
+@keyframes fl-tile-seal {
+  0%, 50%, 66%, 100% { fill: color-mix(in srgb, var(--fl-glow) 16%, transparent); }
+  54% { fill: color-mix(in srgb, var(--fl-glow) 55%, transparent); }
+}
+@keyframes fl-check {
+  0%, 50% { opacity: 0; transform: scale(0.6); }
+  54%, 90% { opacity: 1; transform: scale(1); }
+  96%, 100% { opacity: 0; transform: scale(1); }
+}
+@keyframes fl-prompt {
+  0% { opacity: 0; transform: translateX(-120px); }
+  6% { opacity: 1; }
+  30% { opacity: 1; transform: translateX(0); }
+  33% { opacity: 0; transform: translateX(6px); }
+  100% { opacity: 0; transform: translateX(6px); }
+}
+@keyframes fl-shard {
+  0%, 30% { opacity: 0; transform: none; }
+  31% { opacity: 1; transform: none; }
+  42% { opacity: 0.95; transform: translate(var(--dx), var(--dy)) rotate(var(--r)); }
+  86% { opacity: 0.7; transform: translate(var(--dx), var(--dy)) rotate(var(--r)); }
+  94%, 100% { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 20px)) rotate(var(--r)); }
+}
+@keyframes fl-blocked {
+  0%, 33% { opacity: 0; transform: translateY(8px); }
+  38%, 86% { opacity: 1; transform: none; }
+  94%, 100% { opacity: 0; transform: none; }
+}
+@keyframes fl-impact {
+  0%, 29% { opacity: 0.55; transform: scaleX(1); }
+  31% { opacity: 1; transform: scaleX(3); }
+  40%, 100% { opacity: 0.55; transform: scaleX(1); }
+}
+@keyframes fl-stamp {
+  0%, 46% { opacity: 0; transform: scale(1.6); }
+  50% { opacity: 1; transform: scale(0.94); }
+  53%, 92% { opacity: 1; transform: scale(1); }
+  98%, 100% { opacity: 0; transform: scale(1); }
+}
+@keyframes fl-ring {
+  0%, 50% { opacity: 0; transform: scale(1); }
+  51% { opacity: 0.8; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(9); }
+}
+
+/* ---- La plateforme : une phrase en très grand, sa sous-ligne, trois modules. */
+.xfl .fl-platform {
+  padding-block: var(--section-y);
+  background: var(--signal-bg);
+  scroll-margin-top: var(--home-header);
+}
+.xfl .fl-platform__punch {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.75rem, 8.4vw, 7.75rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  background: linear-gradient(115deg, var(--signal-text) 30%, var(--signal-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.xfl .fl-platform__sub {
+  max-width: 58ch;
+  margin: var(--sp-8) 0 0;
+  color: var(--signal-muted);
+  font-size: var(--fs-lead);
+  line-height: var(--signal-leading);
+}
 .xfl .fl-modules {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-6);
-  margin: 0;
+  gap: var(--sp-8);
+  margin: var(--sp-16) 0 0;
   padding: 0;
   list-style: none;
 }
 .xfl .fl-module {
   display: grid;
   align-content: start;
-  gap: var(--sp-3);
-  padding: var(--sp-8);
-  border: var(--signal-border) solid var(--signal-line);
-  border-radius: var(--home-radius);
-  background: var(--signal-surface);
-}
-.xfl .fl-module[data-status="soon"] {
-  border-style: dashed;
-  background: transparent;
+  gap: var(--sp-2);
+  padding-top: var(--sp-5);
+  border-top: 2px solid var(--signal-accent);
 }
 .xfl .fl-module__status {
   margin: 0;
   color: var(--signal-accent-text);
-  font-family: var(--font-mono), monospace;
-  font-size: var(--fs-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.xfl .fl-module[data-status="soon"] .fl-module__status {
-  color: var(--signal-muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
 }
 .xfl .fl-module h3 {
   margin: 0;
@@ -229,189 +482,287 @@
   font-weight: 700;
   line-height: 1.2;
 }
-.xfl .fl-module__lead {
+.xfl .fl-module p:not(.fl-module__status) {
   margin: 0;
-  color: var(--signal-text);
-  font-weight: 600;
-  line-height: var(--signal-leading);
-}
-.xfl .fl-module ul {
-  display: grid;
-  gap: var(--sp-3);
-  margin: var(--sp-2) 0 0;
-  padding: 0;
-  list-style: none;
-}
-.xfl .fl-module li {
-  position: relative;
-  padding-left: var(--sp-5);
   color: var(--signal-muted);
   line-height: var(--signal-leading);
 }
-.xfl .fl-module li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.7em;
-  width: var(--sp-3);
-  height: 2px;
-  background: var(--signal-accent);
-}
 .xfl .fl-module__link {
-  margin-top: var(--sp-2);
   color: var(--signal-accent-text);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.3em;
 }
 
-/* ---- Les deux factures, côte à côte. */
-.xfl .fl-bills {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sp-6);
-  max-width: 64rem;
-  margin-inline: auto;
+/* ---- Sections : claire, teintée, nuit. */
+.xfl .fl-section {
+  padding-block: var(--section-y);
+  scroll-margin-top: var(--home-header);
 }
-.xfl .fl-bill {
-  padding: var(--sp-10);
-  border: var(--signal-border) solid var(--signal-line);
-  border-radius: calc(var(--home-radius) * 1.5);
-  background: var(--signal-surface);
+.xfl .fl-section--tint {
+  background: var(--fl-tint);
 }
-.xfl .fl-bill[data-bill="seat"] {
-  border-color: var(--signal-accent);
-  box-shadow: 0 var(--sp-8) var(--sp-24) color-mix(in srgb, var(--signal-accent) 14%, transparent);
-}
-.xfl .fl-bill__label {
-  margin: 0;
-  color: var(--signal-muted);
-  font-family: var(--font-mono), monospace;
-  font-size: var(--fs-label);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.xfl .fl-bill__value {
-  margin: var(--sp-4) 0 0;
-  font-family: var(--font-display), sans-serif;
-  font-size: var(--fs-metric);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
-.xfl .fl-bill[data-bill="seat"] .fl-bill__value {
-  color: var(--signal-accent-text);
-}
-.xfl .fl-bill__unit {
-  margin: var(--sp-3) 0 0;
-  color: var(--signal-text);
-  line-height: var(--signal-leading);
-}
-.xfl .fl-bill__source {
-  margin: var(--sp-6) 0 0;
-  color: var(--signal-muted);
-  font-size: var(--fs-xs);
-}
-.xfl .fl-note {
-  max-width: 64rem;
-  margin: var(--sp-8) auto 0;
-  color: var(--signal-muted);
-  font-size: var(--fs-sm);
-  line-height: var(--signal-leading);
+.xfl .fl-title {
+  margin-bottom: var(--sp-12);
+  text-align: center;
 }
 
-/* ---- Les quatre limites, en cartes. */
-.xfl .fl-grid {
+/* ---- Pourquoi choisir xSOM Fleet : une grille de tuiles de tailles différentes.
+   Ordinateur : coût (4/6) et tarif (2/6), puis FinOps et sécurité (3/6 chacune). */
+.xfl .fl-bento {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--sp-6);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--sp-5);
 }
-.xfl .fl-card {
+.xfl .fl-tile {
+  position: relative;
   display: grid;
   align-content: start;
   gap: var(--sp-3);
   padding: var(--sp-8);
+  overflow: hidden;
   border: var(--signal-border) solid var(--signal-line);
-  border-radius: var(--home-radius);
+  border-radius: calc(var(--home-radius) * 1.6);
   background: var(--signal-surface);
+  transition: transform var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease), border-color var(--t-mid) var(--ease);
 }
-.xfl .fl-card__icon {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  aspect-ratio: 1;
-  border-radius: 30%;
-  background: color-mix(in srgb, var(--signal-accent) 12%, transparent);
-  color: var(--signal-accent-text);
+.xfl .fl-tile:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--signal-accent) 45%, var(--signal-line));
+  box-shadow: 0 var(--sp-6) var(--sp-16) color-mix(in srgb, var(--signal-accent) 16%, transparent);
 }
-.xfl .fl-card h3,
-.xfl .fl-principles h3,
-.xfl .fl-steps h4 {
-  margin: var(--sp-2) 0 0;
+.xfl .fl-tile h3 {
+  margin: 0;
   font-size: var(--fs-h3);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
 }
-.xfl .fl-card p,
-.xfl .fl-principles p,
-.xfl .fl-steps p {
+.xfl .fl-tile__line {
+  max-width: 34ch;
   margin: 0;
   color: var(--signal-muted);
-  line-height: var(--signal-leading);
+  font-size: var(--fs-lead);
+  line-height: 1.4;
 }
-
-/* ---- Le déploiement : une liste à filets, sans cartes. */
-.xfl .fl-principles {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-8) var(--sp-12);
-  margin: 0 auto;
-  padding: 0;
-  list-style: none;
-}
-.xfl .fl-principles li {
-  display: grid;
-  align-content: start;
-  gap: var(--sp-2);
-  padding-top: var(--sp-5);
-  border-top: var(--signal-border) solid var(--signal-line);
-}
-
-/* ---- La démarche en trois temps. */
-.xfl .fl-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-8);
+.xfl .fl-demo {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  color: var(--signal-muted);
+  font-size: var(--fs-xs);
 }
-.xfl .fl-steps li {
+.xfl .fl-count {
+  font-variant-numeric: tabular-nums;
+}
+
+.xfl .fl-tile--cost {
+  grid-column: span 4;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 15rem);
+  align-items: center;
+  gap: var(--sp-8);
+  background:
+    radial-gradient(28rem 18rem at 100% 0%, color-mix(in srgb, var(--signal-accent) 12%, transparent), transparent 70%),
+    var(--signal-surface);
+}
+.xfl .fl-tile--cost .fl-tile__text {
   display: grid;
-  align-content: start;
+  gap: var(--sp-3);
+}
+.xfl .fl-tile__action {
+  display: grid;
+  justify-items: start;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+.xfl .fl-tile__action p {
+  margin: 0;
+  color: var(--signal-muted);
+  font-size: var(--fs-xs);
+}
+.xfl .fl-gauge {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-1);
+  margin: 0;
+  text-align: center;
+}
+.xfl .fl-gauge svg {
+  width: 100%;
+  max-width: 15rem;
+  overflow: visible;
+}
+.xfl .fl-gauge path {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+.xfl .fl-gauge__track {
+  stroke: var(--signal-accent-wash);
+}
+.xfl .fl-gauge__fill {
+  stroke: var(--signal-accent);
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.4s var(--ease), filter var(--t-mid) var(--ease);
+}
+[data-motion="on"] .xfl .fl-tile--cost:not([data-shown]) .fl-gauge__fill {
+  stroke-dashoffset: 252;
+}
+.xfl .fl-tile--cost:hover .fl-gauge__fill {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--signal-accent) 60%, transparent));
+}
+.xfl .fl-gauge__value {
+  margin: calc(var(--sp-12) * -1) 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--fs-metric);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.xfl .fl-gauge__value span:last-child {
+  color: var(--signal-muted);
+  font-size: 0.5em;
+}
+.xfl .fl-gauge figcaption {
+  max-width: 22ch;
+  color: var(--signal-text);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+}
+
+.xfl .fl-tile--price {
+  grid-column: span 2;
+  align-content: space-between;
+  background:
+    linear-gradient(160deg, var(--signal-accent), color-mix(in srgb, var(--signal-accent) 55%, var(--home-ink)));
+  border-color: transparent;
+  color: var(--signal-accent-ink);
+}
+.xfl .fl-tile--price h3 {
+  color: var(--signal-accent-ink);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.xfl .fl-tile--price .fl-tile__line {
+  color: color-mix(in srgb, var(--signal-accent-ink) 82%, transparent);
+}
+.xfl .fl-tile--price .guard-button {
+  justify-self: start;
+  margin-top: var(--sp-6);
+  border-color: var(--signal-accent-ink);
+  background: var(--signal-accent-ink);
+  color: var(--signal-accent-text);
+}
+.xfl .fl-tile--price :focus-visible {
+  outline-color: var(--signal-accent-ink);
+}
+
+.xfl .fl-tile--finops,
+.xfl .fl-tile--security {
+  grid-column: span 3;
+}
+.xfl .fl-bars {
+  display: grid;
+  gap: var(--sp-4);
+  margin: var(--sp-4) 0 var(--sp-2);
+}
+.xfl .fl-bars__row {
+  display: grid;
   gap: var(--sp-2);
 }
-.xfl .fl-steps__index {
-  color: var(--signal-accent-text);
-  font-family: var(--font-mono), monospace;
+.xfl .fl-bars__row span {
+  color: var(--signal-text);
   font-size: var(--fs-sm);
   font-weight: 600;
-  letter-spacing: 0.1em;
+}
+.xfl .fl-bars__row em {
+  margin-left: var(--sp-2);
+  padding: 0 var(--sp-2);
+  border-radius: 999px;
+  background: var(--signal-accent-wash);
+  color: var(--signal-accent-text);
+  font-size: var(--fs-xs);
+  font-style: normal;
+  font-weight: 600;
+}
+.xfl .fl-bars__row i {
+  display: block;
+  width: var(--w);
+  height: 1.1rem;
+  border-radius: 999px;
+  transition: width 1.2s var(--ease);
+}
+[data-motion="on"] .xfl .fl-tile--finops:not([data-shown]) .fl-bars__row i {
+  width: 0;
+}
+.xfl .fl-bars__row[data-bar="real"] i {
+  background: linear-gradient(90deg, var(--signal-accent), var(--fl-glow));
+}
+.xfl .fl-bars__row[data-bar="estimate"] i {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--signal-accent) 26%, transparent) 0 6px,
+    color-mix(in srgb, var(--signal-accent) 10%, transparent) 6px 12px
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal-accent) 40%, transparent);
+}
+.xfl .fl-tile--finops:hover .fl-bars__row[data-bar="real"] i {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--signal-accent) 16%, transparent);
+}
+.xfl .fl-stat {
+  margin: 0;
+  color: var(--signal-muted);
+  font-size: var(--fs-sm);
+}
+.xfl .fl-stat .fl-count,
+.xfl .fl-stat strong {
+  color: var(--signal-text);
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.6em;
+  font-weight: 800;
 }
 
-/* ---- Une phrase qui précise la section : filet d'accent, texte courant. */
-.xfl .fl-split {
-  max-width: 52rem;
-  margin: var(--sp-10) auto 0;
-  padding: var(--sp-4) var(--sp-6);
-  border-left: 3px solid var(--signal-accent);
-  background: var(--signal-surface);
-  color: var(--signal-text);
-  line-height: var(--signal-leading);
+.xfl .fl-shield {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-top: var(--sp-2);
+}
+.xfl .fl-shield svg {
+  flex: none;
+  width: 6.5rem;
+  overflow: visible;
+}
+.xfl .fl-shield :is(circle, path) {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.xfl .fl-shield__body {
+  fill: color-mix(in srgb, var(--signal-allow) 14%, var(--signal-surface));
+  stroke: var(--signal-allow);
+  stroke-width: 3;
+}
+.xfl .fl-shield__check {
+  fill: none;
+  stroke: var(--signal-allow);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.xfl .fl-shield__pulse {
+  fill: none;
+  stroke: var(--signal-allow);
+  stroke-width: 2;
+  opacity: 0;
+}
+.xfl .fl-shield .fl-stat {
+  display: grid;
+}
+[data-motion="on"] .xfl .fl-tile--security:hover .fl-shield__pulse {
+  animation: fl-pulse 1.2s var(--ease) infinite;
+}
+@keyframes fl-pulse {
+  from { opacity: 0.7; transform: scale(0.7); }
+  to { opacity: 0; transform: scale(1.25); }
 }
 
 /* ---- Comment ça marche : cinq films, en quinconce sur ordinateur. */
@@ -531,64 +882,86 @@
   display: block;
 }
 
-/* ---- Les preuves, sur fond nuit : trois pièces numérotées. */
+/* ---- Licences, sources et engagements, sur fond nuit : une rangée de badges. */
 .xfl .fl-section--ink {
-  background: var(--home-ink);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(50rem 24rem at 50% 0%, color-mix(in srgb, var(--signal-accent) 26%, transparent), transparent 70%),
+    var(--home-ink);
   color: var(--home-ink-text);
 }
-.xfl .fl-section--ink :is(h2, h3) {
+.xfl .fl-section--ink h2 {
   color: var(--home-ink-text);
 }
-.xfl .fl-section--ink .home-kicker {
+.xfl .fl-section--ink .fl-title {
+  margin-bottom: var(--sp-4);
+}
+.xfl .fl-commitments__lead {
+  margin: 0 auto var(--sp-12);
   color: var(--home-ink-muted);
+  font-size: var(--fs-lead);
+  text-align: center;
 }
-.xfl .fl-section--ink .home-lead {
-  margin: var(--sp-5) 0 0;
-  color: var(--home-ink-muted);
-}
-.xfl .fl-section--ink .fl-split {
-  border-left-color: var(--fl-glow);
-  background: color-mix(in srgb, var(--home-ink-text) 6%, transparent);
-  color: var(--home-ink-text);
-}
-.xfl .fl-pieces {
+.xfl .fl-badges {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sp-8);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--sp-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.xfl .fl-pieces li {
+.xfl .fl-badges li {
+  display: grid;
+}
+.xfl .fl-badge {
+  position: relative;
   display: grid;
   align-content: start;
   gap: var(--sp-3);
-  padding-top: var(--sp-6);
-  border-top: var(--signal-border) solid var(--home-ink-line);
+  padding: var(--sp-6) var(--sp-5);
+  border: 1px solid transparent;
+  border-radius: calc(var(--home-radius) * 1.6);
+  background:
+    linear-gradient(var(--fl-ink-2), var(--fl-ink-2)) padding-box,
+    linear-gradient(150deg, color-mix(in srgb, var(--fl-glow) 70%, transparent), color-mix(in srgb, var(--fl-glow) 8%, transparent) 60%) border-box;
+  color: var(--home-ink-text);
+  transition: transform var(--t-mid) var(--ease), box-shadow var(--t-mid) var(--ease);
 }
-.xfl .fl-pieces__index {
-  color: var(--fl-glow);
+.xfl a.fl-badge:hover,
+.xfl div.fl-badge:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 var(--sp-6) var(--sp-16) color-mix(in srgb, var(--signal-accent) 30%, transparent);
+}
+.xfl .fl-badge strong {
   font-family: var(--font-display), sans-serif;
-  font-size: var(--fs-metric);
+  font-size: clamp(1.6rem, 2.1vw, 2rem);
   font-weight: 800;
   line-height: 1;
+  white-space: nowrap;
+  letter-spacing: -0.03em;
+  background: linear-gradient(120deg, var(--home-ink-text), var(--fl-glow));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
-.xfl .fl-pieces h3 {
-  margin: 0;
-  font-size: var(--fs-h3);
-  line-height: 1.2;
+.xfl .fl-badge > span:not(.fl-badge__go) {
+  color: var(--home-ink-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
 }
-.xfl .fl-pieces p {
-  margin: 0;
+.xfl .fl-badge__go {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-5);
+  color: var(--fl-glow);
+}
+.xfl .fl-commitments__evidence {
+  max-width: 60ch;
+  margin: var(--sp-12) auto 0;
   color: var(--home-ink-muted);
   line-height: var(--signal-leading);
-}
-
-/* ---- Sous-titre de la démarche, sous le déploiement. */
-.xfl .fl-subtitle {
-  margin: var(--sp-20) 0 var(--sp-10);
-  font-size: var(--fs-h3);
-  line-height: 1.2;
   text-align: center;
 }
 
@@ -642,42 +1015,38 @@
   line-height: var(--signal-leading);
 }
 
-/* ---- L'appel final, sur fond nuit. */
-.xfl .fl-cta {
-  padding-block: var(--section-y);
-  background: var(--home-ink);
-  color: var(--home-ink-text);
-}
-.xfl .fl-cta__inner {
-  display: grid;
-  justify-items: center;
-  gap: var(--sp-5);
-  text-align: center;
-}
-.xfl .fl-cta h2 {
-  margin: 0;
-  color: var(--home-ink-text);
-  font-size: var(--fs-h2);
-}
-.xfl .fl-cta p {
-  max-width: 52ch;
-  margin: 0;
-  color: var(--home-ink-muted);
-  line-height: var(--signal-leading);
-}
-.xfl .fl-cta :is(a, button):focus-visible {
-  outline-color: var(--home-ink-text);
+/* ---- Après les questions, un seul bouton vers le contact. */
+.xfl .fl-faq__contact {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-12);
 }
 
 @media (max-width: 1100px) {
-  .xfl .fl-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .xfl .fl-badges {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .xfl .fl-modules {
-    grid-template-columns: minmax(0, 1fr);
+  .xfl .fl-tile--cost {
+    grid-column: span 6;
+  }
+  .xfl .fl-tile--price {
+    grid-column: span 6;
   }
 }
 @media (max-width: 900px) {
+  .xfl .fl-hero {
+    min-height: 0;
+    padding-block: calc(var(--home-header) + var(--sp-8)) var(--sp-12);
+  }
+  .xfl .fl-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-8);
+  }
+  .xfl .fl-visual {
+    width: calc(100% + var(--gutter));
+    max-width: 36rem;
+    margin-inline: auto;
+  }
   /* Le film passe en 16:9 dans le flux, la barre dessous : le repli ne couvre que
      l'image, et la vidéo reste au-dessus de lui. */
   .xfl .home-film__fallback {
@@ -687,6 +1056,14 @@
   }
   .xfl .home-film__video {
     position: relative;
+  }
+  .xfl .fl-modules {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+  }
+  .xfl .fl-tile--finops,
+  .xfl .fl-tile--security {
+    grid-column: span 6;
   }
   .xfl .fl-how {
     gap: var(--sp-16);
@@ -702,22 +1079,19 @@
   .xfl .fl-how__text h3 {
     font-size: var(--fs-h3);
   }
-  .xfl .fl-pieces,
-  .xfl .fl-principles {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 @media (max-width: 760px) {
-  .xfl .fl-bills,
-  .xfl .fl-grid,
-  .xfl .fl-steps {
+  .xfl .fl-tile {
+    padding: var(--sp-6);
+  }
+  .xfl .fl-tile--cost {
     grid-template-columns: minmax(0, 1fr);
   }
-  .xfl .fl-bill {
-    padding: var(--sp-8);
+  .xfl .fl-badges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .xfl .fl-hero {
-    padding-block: var(--sp-16);
+  .xfl .fl-badges li:last-child {
+    grid-column: span 2;
   }
   .xfl .home-film__fallback span {
     display: none;
