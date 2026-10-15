@@ -63,9 +63,9 @@ test("the Fleet page speaks English with the same sections", async ({ browser, b
   const page = await context.newPage();
   await page.goto("/fleet");
   await expect(page.locator("h1")).toContainText("The best AI for your whole company.");
-  await expect(page.locator("#modules h2")).toContainText("xSOM Fleet is the governance platform for your AI:");
+  await expect(page.locator("#modules h2")).toHaveText("xSOM Fleet governs all your AI.");
   await expect(page.locator("#modules .fl-module").nth(2)).toContainText("Available for pilot");
-  await expect(page.locator("#pourquoi .fl-why__card h3")).toHaveText(["Cost", "FinOps steering", "One security layer for all your AI"]);
+  await expect(page.locator("#pourquoi .fl-tile h3")).toHaveText(["Cost", "Pricing", "FinOps steering", "One security layer for all your AI"]);
   await expect(page.locator("#engagements h2")).toHaveText("Licences, sources and commitments.");
   await expect(page.locator("#home-film video")).toHaveAttribute("src", "/signal-media/xsom-fleet-hero-en.mp4");
   await expect(page.locator("#fonctionnement figcaption", { hasText: "Demonstration · illustrative data" })).toHaveCount(STEPS.length);
@@ -74,33 +74,42 @@ test("the Fleet page speaks English with the same sections", async ({ browser, b
   await context.close();
 });
 
-test("the Fleet page defines the platform and its three modules, Fleet Gateway offered for pilot", async ({ page }) => {
+test("the hero shows the assistants by name and logo, and an animated illustration", async ({ page }) => {
   await page.goto("/fleet");
-  await expect(page.locator("#modules h2")).toHaveText(
-    "xSOM Fleet est la plateforme de gouvernance de vos IA : Claude Code et Codex sur chaque Poste, vos applications API par une passerelle installée chez vous.",
-  );
-  await expect(page.locator("#modules")).toContainText("D’autres assistants suivront.");
+  const hosts = page.locator("#promesse .fl-hero__hosts");
+  await expect(hosts.locator("li")).toHaveText([/Claude Code/, /Codex/, /applications API/]);
+  await expect(hosts.locator("img")).toHaveCount(2);
+  const visual = page.locator("#promesse .fl-visual");
+  await expect(visual).toHaveAttribute("role", "img");
+  await expect(visual).toHaveAttribute("aria-label", /Politique signée/);
+  // L'illustration ne porte qu'une clé masquée, jamais une valeur.
+  await expect(visual).toContainText("AKIA••••••••");
+});
+
+test("the Fleet page defines the platform in one short sentence, Fleet Gateway offered for pilot", async ({ page }) => {
+  await page.goto("/fleet");
+  await expect(page.locator("#modules h2")).toHaveText("xSOM Fleet gouverne toutes vos IA.");
+  await expect(page.locator("#modules .fl-platform__sub")).toContainText("Claude Code et Codex sur chaque Poste");
+  await expect(page.locator("#modules .fl-platform__sub")).toContainText("D’autres assistants suivront.");
   const modules = page.locator("#modules .fl-module");
-  await expect(modules).toHaveCount(3);
   await expect(modules.locator("h3")).toHaveText(["Fleet Sièges", "Fleet Guard", "Fleet Gateway"]);
-  await expect(modules.nth(0)).toContainText("Plafond de Sièges");
-  await expect(modules.nth(1)).toContainText("Journal des blocages");
-  await expect(modules.nth(1)).toContainText("Dossier de preuves");
-  // Fleet Gateway est proposé pour pilote, sans date ni promesse de livraison.
   await expect(modules.nth(2)).toContainText("Disponible pour pilote");
   await expect(modules.nth(2)).not.toContainText(/\b20\d{2}\b/);
-  // Le moteur de Fleet Guard est open source : le lien mène à Secret Guard.
   await expect(modules.nth(1).getByRole("link", { name: /Secret Guard/ })).toHaveAttribute("href", "/secret-guard");
 });
 
-test("the three reasons to choose Fleet carry no gain figure, and the simulation is labelled", async ({ page }) => {
+test("the reasons grid carries no price and no gain figure, and labels its demo data", async ({ page }) => {
   await page.goto("/fleet");
-  const cards = page.locator("#pourquoi .fl-why__card");
-  await expect(cards.locator("h3")).toHaveText(["Coût", "Pilotage FinOps", "Une sécurité unique pour toutes vos IA"]);
-  await expect(page.locator("#pourquoi")).not.toContainText(/\d\s?%/);
-  const simulation = cards.nth(0).getByRole("link", { name: "Demander la simulation pour votre entreprise" });
-  await expect(simulation).toHaveAttribute("href", /^mailto:/);
-  await expect(cards.nth(0)).toContainText("Simulation · hypothèses affichées");
+  const section = page.locator("#pourquoi");
+  await expect(section.locator(".fl-tile h3")).toHaveText(["Coût", "Tarif", "Pilotage FinOps", "Une sécurité unique pour toutes vos IA"]);
+  const text = await section.innerText();
+  expect(text).not.toMatch(/\d\s?%/);
+  expect(text).not.toMatch(/\d\s?(€|\$)|(€|\$)\s?\d/);
+  await expect(section.locator(".fl-demo")).toHaveCount(3);
+  await expect(section.locator(".fl-demo").first()).toHaveText("Démonstration · données illustratives");
+  await expect(section.getByRole("link", { name: "Demander la simulation pour votre entreprise" })).toHaveAttribute("href", /^mailto:/);
+  await expect(section).toContainText("Simulation · hypothèses affichées");
+  await expect(section.getByRole("link", { name: "Demander un tarif" })).toHaveAttribute("href", /^mailto:.*tarif/);
 });
 
 test("licences, sources and commitments replace the former limits and proof sections", async ({ page }) => {
@@ -108,6 +117,7 @@ test("licences, sources and commitments replace the former limits and proof sect
   const section = page.locator("#engagements");
   await expect(section.locator("h2")).toHaveText("Licences, sources et engagements.");
   await expect(section.getByRole("link", { name: /Code source de Secret Guard/ })).toHaveAttribute("href", "https://github.com/xsom-consulting/secret-guard");
+  await expect(section.locator(".fl-badge strong")).toHaveText(["Apache-2.0", "MIT", "SBOM", "UE", "0 prompt"]);
   for (const text of ["Apache-2.0", "LiteLLM", "MIT", "CycloneDX", "Ni prompt, ni clé, ni code, ni valeur d’un secret", "Union européenne", "JSON et en PDF", "chaînés"]) {
     await expect(section).toContainText(text);
   }
