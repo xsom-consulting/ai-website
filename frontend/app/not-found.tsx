@@ -9,7 +9,7 @@ import "./guard-footer.css";
 export default async function NotFound() {
   const fr = (await getLang()) === "fr";
   return (
-    <main className="guard-landing guard-home">
+    <main id="main" className="guard-landing guard-home xweb">
       <div className="guard-wrap studio-legal">
         <h1>{fr ? "Page introuvable" : "Page not found"}</h1>
         <p>{fr ? "Cette adresse n’existe pas sur ce site." : "This address does not exist on this site."}</p>

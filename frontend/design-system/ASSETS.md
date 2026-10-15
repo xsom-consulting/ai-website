@@ -33,3 +33,14 @@ Final generation prompt:
 The Guarded/Unguarded videos are recordings of actual shared explanatory
 components, regenerated after palette/font changes. WebM/MP4 and WebP posters
 are produced by `tools/render-signal-media.mjs`. All shown events are illustrative.
+
+## Shared architectural illustration (2026-10-15)
+
+`architecture-xsom.webp` is an original illustration generated with the built-in
+image generation tool: blue enamel, brushed metal and porcelain structural frames
+on a pale mineral background. 1536 × 1024, WebP, about 71 KiB. No text, logos or
+product UI are baked into it. It is decorative brand artwork, not a photograph of
+a customer facility, an actual deployment or a product screenshot.
+
+Stored in `frontend/public/signal-media/` on the product sites and
+`assets/images/` on the corporate site. Original xSOM logos remain unchanged.

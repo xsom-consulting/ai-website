@@ -4,10 +4,9 @@ import Link from "next/link";
 import { Fragment, useEffect, useState, type ReactNode } from "react";
 
 import { Diagramme, DiagrammeDefs } from "@/components/Diagramme";
-import { Brand } from "@/components/site/Brand";
+import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteLink } from "@/components/site/SiteLink";
-import { SiteNav } from "@/components/site/SiteNav";
 import { figureDeFiche } from "@/lib/glossary-figures";
 import { visualForThreat } from "@/lib/threat-visuals";
 import { useT } from "@/lib/i18n";
@@ -255,16 +254,11 @@ export function ThreatGlossary() {
   }
 
   return (
-    <div className="guard-landing guard-glossary">
+    <div className="guard-landing guard-glossary xweb">
       <a className="guard-glossary__skip" href="#definitions">{copy.skip}</a>
-      <header className="guard-header">
-        <div className="guard-wrap guard-header__inner">
-          <Brand site="ai" />
-          <SiteNav site="ai" />
-        </div>
-      </header>
+      <SiteHeader site="ai" />
 
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="guard-wrap guard-glossary__hero reveal" aria-labelledby="glossary-heading">
           <Link href="/" className="guard-glossary__back"><span aria-hidden="true">←</span> {copy.home}</Link>
           <p className="guard-kicker">{copy.kicker}</p>

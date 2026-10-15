@@ -106,17 +106,17 @@ type Chapter = { readonly id: string; readonly at: number; readonly title: strin
 export const FLEET_COPY = {
   fr: {
     meta: {
-      title: "xSOM Fleet · les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise",
-      description: "Pilotez toute votre architecture IA en un seul endroit : abonnements (Claude Code et Codex sur chaque Poste), clés API et modèles hébergés chez vous. Coût réel, Contrôle avant envoi et preuves pour l’audit.",
-      ogAlt: "xSOM Fleet : les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise",
+      title: "xSOM Fleet · Gouvernance des usages IA en entreprise",
+      description: "Gouvernez les usages IA de vos équipes : suivi des abonnements, Contrôle avant envoi sur le Poste et preuves pour l’audit. Programme pilote 2026.",
+      ogAlt: "xSOM · Architectural illustration",
     },
     film: {
       fallback: "Pilotez toute votre architecture IA en un seul endroit.",
     },
     hero: {
       badge: "Programme pilote 2026",
-      title: ["Les meilleurs modèles d’IA du marché,", "aux standards de sécurité de l’entreprise."],
-      lead: "Coût maîtrisé, contrôle sur chaque Poste, preuves pour l’audit.",
+      title: ["Vos usages IA,", "des règles communes."],
+      lead: "Suivez les abonnements, appliquez le Contrôle avant envoi sur les Postes couverts et rassemblez les preuves pour l’audit.",
       contact: "Demander une démonstration",
       how: "Comment ça marche",
       visual: {
@@ -128,8 +128,8 @@ export const FLEET_COPY = {
       },
     },
     platform: {
-      punch: "Pilotez toute votre architecture IA en un seul endroit :",
-      rest: "abonnements, clés API et modèles hébergés chez vous.",
+      punch: "Un cadre commun.",
+      rest: "Trois rôles complémentaires.",
       supported: {
         label: "Pris en charge",
         subscriptions: "Abonnements",
@@ -141,17 +141,17 @@ export const FLEET_COPY = {
       },
       badge: "Disponible pour pilote",
       modules: [
-        { name: "Fleet Sièges", title: "Solution FinOps", line: "Sièges, Facture réelle, Équivalent API estimé et Paliers de siège." },
-        { name: "Fleet Guard", title: "Solution cybersécurité", line: "Contrôle avant envoi sur le Poste, Politique signée, Journal des blocages et Dossier de preuves.", engine: "Moteur open source : Secret Guard" },
-        { name: "Fleet Gateway", title: "Solution architecture et stratégie IA", line: "Gestion et pilotage de la stratégie IA de l’entreprise : Applications API, Budgets API, modèles hébergés chez vous." },
+        { name: "Fleet Sièges", title: "Suivre les abonnements et les coûts", line: "Sièges, Facture réelle, Équivalent API estimé et Paliers de siège." },
+        { name: "Fleet Guard", title: "Contrôler avant l’envoi", line: "Contrôle avant envoi sur le Poste, Politique signée, Journal des blocages et Dossier de preuves.", engine: "Moteur open source : Secret Guard" },
+        { name: "Fleet Gateway", title: "Encadrer les accès aux modèles", line: "Gestion et pilotage de la stratégie IA de l’entreprise : Applications API, Budgets API, modèles hébergés chez vous." },
       ],
     },
     why: {
-      title: "Pourquoi choisir xSOM Fleet.",
+      title: "Distinguer ce que vous payez de ce que vous utilisez.",
       demo: "Démonstration · données illustratives",
       cost: {
         name: "Coût",
-        line: "Profitez des forfaits d’abonnement entreprise : un forfait vaut souvent bien plus que son prix en équivalent API. xSOM Fleet le mesure, Développeur par Développeur.",
+        line: "La Facture réelle et l’Équivalent API estimé répondent à deux questions différentes. Fleet les présente côte à côte, par Développeur et par Équipe.",
         measure: "Mesuré chez xSOM en septembre 2026, sur deux assistants : 8 988 $ d’usage au tarif API.",
         claudeLine: "Forfait Claude à 200 $ par mois (216 € TTC) : 7 815 $ d’usage au tarif API, 39 fois son prix.",
         measureNote: "Relevé avec ccusage (outil libre) sur les journaux d’un seul Poste, un utilisateur intensif. Les tarifs API sont ceux de l’outil ; c’est une estimation, pas une moyenne.",
@@ -181,7 +181,7 @@ export const FLEET_COPY = {
         count: "Développeurs suivis, dans 6 Équipes",
       },
       security: {
-        name: "Une sécurité unique pour toutes vos IA",
+        name: "Le Contrôle avant envoi",
         line: "Secrets, Instructions cachées et fichiers cités bloqués sur le Poste, avant envoi.",
         count: "Postes sains",
       },
@@ -199,14 +199,14 @@ export const FLEET_COPY = {
         { id: "choose", at: 0, title: "Choisissez vos IA", body: "Abonnements et API réunis au même endroit, sans dépendre d’un seul fournisseur." },
         { id: "policy", at: 10.55, title: "Une seule Politique pour tous les Postes", body: "Une Politique signée, vérifiée puis appliquée sur chaque Poste." },
         { id: "coverage", at: 19.55, title: "Supervisez", body: "L’état de chaque Poste, et la liste de ceux qui sont en écart." },
-        { id: "invisible", at: 28.55, title: "Rien ne change pour vos équipes", body: "Un secret détecté est arrêté sur le Poste, sans réseau ni modèle d’IA." },
+        { id: "invisible", at: 28.55, title: "Le contrôle sur le Poste", body: "Un secret détecté est arrêté sur le Poste, sans réseau ni modèle d’IA." },
         { id: "costs", at: 41.07, title: "Maîtrisez votre facture IA", body: "La Facture réelle à côté de l’Équivalent API estimé, et le bon forfait pour chaque Développeur." },
-        { id: "proof", at: 53.78, title: "Prouvez votre maîtrise", body: "Le Dossier de preuves, prêt en un clic pour vos auditeurs." },
+        { id: "proof", at: 53.78, title: "Rassemblez les preuves", body: "Un Dossier de preuves pour examiner les contrôles et leurs résultats." },
       ] satisfies readonly Chapter[],
     },
     commitments: {
-      title: "Licences, sources et engagements.",
-      lead: "Des pièces qu’un auditeur peut vérifier, pas des promesses.",
+      title: "Un périmètre clair, des éléments vérifiables.",
+      lead: "Le pilote précise les intégrations couvertes, les données traitées et les preuves disponibles.",
       badges: [
         { id: "apache", value: "Apache-2.0", caption: "Secret Guard, le moteur de détection, en code ouvert", link: true },
         { id: "mit", value: "MIT", caption: "LiteLLM, sa seule partie MIT, à une version épinglée" },
@@ -222,8 +222,8 @@ export const FLEET_COPY = {
       items: [
         ["xSOM voit-il nos prompts ou nos clés ?", "Non. Le Contrôle avant envoi tourne sur le Poste, sans réseau ni modèle d’IA, et la passerelle reste chez vous. Seuls remontent des métriques d’usage et des Événements sans contenu."],
         ["Est-ce permis par les fournisseurs ?", "Vos développeurs gardent l’outil officiel, non modifié, avec leur propre connexion ; aucun identifiant n’est collecté, aucun compte n’est revendu. L’agent écrit seulement les réglages que chaque fournisseur documente pour les entreprises."],
-        ["Quels assistants sont couverts ?", "Claude Code et Codex, sur les Postes Windows, macOS et Linux ; par la passerelle Fleet Gateway, vos applications API et vos modèles hébergés chez vous. ChatGPT sur le web, Copilot et les modèles lancés sur le Poste lui-même ne le sont pas encore : d’autres assistants suivront, sans date annoncée."],
-        ["À partir de combien de développeurs ?", "150 et plus. En dessous, une seule organisation Claude Team suffit."],
+        ["Quels assistants sont couverts ?", "Le périmètre vise Claude Code et Codex sur les Postes, ainsi que les Applications API via Fleet Gateway. La disponibilité de chaque intégration et système d’exploitation est vérifiée lors du cadrage du pilote. ChatGPT dans le navigateur, Copilot et les modèles locaux ne sont pas inclus."],
+        ["À partir de combien de développeurs ?", "Fleet s’adresse aux organisations qui doivent piloter plusieurs équipes. Le pilote permet de vérifier l’intérêt de la plateforme pour votre taille et vos usages."],
         ["Et si le contrôle échoue ?", "L’envoi est bloqué, avec un message clair. Un contenu trop gros, une analyse incomplète ou un délai dépassé ne laissent jamais partir un envoi partiel. Le contrôle ne fait aucun appel réseau vers xSOM."],
         ["Comment se déroule le déploiement ?", "Votre outil de gestion de flotte, Intune ou un autre, installe l’agent xSOM. D’abord une démonstration gratuite sur nos propres comptes, puis un pilote de deux à trois mois chez vous, puis le Groupe entier."],
         ["Combien coûte xSOM Fleet ?", "Un abonnement annuel par développeur gouverné, sur devis : demandez un tarif. La démonstration est gratuite."],
@@ -233,8 +233,8 @@ export const FLEET_COPY = {
   },
   en: {
     meta: {
-      title: "xSOM Fleet · the best AI models, at enterprise security standards",
-      description: "Steer your whole AI architecture from one place: subscriptions (Claude Code and Codex on every workstation), API keys and models hosted on your side. Real cost, pre-send check and evidence for audit.",
+      title: "xSOM Fleet · Enterprise AI governance",
+      description: "Govern your teams’ AI usage: subscription tracking, pre-send checks on the workstation and audit evidence. 2026 pilot programme.",
       ogAlt: "xSOM Fleet: the best AI models on the market, at enterprise security standards",
     },
     film: {
@@ -242,8 +242,8 @@ export const FLEET_COPY = {
     },
     hero: {
       badge: "2026 pilot programme",
-      title: ["The best AI models on the market,", "at enterprise security standards."],
-      lead: "Controlled cost, a check on every workstation, evidence for audit.",
+      title: ["Your AI usage,", "shared rules."],
+      lead: "Track subscriptions, apply pre-send checks on covered workstations and gather evidence for audit.",
       contact: "Request a demo",
       how: "How it works",
       visual: {
@@ -255,8 +255,8 @@ export const FLEET_COPY = {
       },
     },
     platform: {
-      punch: "Steer your whole AI architecture from one place:",
-      rest: "subscriptions, API keys and models hosted on your side.",
+      punch: "One framework.",
+      rest: "Three complementary roles.",
       supported: {
         label: "Supported",
         subscriptions: "Subscriptions",
@@ -268,17 +268,17 @@ export const FLEET_COPY = {
       },
       badge: "Available for pilot",
       modules: [
-        { name: "Fleet Sièges", title: "FinOps solution", line: "Seats, actual invoice, estimated API equivalent and seat tiers." },
-        { name: "Fleet Guard", title: "Cybersecurity solution", line: "Pre-send check on the workstation, signed Policy, block log and evidence dossier.", engine: "Open-source engine: Secret Guard" },
-        { name: "Fleet Gateway", title: "AI architecture and strategy solution", line: "Managing and steering the company’s AI strategy: API applications, API budgets, models hosted on your side." },
+        { name: "Fleet Sièges", title: "Track subscriptions and costs", line: "Seats, actual invoice, estimated API equivalent and seat tiers." },
+        { name: "Fleet Guard", title: "Check before sending", line: "Pre-send check on the workstation, signed Policy, block log and evidence dossier.", engine: "Open-source engine: Secret Guard" },
+        { name: "Fleet Gateway", title: "Govern model access", line: "Managing and steering the company’s AI strategy: API applications, API budgets, models hosted on your side." },
       ],
     },
     why: {
-      title: "Why choose xSOM Fleet.",
+      title: "See what you pay and what you use.",
       demo: "Demonstration · illustrative data",
       cost: {
         name: "Cost",
-        line: "Make the most of enterprise subscription plans: a plan is often worth far more than its price in API equivalent. xSOM Fleet measures it, developer by developer.",
+        line: "The actual invoice and estimated API equivalent answer two different questions. Fleet shows them side by side, by developer and team.",
         measure: "Measured at xSOM in September 2026, across two assistants: $8,988 of usage at API rates.",
         claudeLine: "Claude plan at $200 per month (€216 incl. VAT): $7,815 of usage at API rates, 39 times its price.",
         measureNote: "Read with ccusage (a free tool) from the logs of a single workstation, one heavy user. API rates are the tool’s own; this is an estimate, not an average.",
@@ -308,7 +308,7 @@ export const FLEET_COPY = {
         count: "developers tracked, in 6 teams",
       },
       security: {
-        name: "One security layer for all your AI",
+        name: "The pre-send check",
         line: "Secrets, hidden instructions and referenced files blocked on the workstation, before sending.",
         count: "healthy workstations",
       },
@@ -326,14 +326,14 @@ export const FLEET_COPY = {
         { id: "choose", at: 0, title: "Choose your AI", body: "Subscriptions and APIs brought together in one place, without depending on a single provider." },
         { id: "policy", at: 13.71, title: "One Policy for every workstation", body: "A signed Policy, checked then applied on every workstation." },
         { id: "coverage", at: 23.3, title: "Supervise", body: "The status of every workstation, and the list of those out of line." },
-        { id: "invisible", at: 32.3, title: "Nothing changes for your teams", body: "A detected secret is stopped on the workstation, with no network and no AI model." },
+        { id: "invisible", at: 32.3, title: "The workstation check", body: "A detected secret is stopped on the workstation, with no network and no AI model." },
         { id: "costs", at: 46.25, title: "Control your AI bill", body: "The actual invoice next to the estimated API equivalent, and the right plan for every developer." },
-        { id: "proof", at: 60.36, title: "Prove you are in control", body: "The evidence dossier, ready in one click for your auditors." },
+        { id: "proof", at: 60.36, title: "Gather the evidence", body: "An evidence dossier to review checks and their results." },
       ] satisfies readonly Chapter[],
     },
     commitments: {
-      title: "Licences, sources and commitments.",
-      lead: "Documents an auditor can check, not promises.",
+      title: "Clear scope, verifiable evidence.",
+      lead: "The pilot defines covered integrations, processed data and available evidence.",
       badges: [
         { id: "apache", value: "Apache-2.0", caption: "Secret Guard, the detection engine, as open code", link: true },
         { id: "mit", value: "MIT", caption: "LiteLLM, its MIT part only, at a pinned version" },
@@ -349,8 +349,8 @@ export const FLEET_COPY = {
       items: [
         ["Does xSOM see our prompts or keys?", "No. The pre-send check runs on the workstation, with no network and no AI model, and the gateway stays on your side. Only usage metrics and events without content are sent."],
         ["Do the providers allow it?", "Your developers keep the official, unmodified tool with their own sign-in; no credential is collected and no account is resold. The agent only writes the settings each provider documents for enterprises."],
-        ["Which assistants are covered?", "Claude Code and Codex, on Windows, macOS and Linux workstations; through the Fleet Gateway, your API applications and your models hosted on your side. ChatGPT on the web, Copilot and models run on the workstation itself are not covered yet: other assistants will follow, with no date announced."],
-        ["From how many developers?", "150 and more. Below that, a single Claude Team organization is enough."],
+        ["Which assistants are covered?", "The scope targets Claude Code and Codex on workstations, and API applications through Fleet Gateway. Availability for each integration and operating system is checked when scoping the pilot. Browser-based ChatGPT, Copilot and local models are not included."],
+        ["From how many developers?", "Fleet is designed for organisations managing multiple teams. A pilot establishes whether the platform fits your scale and usage."],
         ["What if the check fails?", "The send is blocked, with a clear message. Oversized content, an incomplete scan or a timeout never lets a partial send through. The check makes no network call to xSOM."],
         ["How does the rollout work?", "Your fleet management tool, Intune or another, installs the xSOM agent. First a free demo on our own accounts, then a two-to-three-month pilot on your side, then the whole group."],
         ["How much does xSOM Fleet cost?", "An annual subscription per governed developer, on quotation: request pricing. The demo is free."],

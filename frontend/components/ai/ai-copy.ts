@@ -38,20 +38,20 @@ export const AI_COPY = {
     meta: {
       title: "xSOM · IA · la division IA de xSOM Consulting",
       description: "Prestations de conseil IA et produits pour utiliser l’IA en entreprise : xSOM Fleet, la plateforme de gouvernance des IA, et Secret Guard, le moteur open source de détection de secrets.",
-      ogAlt: "xSOM · IA, la division IA de xSOM Consulting",
+      ogAlt: "xSOM · Architectural illustration",
     },
     film: { fallback: "La division IA de xSOM Consulting." },
     intro: {
       kicker: "xSOM · IA",
-      title: "La division IA de xSOM.",
-      lead: "xSOM Consulting, cabinet indépendant depuis 2007, réunit ici ses prestations IA et ses produits : de l’infrastructure au modèle, du poste du développeur à la console de l’entreprise.",
+      title: "Des bases solides pour vos projets IA.",
+      lead: "Infrastructure, données, sécurité : nous accompagnons vos projets IA jusqu’à la production et développons les outils pour en gouverner les usages.",
       services: "Voir les prestations",
-      products: "Voir les produits",
+      products: "Explorer les produits",
     },
     services: {
       kicker: "01 · Prestations IA",
-      title: "Du conseil jusqu’à la production.",
-      lead: "Les prestations IA de xSOM Consulting, telles que le cabinet les présente sur www.xsom.fr. Trois exigences, jamais l’une au détriment des autres : sérénité, sécurité, souveraineté.",
+      title: "Passer du projet à un système exploitable.",
+      lead: "Nous travaillons sur les fondations de vos services IA : leur hébergement, leurs données et leur sécurité. Le périmètre se construit à partir de vos contraintes d’exploitation.",
       items: [
         {
           name: "Infrastructures IA & cloud souverain",
@@ -65,22 +65,22 @@ export const AI_COPY = {
         },
         {
           name: "Sécurité des pipelines IA",
-          body: "Les pipelines IA sont des surfaces d’attaque.",
+          body: "Identifier les risques dans les données, les modèles et les accès, puis définir les contrôles adaptés.",
           tags: ["Pipelines de données sensibles", "Empoisonnement de modèles", "AI Act · DORA · NIS2", "Tests de résilience"],
         },
       ],
-      more: "Voir IA & Souveraineté sur www.xsom.fr",
+      more: "Explorer notre expertise IA et souveraineté",
       moreHref: `${MAIN_SITE_ORIGIN}/ia-souverainete.html`,
       contact: "Parler de votre projet",
     },
     products: {
       kicker: "02 · Produits IA",
-      title: "Nos produits IA.",
+      title: "Des outils pour garder la main.",
       lead: "Une plateforme pour gouverner les IA d’une entreprise, et le moteur open source qui y détecte les secrets.",
       fleet: {
         badge: "Plateforme · programme pilote 2026",
         name: "xSOM Fleet",
-        body: "Les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise : pilotez toute votre architecture IA en un seul endroit, abonnements (Claude Code et Codex sur chaque Poste), clés API et modèles hébergés chez vous.",
+        body: "Une plateforme pour suivre les abonnements IA, appliquer des contrôles sur les Postes et rassembler les preuves pour l’audit.",
         modules: [
           ["Fleet Sièges", "Solution FinOps : Sièges, Facture réelle, Équivalent API estimé."],
           ["Fleet Guard", "Solution cybersécurité : secrets bloqués sur le Poste, Journal des blocages, Dossier de preuves."],
@@ -103,8 +103,8 @@ export const AI_COPY = {
       action: "Ouvrir le glossaire des menaces IA",
     },
     contact: {
-      title: "Un projet IA ?",
-      body: "Écrivez-nous quelques lignes sur votre contexte : xSOM Consulting vous répond.",
+      title: "Parlons de votre projet IA.",
+      body: "Votre contexte, vos contraintes et la prochaine étape à franchir : quelques lignes suffisent pour commencer.",
       button: "Écrire à xSOM",
       main: "xSOM Consulting",
     },
@@ -118,15 +118,15 @@ export const AI_COPY = {
     film: { fallback: "The AI division of xSOM Consulting." },
     intro: {
       kicker: "xSOM · AI",
-      title: "The AI division of xSOM.",
-      lead: "xSOM Consulting, an independent firm since 2007, brings its AI services and its products together here: from infrastructure to the model, from the developer’s workstation to the enterprise console.",
+      title: "Solid foundations for your AI projects.",
+      lead: "Infrastructure, data, security: we take your AI projects into production and develop tools to govern how they are used.",
       services: "See the services",
-      products: "See the products",
+      products: "Explore the products",
     },
     services: {
       kicker: "01 · AI services",
-      title: "From consulting to production.",
-      lead: "The AI services of xSOM Consulting, as the firm presents them on www.xsom.fr. Three requirements, never one at the expense of the others: operational confidence, security, sovereignty.",
+      title: "From a project to an operational system.",
+      lead: "We work on the foundations of your AI services: hosting, data and security. The scope starts with your operational constraints.",
       items: [
         {
           name: "AI infrastructure & sovereign cloud",
@@ -140,22 +140,22 @@ export const AI_COPY = {
         },
         {
           name: "AI pipeline security",
-          body: "AI pipelines are attack surfaces.",
+          body: "Identify risks in data, models and access, then define suitable controls.",
           tags: ["Sensitive data pipelines", "Model poisoning", "AI Act · DORA · NIS2", "Resilience testing"],
         },
       ],
-      more: "See AI & Sovereignty on www.xsom.fr",
+      more: "Explore our AI and sovereignty expertise",
       moreHref: `${MAIN_SITE_ORIGIN}/en/ai-sovereignty.html`,
       contact: "Discuss your project",
     },
     products: {
       kicker: "02 · AI products",
-      title: "Our AI products.",
+      title: "Tools to stay in control.",
       lead: "A platform to govern a company’s AI, and the open-source engine that detects secrets in it.",
       fleet: {
         badge: "Platform · 2026 pilot programme",
         name: "xSOM Fleet",
-        body: "The best AI models on the market, at enterprise security standards: steer your whole AI architecture from one place, subscriptions (Claude Code and Codex on every workstation), API keys and models hosted on your side.",
+        body: "A platform to track AI subscriptions, apply workstation checks and bring together evidence for audit.",
         modules: [
           ["Fleet Sièges", "FinOps solution: seats, actual invoice, estimated API equivalent."],
           ["Fleet Guard", "Cybersecurity solution: secrets blocked on the workstation, block log, evidence dossier."],
@@ -178,8 +178,8 @@ export const AI_COPY = {
       action: "Open the AI threat glossary",
     },
     contact: {
-      title: "An AI project?",
-      body: "Write us a few lines about your context: xSOM Consulting will reply.",
+      title: "Let’s discuss your AI project.",
+      body: "Your context, your constraints and the next step: a few lines are enough to start.",
       button: "Write to xSOM",
       main: "xSOM Consulting",
     },

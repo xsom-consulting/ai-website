@@ -1,10 +1,8 @@
-import { Brand } from "@/components/site/Brand";
+import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteNav } from "@/components/site/SiteNav";
 import { brandName, CONTACT_EMAIL } from "@/lib/site-copy";
 import type { Site } from "@/lib/sites";
 import "@/app/guard-landing.css";
-import "@/app/guard-home.css";
 import "@/app/guard-footer.css";
 
 /**
@@ -58,8 +56,9 @@ export function legalTitle(document: LegalDocument) { return documents[document]
 
 export function LegalPage({ document, site }: { document: LegalDocument; site: Site }) {
   const copy = documents[document];
-  return <main className="guard-landing guard-home">
-    <header className="guard-header"><div className="guard-wrap guard-header__inner"><Brand site={site} /><SiteNav site={site} /></div></header>
+  return <div className="guard-landing xweb">
+    <SiteHeader site={site} />
+    <main id="main" tabIndex={-1}>
     <article className="guard-wrap studio-legal" lang="fr">
       <p className="guard-kicker">{brandName(site)} · Informations légales</p>
       <h1>{copy.title}</h1><p>Version du 13 octobre 2026 · Document en français</p>
@@ -67,6 +66,7 @@ export function LegalPage({ document, site }: { document: LegalDocument; site: S
       {copy.sections.map(([title, body]) => <section key={title}><h2>{title}</h2><p>{body}</p></section>)}
       <section><h2>Liens utiles</h2><p><a href={`mailto:${CONTACT_EMAIL}`}>Contacter xSOM</a> · <a href="https://www.cnil.fr/fr/plaintes">Saisir la CNIL</a> · <a href="https://vercel.com/legal">Informations Vercel</a></p></section>
     </article>
+    </main>
     <SiteFooter site={site} />
-  </main>;
+  </div>;
 }

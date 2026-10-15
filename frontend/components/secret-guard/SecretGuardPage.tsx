@@ -23,27 +23,27 @@ export function SecretGuardPage() {
   const { lang } = useT();
   const copy = SECRET_GUARD_COPY[lang];
   return (
-    <div ref={root} className="guard-landing xhome xsg">
+    <div ref={root} className="guard-landing xhome xsg xweb">
       <SiteHeader site="guard" />
-      <main>
+      <main id="main" tabIndex={-1}>
         <SgHero />
         <SgFlow />
 
         <section id="open-source" className="sg-panel" aria-labelledby="sg-open-title">
           <div className="guard-wrap">
             <header className="sg-head">
-              <p className="home-kicker" data-reveal>{copy.open.kicker}</p>
-              <h2 id="sg-open-title" className="home-title" data-reveal style={{ "--chars": copy.open.title.length } as React.CSSProperties}>{copy.open.title}</h2>
+              <p className="home-kicker">{copy.open.kicker}</p>
+              <h2 id="sg-open-title" className="home-title" style={{ "--chars": copy.open.title.length } as React.CSSProperties}>{copy.open.title}</h2>
             </header>
             <ul className="sg-points">
               {copy.open.points.map(([name, body]) => (
-                <li key={name} data-reveal>
+                <li key={name}>
                   <h3>{name}</h3>
                   <p>{body}</p>
                 </li>
               ))}
             </ul>
-            <p className="sg-panel__action" data-reveal>
+            <p className="sg-panel__action">
               <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="guard-button">{copy.open.action} <span aria-hidden="true">↗</span></SiteLink>
             </p>
           </div>
@@ -51,10 +51,10 @@ export function SecretGuardPage() {
 
         <section id="fleet" className="sg-panel sg-panel--tint" aria-labelledby="sg-fleet-title">
           <div className="guard-wrap sg-fleet">
-            <p className="home-kicker" data-reveal>{copy.fleet.kicker}</p>
-            <h2 id="sg-fleet-title" className="home-title" data-reveal style={{ "--chars": copy.fleet.title.length } as React.CSSProperties}>{copy.fleet.title}</h2>
-            <p className="sg-fleet__body" data-reveal>{copy.fleet.body}</p>
-            <p data-reveal>
+            <p className="home-kicker">{copy.fleet.kicker}</p>
+            <h2 id="sg-fleet-title" className="home-title" style={{ "--chars": copy.fleet.title.length } as React.CSSProperties}>{copy.fleet.title}</h2>
+            <p className="sg-fleet__body">{copy.fleet.body}</p>
+            <p>
               <SiteLink to={{ site: "fleet", path: "/#modules" }} className="guard-button">{copy.fleet.action} <span aria-hidden="true">↗</span></SiteLink>
             </p>
           </div>

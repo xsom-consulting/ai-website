@@ -25,6 +25,24 @@ connexion, ni compte.
   `frontend/public/signal-media/` ; les ressources de rendu (séquences Pexels, captures de la console de
   démonstration, musiques) ne sont pas versionnées.
 
+## Présentation publique
+
+Les accueils IA et Fleet affichent une proposition lisible avant toute vidéo.
+Le même en-tête situe le cabinet, la division IA et Fleet ; les pages légales et
+le glossaire utilisent cette navigation. Les textes existent en français et en
+anglais ; les documents juridiques restent explicitement en français.
+
+Fleet présente un programme pilote, avec un périmètre à valider. Le relevé de
+coûts distingue Facture réelle et Équivalent API estimé ; il n’est pas présenté
+comme une économie. Les films sont consultables sur demande et les chapitres de
+la démonstration commandent réellement la lecture. L’illustration architecturale
+commune est documentée dans `frontend/design-system/ASSETS.md`.
+
+La composition des sites vit dans `design-system/web.css` ; les valeurs visuelles
+viennent de `design-system/design/tokens.json`. Après changement, régénérer les
+tokens et synchroniser le paquet avec le site du cabinet. `build.mjs --compare`
+permet de vérifier les deux copies octet par octet.
+
 ## Commandes
 
 Node.js 24 (voir `.nvmrc`).

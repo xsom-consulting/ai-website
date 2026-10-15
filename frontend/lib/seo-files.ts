@@ -28,7 +28,7 @@ export function sitemapXml(site: Site | null): string {
 }
 
 const FLEET_SUMMARY =
-  "xSOM Fleet : les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise. Pilotez toute votre architecture IA en un seul endroit : abonnements (Claude Code et Codex sur chaque Poste, Windows, macOS, Linux), clés API et modèles hébergés chez le client, par une passerelle installée chez lui. Trois solutions, disponibles pour pilote : FinOps (Fleet Sièges : Sièges, Facture réelle, Équivalent API estimé, Paliers), cybersécurité (Fleet Guard : Contrôle avant envoi sur le Poste, Politique signée, Journal des blocages, Dossier de preuves) et architecture et stratégie IA (Fleet Gateway : passerelle LiteLLM installée chez le client, Applications API, Budgets API, modèles hébergés chez le client).";
+  "xSOM Fleet : un cadre commun pour les usages IA en entreprise. Programme pilote 2026. Fleet Sièges suit les abonnements, la Facture réelle et l’Équivalent API estimé, sans les additionner. Fleet Guard applique un Contrôle avant envoi sur les Postes couverts et rassemble des preuves pour l’audit. Fleet Gateway encadre les Applications API et les Budgets API via une passerelle installée chez le client. Le périmètre et les environnements couverts sont validés lors du cadrage du pilote.";
 
 /** Le texte `llms.txt` de chaque site : ce que c'est, et où lire le détail. */
 export function llmsTxt(site: Site | null): string {
@@ -41,7 +41,7 @@ export function llmsTxt(site: Site | null): string {
 
 ## Pages
 
-- [Accueil](${base}/) : les prestations IA (reprises du site de conseil), les produits IA et les équipes face à l’IA.
+- [Accueil](${base}/) : les prestations d’infrastructure, de données et de sécurité IA, les produits IA et les équipes face à l’IA.
 - [Glossaire des menaces IA](${base}/menaces) : attaque type, parade de référence, outils libres et état de l’art de chaque menace.
 
 ## Produits
@@ -58,11 +58,11 @@ export function llmsTxt(site: Site | null): string {
   if (site === "fleet") {
     return `# xSOM Fleet
 
-> ${FLEET_SUMMARY} (EN: the governance platform for a company’s AI: Claude Code and Codex on every workstation, API applications through a gateway installed on the customer’s side.)
+> ${FLEET_SUMMARY} (EN: the governance platform for a company’s AI: pilot scope validated for each environment, workstation controls and API applications through a customer-hosted gateway.)
 
 ## Pages
 
-- [xSOM Fleet](${origin("fleet")}/) : la promesse (les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise), ce qui est pris en charge et les trois solutions (FinOps, cybersécurité, architecture et stratégie IA), pourquoi la choisir (valeur des forfaits d’abonnement mesurée chez xSOM avec ccusage, pilotage FinOps avec la Facture réelle face à l’Équivalent API estimé, sécurité), le film « Comment ça marche » avec voix off et chapitres, les licences, sources et engagements (Secret Guard en Apache-2.0, LiteLLM en partie MIT, SBOM CycloneDX, ce que xSOM ne voit jamais, Dossier de preuves) et les questions fréquentes.
+- [xSOM Fleet](${origin("fleet")}/) : les trois modules et leur périmètre pilote, la distinction entre Facture réelle et Équivalent API estimé, un exemple daté sur un utilisateur, la démonstration avec données illustratives, les sources et les questions fréquentes.
 
 ## Liens
 

@@ -25,9 +25,9 @@ function watch(page: Page) {
 }
 
 const sites = [
-  { host: "ai.xsom.fr", brand: "xSOM · IA", heading: "La division IA de xSOM.", nav: ["Prestations", "Produits", "Menaces IA", "xSOM Consulting"], paths: ["/", "/menaces", "/mentions-legales"] },
-  { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "Les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise.", nav: ["Pourquoi Fleet", "Comment ça marche", "Engagements", "Questions", "Division IA", "xSOM Consulting"], paths: ["/"] },
-  { host: "guard.xsom.fr", brand: "Secret Guard", heading: "Repérer les secrets avant qu’ils ne partent.", nav: ["Comment ça marche", "Open source", "Dans xSOM Fleet", "Division IA", "xSOM Consulting"], paths: ["/", "/cookies"] },
+  { host: "ai.xsom.fr", brand: "xSOM · IA", heading: "Des bases solides pour vos projets IA.", nav: ["Prestations", "Produits", "Menaces IA"], paths: ["/", "/menaces", "/mentions-legales"] },
+  { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "Vos usages IA, des règles communes.", nav: ["Pourquoi Fleet", "Comment ça marche", "Engagements", "Questions"], paths: ["/"] },
+  { host: "guard.xsom.fr", brand: "Secret Guard", heading: "Repérer les secrets avant qu’ils ne partent.", nav: ["Comment ça marche", "Open source", "Dans xSOM Fleet"], paths: ["/", "/cookies"] },
 ] as const;
 
 for (const site of sites) {
@@ -39,7 +39,7 @@ for (const site of sites) {
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     await expect(nav.getByRole("link")).toHaveText(site.nav.map((label) => new RegExp(`^${label}`)));
     // Chaque site renvoie au site de conseil, dans son en-tête et son pied de page.
-    await expect(nav.getByRole("link", { name: /xSOM Consulting/ })).toHaveAttribute("href", "https://www.xsom.fr");
+    await expect(page.locator(".web-family").getByRole("link", { name: "Le cabinet" })).toHaveAttribute("href", "https://www.xsom.fr/");
     await expect(page.locator("footer").getByRole("link", { name: /www\.xsom\.fr/ })).toHaveAttribute("href", "https://www.xsom.fr");
     // Un lien d'un site à l'autre est absolu entre adresses de production.
     await expect(page.locator("footer").getByRole("link", { name: "Secret Guard", exact: true }).first()).toHaveAttribute("href", /^(https:\/\/guard\.xsom\.fr\/|\/)/);

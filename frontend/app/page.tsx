@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { AiHome } from "@/components/ai/AiHome";
-import { AI_COPY, AI_HERO_MEDIA, AI_ORIGIN } from "@/components/ai/ai-copy";
+import { AI_COPY, AI_ORIGIN } from "@/components/ai/ai-copy";
 import { getLang } from "@/lib/lang";
 import { MAIN_SITE_ORIGIN } from "@/lib/sites";
 import "./guard-landing.css";
@@ -11,12 +11,12 @@ import "./ai.css";
 
 /**
  * Titre absolu : le gabarit du site (« · xSOM · IA ») ne s'applique pas à la page
- * d'accueil. L'affiche du film d'ouverture sert d'image Open Graph.
+ * d'accueil. L’illustration de marque sert d’image Open Graph.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const lang = await getLang();
   const copy = AI_COPY[lang].meta;
-  const poster = `${AI_ORIGIN}${AI_HERO_MEDIA[lang].poster}`;
+  const poster = `${AI_ORIGIN}/signal-media/architecture-xsom.webp`;
   return {
     title: { absolute: copy.title },
     description: copy.description,
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: lang === "fr" ? "xSOM · IA" : "xSOM · AI",
       locale: lang === "fr" ? "fr_FR" : "en_US",
       type: "website",
-      images: [{ url: poster, width: 1920, height: 1080, alt: copy.ogAlt }],
+      images: [{ url: poster, width: 1536, height: 1024, alt: copy.ogAlt }],
     },
     twitter: { card: "summary_large_image", title: copy.title, description: copy.description, images: [poster] },
   };

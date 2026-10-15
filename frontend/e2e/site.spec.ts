@@ -12,7 +12,7 @@ test("un visiteur sans cookie reçoit le français, et le document le déclare",
   // pendant que le texte sortait en anglais, si bien qu'un lecteur d'écran lisait de
   // l'anglais avec une voix française.
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(page.locator("#usages-heading")).toHaveText("Chaque usage de l’IA expose à des risques cyber différents.");
+  await expect(page.locator("#usages-heading")).toHaveText("Comprendre les risques de vos usages.");
   await expect(page).toHaveTitle("xSOM · IA · la division IA de xSOM Consulting");
   const description = await page.locator('head meta[name="description"]').getAttribute("content");
   expect(description).toContain("Prestations de conseil IA et produits");
@@ -20,20 +20,20 @@ test("un visiteur sans cookie reçoit le français, et le document le déclare",
   // Le français est dans la **première réponse**, pas posé après coup : un robot, qui
   // n'hydrate pas, doit le lire.
   const html = (await reponse?.text()) ?? "";
-  expect(html).toContain("Chaque usage de l’IA expose à des risques cyber différents.");
+  expect(html).toContain("Comprendre les risques de vos usages.");
 });
 
 test("basculer en anglais tient au rechargement", async ({ page }) => {
   await page.goto("/");
   // `exact` : sans lui, le nom accessible est cherché en sous-chaîne insensible à la casse.
   await page.getByRole("button", { name: "EN", exact: true }).click();
-  await expect(page.locator("#usages-heading")).toHaveText("Every AI use case brings its own cyber risks.");
+  await expect(page.locator("#usages-heading")).toHaveText("Understand the risks in your use cases.");
 
   // Le rechargement est le point : la préférence tient dans un cookie que le serveur
   // relit, elle ne vit pas seulement dans l'état d'un composant.
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.locator("#usages-heading")).toHaveText("Every AI use case brings its own cyber risks.");
+  await expect(page.locator("#usages-heading")).toHaveText("Understand the risks in your use cases.");
   await expect(page).toHaveTitle("xSOM · AI · the AI division of xSOM Consulting");
 });
 
@@ -135,42 +135,15 @@ test("the fonts are the design system's, loaded locally", async ({ page }) => {
   expect(fonts.bodyStyle).toContain(fonts.body);
 });
 
-test("reducing motion reveals the content instead of hiding it for good", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/");
-
-  // L'effet existe bien : sans `is-visible`, la cible est masquée.
-  const masquee = await page.evaluate(() => {
-    const cible = document.querySelector(".guard-glossary-link") as HTMLElement;
-    cible.classList.remove("is-visible");
-    document.documentElement.dataset.motion = "on";
-    return getComputedStyle(cible).opacity;
-  });
-  expect(masquee).toBe("0");
-
-  // Et le réglage « Réduire les animations » écrit `off`, pas l'absence de marqueur :
-  // un sélecteur de présence gardait l'opacité à zéro sur un contenu que plus rien
-  // n'allait révéler.
-  const reduite = await page.evaluate(() => {
-    const cible = document.querySelector(".guard-glossary-link") as HTMLElement;
-    cible.classList.remove("is-visible");
-    document.documentElement.dataset.motion = "off";
-    return getComputedStyle(cible).opacity;
-  });
-  expect(reduite).toBe("1");
-});
-
-test("a page reached by an internal link still reveals what it hides", async ({ page }) => {
+test("content stays readable after a client-side navigation with motion enabled", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/menaces");
   await page.getByRole("link", { name: "Accueil", exact: true }).first().click();
   await expect(page).toHaveURL(/\/$/);
-
-  // Le layout racine reste monté d'une page à l'autre : sans relevé des cibles à
-  // chaque navigation, cette page gardait ses révélations à zéro pour toujours.
-  const cible = page.locator(".guard-glossary-link");
-  await cible.scrollIntoViewIfNeeded();
-  await expect.poll(() => cible.evaluate((n) => getComputedStyle(n).opacity), { timeout: 5_000 }).toBe("1");
+  const content = page.locator("#usages h2");
+  await content.scrollIntoViewIfNeeded();
+  await expect(content).toBeVisible();
+  expect(await content.evaluate(n => getComputedStyle(n).opacity)).toBe("1");
 });
 
 test("les pages légales décrivent le site tel qu'il est, sans compte ni console", async ({ page }) => {

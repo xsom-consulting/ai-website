@@ -18,11 +18,11 @@ export function SgFlow() {
     <section id="fonctionnement" className="sg-flow" aria-labelledby="sg-flow-title">
       <div className="guard-wrap">
         <header className="sg-head">
-          <p className="home-kicker" data-reveal>{copy.kicker}</p>
-          <h2 id="sg-flow-title" className="home-title" data-reveal style={{ "--chars": copy.title.length } as CSSProperties}>{copy.title}</h2>
+          <p className="home-kicker">{copy.kicker}</p>
+          <h2 id="sg-flow-title" className="home-title" style={{ "--chars": copy.title.length } as CSSProperties}>{copy.title}</h2>
         </header>
 
-        <div className="sg-flow__diagram" data-reveal>
+        <div className="sg-flow__diagram">
           <article className="sg-node">
             <p className="sg-node__label"><TerminalIcon /> {copy.prompt}</p>
             <p className="sg-code">{copy.promptLine} <code>Bearer <mark data-risk>ghp_8f3K••••••••</mark></code></p>

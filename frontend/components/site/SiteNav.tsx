@@ -11,7 +11,7 @@ export function SiteNav({ site }: { site: Site }) {
   return (
     <div className="guard-nav-shell">
       <nav aria-label={SITE_UI[lang].mainNav}>
-        {NAV[site][lang].map((item) => (
+        {NAV[site][lang].filter((item) => "site" in item.to && item.to.site === site).map((item) => (
           <SiteLink key={item.label} to={item.to} className="guard-nav__link">
             {item.label}
             {isExternal(item.to) ? <span aria-hidden="true">↗</span> : null}

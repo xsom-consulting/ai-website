@@ -48,7 +48,7 @@ test("hors des trois adresses, l'ancienne adresse des produits mène à la secti
 
 test("fleet.xsom.fr shows the Fleet page at its root", async ({ request }) => {
   const response = await request.get("/", { headers: { host: "fleet.xsom.fr" } });
-  expect(await response.text()).toContain("aux standards de sécurité de l’entreprise.");
+  expect(await response.text()).toContain("des règles communes.");
 });
 
 test("guard.xsom.fr shows Secret Guard at its root", async ({ request }) => {
@@ -58,13 +58,13 @@ test("guard.xsom.fr shows Secret Guard at its root", async ({ request }) => {
 
 test("ai.xsom.fr shows the AI division at its root", async ({ request }) => {
   const response = await request.get("/", { headers: { host: "ai.xsom.fr" } });
-  expect(await response.text()).toContain("La division IA de xSOM.");
+  expect(await response.text()).toContain("Des bases solides pour vos projets IA.");
 });
 
 /** Titre, adresse canonique et marque de chaque site, lus dans la première réponse. */
 const metadata: [host: string, title: string, canonical: string][] = [
   ["ai.xsom.fr", "xSOM · IA · la division IA de xSOM Consulting", "https://ai.xsom.fr/"],
-  ["fleet.xsom.fr", "xSOM Fleet · les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise", "https://fleet.xsom.fr/"],
+  ["fleet.xsom.fr", "xSOM Fleet · Gouvernance des usages IA en entreprise", "https://fleet.xsom.fr/"],
   ["guard.xsom.fr", "Secret Guard · détection de secrets open source", "https://guard.xsom.fr/"],
 ];
 

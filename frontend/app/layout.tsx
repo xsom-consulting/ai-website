@@ -12,6 +12,7 @@ import { SITE_ORIGINS } from "@/lib/sites";
 import "./globals.css";
 import "@/design-system/tokens.css";
 import "@/design-system/components.css";
+import "@/design-system/web.css";
 import { SignalBootstrap } from "@/design-system/react";
 import { SIGNAL_BOOTSTRAP_SCRIPT } from "@/design-system/bootstrap";
 
