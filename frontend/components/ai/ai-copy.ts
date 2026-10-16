@@ -131,18 +131,11 @@ export const AI_COPY = {
     services: {
       number: "02",
       name: "Nos prestations",
-      title: { before: "Nos prestations de ", accent: "conseil IA", after: "." },
-      lead: "Du conseil jusqu’à la production. Trois exigences, jamais l’une au détriment des autres : sérénité, sécurité, souveraineté.",
-      items: [
-        { name: "Infrastructures IA & cloud souverain", body: "Dimensionner, héberger et exploiter les charges IA sous contrôle." },
-        { name: "Données & MLOps", body: "Faire passer les modèles du prototype à un service suivi en production." },
-        { name: "Sécurité des pipelines IA", body: "Les pipelines IA sont des surfaces d’attaque." },
-      ],
+      title: { before: "Besoin d’une prestation ", accent: "personnalisée", after: " ?" },
+      lead: "Du conseil jusqu’à la production. Décrivez votre contexte en quelques lignes : nous revenons vers vous.",
       more: "Voir IA & Souveraineté sur www.xsom.fr",
       moreHref: `${MAIN_SITE_ORIGIN}/ia-souverainete.html`,
       request: {
-        title: "Besoin d’une prestation personnalisée ?",
-        body: "Décrivez votre contexte en quelques lignes : nous revenons vers vous.",
         open: "Contactez-nous",
         close: "Refermer",
         name: "Nom",
@@ -160,13 +153,6 @@ export const AI_COPY = {
         privacy: "Vos informations ne servent qu’à vous répondre.",
         privacyLink: "Politique de confidentialité",
       },
-    },
-    contact: {
-      name: "Contact",
-      title: "Un projet IA ?",
-      body: "Écrivez-nous quelques lignes sur votre contexte : xSOM Consulting vous répond.",
-      button: "Écrire à xSOM",
-      main: "xSOM Consulting",
     },
   },
   en: {
@@ -275,18 +261,11 @@ export const AI_COPY = {
     services: {
       number: "02",
       name: "Our services",
-      title: { before: "Our ", accent: "AI consulting", after: " services." },
-      lead: "From consulting to production. Three requirements, never one at the expense of the others: operational confidence, security, sovereignty.",
-      items: [
-        { name: "AI infrastructure & sovereign cloud", body: "Size, host and operate AI workloads with control." },
-        { name: "Data & MLOps", body: "Move models from prototypes to monitored production services." },
-        { name: "AI pipeline security", body: "AI pipelines are attack surfaces." },
-      ],
+      title: { before: "Need a ", accent: "tailored", after: " engagement?" },
+      lead: "From consulting to production. Describe your context in a few lines: we will get back to you.",
       more: "See AI & Sovereignty on www.xsom.fr",
       moreHref: `${MAIN_SITE_ORIGIN}/en/ai-sovereignty.html`,
       request: {
-        title: "Need a tailored engagement?",
-        body: "Describe your context in a few lines: we will get back to you.",
         open: "Contact us",
         close: "Close",
         name: "Name",
@@ -304,13 +283,6 @@ export const AI_COPY = {
         privacy: "Your details are only used to reply to you.",
         privacyLink: "Privacy policy (in French)",
       },
-    },
-    contact: {
-      name: "Contact",
-      title: "An AI project?",
-      body: "Write us a few lines about your context: xSOM Consulting will reply.",
-      button: "Write to xSOM",
-      main: "xSOM Consulting",
     },
   },
 } as const;

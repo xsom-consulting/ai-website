@@ -4,7 +4,6 @@ import { glideTo } from "@/components/home/motion";
 import { useFilmPlayback } from "@/components/home/useFilmPlayback";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
 import { AI_COPY, AI_HERO_FILM } from "./ai-copy";
 import { AiProducts } from "./AiProducts";
@@ -47,18 +46,6 @@ export function AiHome() {
         <AiProducts copy={copy.products} />
 
         <AiServices copy={copy.services} lang={lang} />
-
-        <section id="contact" className="xp-final" aria-labelledby="ai-contact-title">
-          <div className="xp-cover__grid" aria-hidden="true" />
-          <div className="guard-wrap xp-final__inner reveal">
-            <h2 id="ai-contact-title">{copy.contact.title}</h2>
-            <p>{copy.contact.body}</p>
-            <div className="xp-actions xp-actions--center">
-              <a className="xp-btn" href={`#${REQUEST_ANCHOR}`}>{copy.contact.button}</a>
-              <SiteLink to={{ href: "https://www.xsom.fr" }} className="xp-btn xp-btn--ghost">{copy.contact.main} <span aria-hidden="true">↗</span></SiteLink>
-            </div>
-          </div>
-        </section>
       </main>
       <SiteFooter site="ai" />
     </div>

@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * ai.xsom.fr, la division IA, réduite à l'essentiel et dans la charte de Fleet : qui
- * nous sommes, nos produits (xSOM Fleet en vedette, Secret Guard en open source), nos
- * prestations de conseil IA en quelques lignes, le contact. La couverture, comme celle
- * de www.xsom.fr, pose un film muet sans texte ; ni campus des équipes, ni encart du
- * glossaire (le glossaire reste dans le menu).
+ * ai.xsom.fr, la division IA, dans la charte de www.xsom.fr : qui nous sommes, nos
+ * produits (xSOM Fleet en vedette, Secret Guard en open source), puis un appel à
+ * l'action pour une prestation, avec son formulaire de demande. La couverture pose un
+ * film muet sans texte ; ni campus des équipes, ni encart du glossaire (le glossaire
+ * reste dans le menu).
  */
 test("the cover says who we are and opens on products and services", async ({ page }) => {
   await page.goto("/");
@@ -88,33 +88,26 @@ test("the Secret Guard demo plays once when it comes into view, then rests on it
   await expect(demo.locator(".ai-vsc__results li").last()).toBeVisible();
 });
 
-test("the services come from the consulting site, in a few lines, and invent nothing", async ({ page }) => {
+test("the services section is a call to action that invents nothing", async ({ page }) => {
   await page.goto("/");
   const services = page.locator("#prestations");
-  await expect(services.locator(".ai-service h3")).toHaveText([
-    "Infrastructures IA & cloud souverain",
-    "Données & MLOps",
-    "Sécurité des pipelines IA",
-  ]);
-  await expect(services.locator(".ai-service").first()).toContainText("Dimensionner, héberger et exploiter les charges IA sous contrôle.");
+  await expect(services.getByRole("heading", { level: 2 })).toHaveText("Besoin d’une prestation personnalisée ?");
+  await expect(services.getByRole("button", { name: /Contactez-nous/ })).toBeVisible();
   await expect(services.getByRole("link", { name: /IA & Souveraineté sur www\.xsom\.fr/ })).toHaveAttribute("href", "https://www.xsom.fr/ia-souverainete.html");
-  const text = (await services.innerText()).replace(/\b(MLOps)\b/g, "");
-  expect(text).not.toMatch(/\d\s?(%|€|\$|clients?)/);
+  expect(await services.innerText()).not.toMatch(/\d\s?(%|€|\$|clients?)/);
 });
 
 test("a tailored request opens a simple form and goes out by email, never by the mail app", async ({ page }) => {
   await page.goto("/");
   const services = page.locator("#prestations");
-  await expect(services.getByRole("heading", { level: 2 })).toHaveText("Nos prestations de conseil IA.");
   const request = services.locator("#demande");
-  await expect(request).toContainText("Besoin d’une prestation personnalisée ?");
   // Replié par défaut ; le bouton le déplie.
   await expect(request.locator("form")).toHaveCount(0);
   await request.getByRole("button", { name: /Contactez-nous/ }).click();
   await expect(request.getByLabel("Nom")).toBeFocused();
-  // Ni l'en-tête ni l'appel final n'ouvrent la messagerie : ils mènent au formulaire.
+  // L'en-tête n'ouvre pas la messagerie : « Nous écrire » mène au formulaire.
   await expect(page.locator(".guard-header, main").locator("a[href^='mailto:']")).toHaveCount(0);
-  await expect(page.locator("#contact").getByRole("link", { name: "Écrire à xSOM" })).toHaveAttribute("href", "#demande");
+  await expect(page.locator(".guard-header").getByRole("link", { name: "Nous écrire" }).first()).toHaveAttribute("href", "#demande");
 
   let sent: Record<string, string> | null = null;
   await page.route("**/api/contact", async (route) => {
@@ -154,14 +147,6 @@ test("the contact route refuses other origins and incomplete requests", async ({
   expect((await request.post("/api/contact", { data: valid, headers: { origin } })).status()).toBe(503);
 });
 
-test("the contact closes the page", async ({ page }) => {
-  await page.goto("/");
-  const contact = page.locator("#contact");
-  await expect(contact.getByRole("heading", { name: "Un projet IA ?" })).toBeVisible();
-  // Il mène au formulaire de demande, pas à la messagerie.
-  await expect(contact.getByRole("link", { name: "Écrire à xSOM" })).toHaveAttribute("href", "#demande");
-});
-
 test("the home page carries its JSON-LD, its own Open Graph image and no offer", async ({ request }) => {
   const html = await (await request.get("/", { headers: { host: "ai.xsom.fr" } })).text();
   const json = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)?.[1];
@@ -186,8 +171,8 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · AI");
   await expect(page.locator("#produits .ai-product")).toHaveCount(2);
   await expect(page.locator("#produits .ai-verbs span")).toHaveText(["Govern", "Measure", "Decide"]);
-  await expect(page.locator("#prestations .ai-service")).toHaveCount(3);
-  await expect(page.locator("#contact").getByRole("link", { name: "Write to xSOM" })).toHaveAttribute("href", "#demande");
+  await expect(page.locator("#prestations h2")).toHaveText("Need a tailored engagement?");
+  await expect(page.locator("#prestations").getByRole("button", { name: /Contact us/ })).toBeVisible();
   await context.close();
 });
 
@@ -196,12 +181,6 @@ for (const width of [390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    if (width === 390) {
-      const cards = page.locator("#prestations .ai-service");
-      const first = await cards.nth(0).boundingBox();
-      const second = await cards.nth(1).boundingBox();
-      expect(second!.y).toBeGreaterThan(first!.y + first!.height - 1);
-    }
     // Sous 900 px, la langue se choisit dans le menu.
     const menu = page.getByRole("button", { name: "Menu", exact: true });
     if (await menu.isVisible()) await menu.click();

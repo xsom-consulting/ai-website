@@ -141,7 +141,7 @@ test("reducing motion reveals the content instead of hiding it for good", async 
 
   // L'effet existe bien : sans `is-visible`, la cible est masquée.
   const masquee = await page.evaluate(() => {
-    const cible = document.querySelector("#prestations .ai-service") as HTMLElement;
+    const cible = document.querySelector("#prestations .ai-h2") as HTMLElement;
     cible.classList.remove("is-visible");
     document.documentElement.dataset.motion = "on";
     return getComputedStyle(cible).opacity;
@@ -152,7 +152,7 @@ test("reducing motion reveals the content instead of hiding it for good", async 
   // un sélecteur de présence gardait l'opacité à zéro sur un contenu que plus rien
   // n'allait révéler.
   const reduite = await page.evaluate(() => {
-    const cible = document.querySelector("#prestations .ai-service") as HTMLElement;
+    const cible = document.querySelector("#prestations .ai-h2") as HTMLElement;
     cible.classList.remove("is-visible");
     document.documentElement.dataset.motion = "off";
     return getComputedStyle(cible).opacity;
@@ -168,7 +168,7 @@ test("a page reached by an internal link still reveals what it hides", async ({ 
 
   // Le layout racine reste monté d'une page à l'autre : sans relevé des cibles à
   // chaque navigation, cette page gardait ses révélations à zéro pour toujours.
-  const cible = page.locator("#prestations .ai-service").first();
+  const cible = page.locator("#prestations .ai-h2");
   await cible.scrollIntoViewIfNeeded();
   await expect.poll(() => cible.evaluate((n) => getComputedStyle(n).opacity), { timeout: 5_000 }).toBe("1");
 });
