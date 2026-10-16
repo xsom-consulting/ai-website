@@ -8,7 +8,6 @@ import { useT } from "@/lib/i18n";
 import { AI_COPY, AI_HERO_FILM } from "./ai-copy";
 import { AiProducts } from "./AiProducts";
 import { AiServices, REQUEST_ANCHOR } from "./AiServices";
-import { useSectionSnap } from "./useSectionSnap";
 
 /**
  * La page d'accueil de la division IA (`ai.xsom.fr`), dans la charte de fleet.xsom.fr
@@ -20,7 +19,6 @@ import { useSectionSnap } from "./useSectionSnap";
 export function AiHome() {
   const { lang } = useT();
   const copy = AI_COPY[lang];
-  useSectionSnap();
 
   return (
     <div className="guard-landing xhome xp xai">

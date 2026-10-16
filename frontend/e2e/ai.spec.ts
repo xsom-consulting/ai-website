@@ -88,13 +88,23 @@ test("the Secret Guard demo plays once when it comes into view, then rests on it
   await expect(demo.locator(".ai-vsc__results li").last()).toBeVisible();
 });
 
-test("the services section is a call to action that invents nothing", async ({ page }) => {
+test("the closing section is the one of www.xsom.fr: a project, a question, contact and LinkedIn", async ({ page }) => {
   await page.goto("/");
-  const services = page.locator("#prestations");
-  await expect(services.getByRole("heading", { level: 2 })).toHaveText("Besoin d’une prestation personnalisée ?");
-  await expect(services.getByRole("button", { name: /Contactez-nous/ })).toBeVisible();
-  await expect(services.getByRole("link", { name: /IA & Souveraineté sur www\.xsom\.fr/ })).toHaveAttribute("href", "https://www.xsom.fr/ia-souverainete.html");
-  expect(await services.innerText()).not.toMatch(/\d\s?(%|€|\$|clients?)/);
+  const closing = page.locator("#prestations");
+  await expect(closing.getByRole("heading", { level: 2 })).toHaveText("Un projet, une question ?");
+  await expect(closing).toContainText("Besoin d’une prestation personnalisée ?");
+  await expect(closing.getByRole("button", { name: /Nous contacter/ })).toBeVisible();
+  await expect(closing.getByRole("link", { name: /Nous suivre sur LinkedIn/ })).toHaveAttribute("href", "https://www.linkedin.com/company/xsom-consulting");
+  expect(await closing.innerText()).not.toMatch(/\d\s?(%|€|\$|clients?)/);
+});
+
+test("the footer shows no email address and links to the form and to LinkedIn", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.locator("footer");
+  await expect(footer.locator("a[href^='mailto:']")).toHaveCount(0);
+  await expect(footer.getByRole("link", { name: "Nous écrire" })).toHaveAttribute("href", "/#demande");
+  await expect(footer.getByRole("link", { name: "xSOM Consulting sur LinkedIn" })).toHaveAttribute("href", "https://www.linkedin.com/company/xsom-consulting");
+  await expect(footer.locator(".studio-footer__linkedin svg")).toBeVisible();
 });
 
 test("a tailored request opens a simple form and goes out by email, never by the mail app", async ({ page }) => {
@@ -103,7 +113,7 @@ test("a tailored request opens a simple form and goes out by email, never by the
   const request = services.locator("#demande");
   // Replié par défaut ; le bouton le déplie.
   await expect(request.locator("form")).toHaveCount(0);
-  await request.getByRole("button", { name: /Contactez-nous/ }).click();
+  await page.locator("#prestations").getByRole("button", { name: /Nous contacter/ }).click();
   await expect(request.getByLabel("Nom")).toBeFocused();
   // L'en-tête n'ouvre pas la messagerie : « Nous écrire » mène au formulaire.
   await expect(page.locator(".guard-header, main").locator("a[href^='mailto:']")).toHaveCount(0);
@@ -147,6 +157,27 @@ test("the contact route refuses other origins and incomplete requests", async ({
   expect((await request.post("/api/contact", { data: valid, headers: { origin } })).status()).toBe(503);
 });
 
+test("www.xsom.fr may post to the contact route, by fetch or by a plain form", async ({ request }) => {
+  const www = "https://www.xsom.fr";
+  // Le contrôle préalable du navigateur (CORS) est accepté pour www.xsom.fr seulement.
+  const preflight = await request.fetch("/api/contact", { method: "OPTIONS", headers: { origin: www, "access-control-request-method": "POST" } });
+  expect(preflight.status()).toBe(204);
+  expect(preflight.headers()["access-control-allow-origin"]).toBe(www);
+  expect((await request.fetch("/api/contact", { method: "OPTIONS", headers: { origin: "https://evil.example" } })).status()).toBe(403);
+  const valid = { name: "Camille", email: "camille@example.com", subject: "Cybersécurité & conformité", message: "Un audit de notre SI.", lang: "fr" };
+  const response = await request.post("/api/contact", { data: valid, headers: { origin: www } });
+  expect(response.status()).toBe(503);
+  expect(response.headers()["access-control-allow-origin"]).toBe(www);
+  // Sans JavaScript, le formulaire classique revient sur sa page avec le résultat.
+  const native = await request.post("/api/contact", {
+    form: { ...valid, botcheck: "" },
+    headers: { origin: www, referer: `${www}/contact` },
+    maxRedirects: 0,
+  });
+  expect(native.status()).toBe(303);
+  expect(native.headers()["location"]).toBe(`${www}/contact?envoi=erreur`);
+});
+
 test("the home page carries its JSON-LD, its own Open Graph image and no offer", async ({ request }) => {
   const html = await (await request.get("/", { headers: { host: "ai.xsom.fr" } })).text();
   const json = html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)?.[1];
@@ -171,8 +202,8 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · AI");
   await expect(page.locator("#produits .ai-product")).toHaveCount(2);
   await expect(page.locator("#produits .ai-verbs span")).toHaveText(["Govern", "Measure", "Decide"]);
-  await expect(page.locator("#prestations h2")).toHaveText("Need a tailored engagement?");
-  await expect(page.locator("#prestations").getByRole("button", { name: /Contact us/ })).toBeVisible();
+  await expect(page.locator("#prestations h2")).toHaveText("A project, a question?");
+  await expect(page.locator("#prestations").getByRole("button", { name: /Get in touch/ })).toBeVisible();
   await context.close();
 });
 

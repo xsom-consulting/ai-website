@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { SiteLink } from "@/components/site/SiteLink";
-import { CONTACT_EMAIL } from "@/lib/site-copy";
+import { LinkedInMark } from "@/components/site/LinkedInMark";
+import { CONTACT_EMAIL, LINKEDIN_URL } from "@/lib/site-copy";
 import type { AI_COPY } from "./ai-copy";
 
 type Copy = (typeof AI_COPY)["fr" | "en"];
@@ -12,14 +13,16 @@ type Services = Copy["services"];
 export const REQUEST_ANCHOR = "demande";
 
 /**
- * « 02 Nos prestations », une section d'appel à l'action, centrée, dans la charte claire
- * de www.xsom.fr : « Besoin d'une prestation personnalisée ? », « Contactez-nous », et le
- * formulaire qui se déplie et part par email (`/api/contact`). Le détail des expertises
- * reste sur www.xsom.fr.
+ * La conclusion de la page, reprise de www.xsom.fr (« Un projet, une question ? ») :
+ * plein écran, marine, le logo xSOM en filigrane, « Nous contacter » et « Nous suivre
+ * sur LinkedIn ». « Nous contacter » déplie le formulaire, qui part par email
+ * (`/api/contact`, Resend). C'est la cible de l'entrée « Prestations » du menu.
  */
 export function AiServices({ copy, lang }: { copy: Services; lang: "fr" | "en" }) {
   return (
-    <section id="prestations" className="ai-light ai-light--white ai-services-x" aria-labelledby="ai-services-title">
+    <section id="prestations" className="ai-closing" aria-labelledby="ai-services-title">
+      {/* eslint-disable-next-line @next/next/no-img-element -- filigrane décoratif, le logo d'origine */}
+      <img className="ai-closing__mark" src="/xsom-mark.svg" alt="" width={600} height={600} aria-hidden="true" />
       <div className="guard-wrap">
         <ContactRequest section={copy} lang={lang} />
       </div>
@@ -76,17 +79,17 @@ function ContactRequest({ section, lang }: { section: Services; lang: "fr" | "en
 
   return (
     <div id={REQUEST_ANCHOR} ref={root} className="ai-request" data-open={open}>
-      <header className="ai-center-head">
+      <header className="ai-closing__head">
         <p className="ai-eyebrow reveal"><span>{section.number}</span>{section.name}</p>
-        <h2 id="ai-services-title" className="ai-h2 reveal" data-delay="1">
-          {section.title.before}<em>{section.title.accent}</em>{section.title.after}
-        </h2>
-        <p className="ai-center-head__lead reveal" data-delay="2">{section.lead}</p>
+        <h2 id="ai-services-title" className="ai-closing__title reveal" data-delay="1">{section.title}</h2>
+        <p className="ai-closing__lead reveal" data-delay="2">{section.lead}</p>
         <div className="ai-request__actions reveal" data-delay="3">
           <button type="button" className="ai-btn ai-btn--lg" aria-expanded={open} aria-controls="ai-request-form" onClick={() => setOpen((value) => !value)}>
             {open ? copy.close : copy.open} <span aria-hidden="true">{open ? "×" : "→"}</span>
           </button>
-          <SiteLink to={{ href: section.moreHref }} className="ai-link">{section.more} <span aria-hidden="true">↗</span></SiteLink>
+          <a className="ai-btn ai-btn--lg ai-btn--ghost" href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
+            <LinkedInMark />{section.linkedin} <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </header>
       {open ? (

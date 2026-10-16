@@ -1,5 +1,4 @@
 import type { Lang } from "@/lib/i18n";
-import { MAIN_SITE_ORIGIN } from "@/lib/sites";
 
 /**
  * ai.xsom.fr, la division IA de xSOM Consulting, réduite à l'essentiel : qui nous
@@ -131,12 +130,11 @@ export const AI_COPY = {
     services: {
       number: "02",
       name: "Nos prestations",
-      title: { before: "Besoin d’une prestation ", accent: "personnalisée", after: " ?" },
-      lead: "Du conseil jusqu’à la production. Décrivez votre contexte en quelques lignes : nous revenons vers vous.",
-      more: "Voir IA & Souveraineté sur www.xsom.fr",
-      moreHref: `${MAIN_SITE_ORIGIN}/ia-souverainete.html`,
+      title: "Un projet, une question ?",
+      lead: "Besoin d’une prestation personnalisée ? Du conseil jusqu’à la production : décrivez votre contexte en quelques lignes, nous revenons vers vous.",
+      linkedin: "Nous suivre sur LinkedIn",
       request: {
-        open: "Contactez-nous",
+        open: "Nous contacter",
         close: "Refermer",
         name: "Nom",
         email: "Email professionnel",
@@ -261,12 +259,11 @@ export const AI_COPY = {
     services: {
       number: "02",
       name: "Our services",
-      title: { before: "Need a ", accent: "tailored", after: " engagement?" },
-      lead: "From consulting to production. Describe your context in a few lines: we will get back to you.",
-      more: "See AI & Sovereignty on www.xsom.fr",
-      moreHref: `${MAIN_SITE_ORIGIN}/en/ai-sovereignty.html`,
+      title: "A project, a question?",
+      lead: "Need a tailored engagement? From consulting to production: describe your context in a few lines, we will get back to you.",
+      linkedin: "Follow us on LinkedIn",
       request: {
-        open: "Contact us",
+        open: "Get in touch",
         close: "Close",
         name: "Name",
         email: "Work email",

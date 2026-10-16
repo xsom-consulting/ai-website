@@ -6,17 +6,28 @@ import { CONTACT_EMAIL } from "@/lib/site-copy";
 export const runtime = "nodejs";
 
 /**
- * Le formulaire « Besoin d'une prestation personnalisée ? » de ai.xsom.fr : la demande
- * part par email, envoyée par Resend (API REST, sans SDK), avec l'adresse du visiteur en
- * réponse. Sans `RESEND_API_KEY`, la route répond « indisponible » et le formulaire
- * propose d'écrire directement : rien n'est obligatoire pour faire tourner le site.
+ * Les formulaires de contact des sites xSOM : « Un projet, une question ? » de
+ * ai.xsom.fr, et ceux de www.xsom.fr, servi par GitHub Pages sans serveur, qui écrit
+ * ici. La demande part par email, envoyée par Resend (API REST, sans SDK), avec
+ * l'adresse du visiteur en réponse. Sans `RESEND_API_KEY`, la route répond
+ * « indisponible » et les formulaires proposent d'écrire directement.
  *
  * Variables : `RESEND_API_KEY` (clé d'envoi seule), `CONTACT_FROM` (expéditeur sur un
- * domaine vérifié chez Resend, par défaut `xSOM · IA <site@xsom.fr>`), `CONTACT_TO`
- * (destinataire, par défaut l'adresse de contact du site).
+ * domaine vérifié chez Resend, par défaut `xSOM <site@xsom.fr>`), `CONTACT_TO`
+ * (destinataire des demandes de ai.xsom.fr), `CONTACT_TO_WWW` (destinataire des
+ * demandes de www.xsom.fr), `CONTACT_EXTRA_ORIGINS` (origines de test, séparées par
+ * des virgules, traitées comme www.xsom.fr).
  */
 
-const LIMITS = { name: 120, email: 254, company: 160, message: 4000 } as const;
+type Site = "ai" | "www";
+
+const SITES: Record<Site, { label: string; to: () => string }> = {
+  ai: { label: "ai.xsom.fr", to: () => process.env.CONTACT_TO || CONTACT_EMAIL },
+  www: { label: "www.xsom.fr", to: () => process.env.CONTACT_TO_WWW || "jean-philippe.talou@xsom.fr" },
+};
+const WWW_ORIGINS = ["https://www.xsom.fr", "https://xsom.fr"];
+
+const LIMITS = { name: 120, email: 254, company: 160, subject: 120, message: 4000 } as const;
 const MIN_MESSAGE = 10;
 const requestTimes = new Map<string, number[]>();
 const MAX_REQUESTS = 5;
@@ -37,15 +48,29 @@ function isRateLimited(request: NextRequest) {
   return recent.length > MAX_REQUESTS;
 }
 
-/** Une demande d'un autre site est refusée : seul le formulaire de la page peut écrire ici. */
-function isSameOrigin(request: NextRequest) {
+/** Le site qui écrit : ai.xsom.fr lui-même, ou www.xsom.fr ; tout autre site est refusé. */
+function siteOf(request: NextRequest): Site | null {
   const origin = request.headers.get("origin");
-  if (!origin) return false;
+  if (!origin) return null;
+  const extra = (process.env.CONTACT_EXTRA_ORIGINS ?? "").split(",").map((value) => value.trim()).filter(Boolean);
+  if ([...WWW_ORIGINS, ...extra].includes(origin)) return "www";
   try {
-    return new URL(origin).host === request.headers.get("host");
+    return new URL(origin).host === request.headers.get("host") ? "ai" : null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+/** Les en-têtes qui laissent www.xsom.fr lire la réponse (CORS) ; rien pour ai.xsom.fr. */
+function cors(request: NextRequest, site: Site | null): Record<string, string> {
+  if (site !== "www") return {};
+  return {
+    "Access-Control-Allow-Origin": request.headers.get("origin") ?? "",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
+  };
 }
 
 /** Un champ texte, borné ; les retours à la ligne sont retirés des champs d'une ligne. */
@@ -55,38 +80,50 @@ function field(body: Record<string, unknown>, key: keyof typeof LIMITS, multilin
   return clean.slice(0, LIMITS[key]);
 }
 
-export async function POST(request: NextRequest) {
-  if (!isSameOrigin(request)) return NextResponse.json({ detail: "Forbidden" }, { status: 403 });
-  if (isRateLimited(request)) return NextResponse.json({ detail: "Too many requests" }, { status: 429 });
-
+/** Le corps, en JSON (fetch) ou en formulaire classique (sans JavaScript). */
+async function readBody(request: NextRequest): Promise<{ body: Record<string, unknown> | null; native: boolean }> {
+  const type = request.headers.get("content-type") ?? "";
+  if (type.includes("application/x-www-form-urlencoded") || type.includes("multipart/form-data")) {
+    const form = await request.formData().catch(() => null);
+    return { body: form ? Object.fromEntries([...form.entries()].map(([key, value]) => [key, String(value)])) : null, native: true };
+  }
   const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
-  if (!body || typeof body !== "object") return NextResponse.json({ detail: "Invalid request" }, { status: 400 });
+  return { body: body && typeof body === "object" ? body : null, native: false };
+}
 
-  // Le champ piège, invisible pour un visiteur : un robot le remplit, on fait comme si.
-  if (typeof body.website === "string" && body.website.trim() !== "") return NextResponse.json({ ok: true });
+type Outcome = { status: number; detail?: string };
+
+/** `limited` n'est consulté qu'au moment d'envoyer : une demande refusée ne compte pas. */
+async function send(site: Site, body: Record<string, unknown> | null, limited: () => boolean): Promise<Outcome> {
+  if (!body) return { status: 400, detail: "Invalid request" };
+  // Les champs pièges, invisibles pour un visiteur : un robot les remplit, on fait comme si.
+  const trap = [body.website, body.botcheck].some((value) => typeof value === "string" ? value.trim() !== "" && value !== "false" : value === true);
+  if (trap) return { status: 200 };
 
   const name = field(body, "name");
   const email = field(body, "email");
   const company = field(body, "company");
+  const subject = field(body, "subject");
   const message = field(body, "message", true);
   const lang = body.lang === "en" ? "en" : "fr";
-  if (!name || !EMAIL.test(email) || message.length < MIN_MESSAGE) {
-    return NextResponse.json({ detail: "Invalid request" }, { status: 400 });
-  }
+  if (!name || !EMAIL.test(email) || message.length < MIN_MESSAGE) return { status: 400, detail: "Invalid request" };
+  if (limited()) return { status: 429, detail: "Too many requests" };
 
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return NextResponse.json({ detail: "Contact unavailable" }, { status: 503 });
+  if (!apiKey) return { status: 503, detail: "Contact unavailable" };
 
+  const { label, to } = SITES[site];
   const who = company ? `${name} · ${company}` : name;
   const text = [
     `Nom : ${name}`,
     `Email : ${email}`,
-    `Entreprise : ${company || "non indiquée"}`,
-    `Langue du site : ${lang}`,
+    `Organisation : ${company || "non indiquée"}`,
+    ...(subject ? [`Sujet : ${subject}`] : []),
+    `Langue : ${lang}`,
     "",
     message,
     "",
-    "Envoyé depuis le formulaire « Besoin d’une prestation personnalisée ? » de ai.xsom.fr.",
+    `Envoyé depuis le formulaire de contact de ${label}.`,
   ].join("\n");
 
   const upstream = await fetch("https://api.resend.com/emails", {
@@ -95,18 +132,43 @@ export async function POST(request: NextRequest) {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
       // Un double clic ou une nouvelle tentative n'envoie pas deux fois la même demande.
-      "Idempotency-Key": `ai-contact/${createHash("sha256").update(`${email}\n${message}`).digest("hex").slice(0, 40)}`,
+      "Idempotency-Key": `contact/${createHash("sha256").update(`${site}\n${email}\n${message}`).digest("hex").slice(0, 40)}`,
     },
     body: JSON.stringify({
-      from: process.env.CONTACT_FROM || "xSOM · IA <site@xsom.fr>",
-      to: [process.env.CONTACT_TO || CONTACT_EMAIL],
+      from: process.env.CONTACT_FROM || "xSOM <site@xsom.fr>",
+      to: [to()],
       reply_to: email,
-      subject: `[ai.xsom.fr] Demande de prestation · ${who}`,
+      subject: `[${label}] ${subject || "Demande de contact"} · ${who}`,
       text,
     }),
     signal: AbortSignal.timeout(10_000),
   }).catch(() => null);
 
-  if (!upstream?.ok) return NextResponse.json({ detail: "Contact unavailable" }, { status: 502 });
-  return NextResponse.json({ ok: true });
+  return upstream?.ok ? { status: 200 } : { status: 502, detail: "Contact unavailable" };
+}
+
+/** Le formulaire sans JavaScript revient sur sa page, avec le résultat dans l'adresse. */
+function backTo(request: NextRequest, ok: boolean) {
+  const origin = request.headers.get("origin") ?? "";
+  const referer = request.headers.get("referer");
+  const page = referer && referer.startsWith(`${origin}/`) ? new URL(referer) : new URL(`${origin}/`);
+  page.searchParams.set("envoi", ok ? "ok" : "erreur");
+  return NextResponse.redirect(page, 303);
+}
+
+export function OPTIONS(request: NextRequest) {
+  const site = siteOf(request);
+  return new NextResponse(null, { status: site ? 204 : 403, headers: cors(request, site) });
+}
+
+export async function POST(request: NextRequest) {
+  const site = siteOf(request);
+  if (!site) return NextResponse.json({ detail: "Forbidden" }, { status: 403 });
+  const headers = cors(request, site);
+  const { body, native } = await readBody(request);
+  const outcome = await send(site, body, () => isRateLimited(request));
+  if (native) return backTo(request, outcome.status === 200);
+  return outcome.status === 200
+    ? NextResponse.json({ ok: true }, { headers })
+    : NextResponse.json({ detail: outcome.detail }, { status: outcome.status, headers });
 }
