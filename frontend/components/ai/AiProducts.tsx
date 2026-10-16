@@ -24,78 +24,74 @@ export function AiProducts({ copy }: { copy: Products }) {
   return (
     <section id="produits" className="ai-light ai-offer" aria-labelledby="ai-products-title">
       <div className="guard-wrap">
-        <header className="ai-offer__head">
-          <p className="ai-eyebrow reveal"><span>{copy.number}</span>{copy.name}</p>
-          <h2 id="ai-products-title" className="ai-h2 reveal" data-delay="1">
-            {copy.title.before}<em>{copy.title.accent}</em>{copy.title.after}
-          </h2>
-        </header>
-
         <ProductCarousel
+          head={
+            <header className="ai-offer__head">
+              <p className="ai-eyebrow reveal"><span>{copy.number}</span>{copy.name}</p>
+              <h2 id="ai-products-title" className="ai-h2 reveal" data-delay="1">
+                {copy.title.before}<em>{copy.title.accent}</em>{copy.title.after}
+              </h2>
+            </header>
+          }
           labels={copy.carousel}
           slides={[
             { id: "fleet", name: fleet.name },
             { id: "secret-guard", name: guard.name },
           ]}
         >
-        <article id="fleet" className="ai-product ai-product--fleet ai-showcase reveal" data-delay="2">
-          <div className="ai-showcase__body">
-            <p className="ai-tag ai-tag--pilot">{fleet.tag}</p>
-            <h3 className="ai-showcase__name"><Mark />{fleet.name}</h3>
-            <p className="ai-showcase__line">{fleet.line}</p>
-            <p className="ai-verbs">
-              {fleet.verbs.map((verb, index) => (
-                <span key={verb} style={{ "--i": index } as CSSProperties}>{verb}</span>
-              ))}
-            </p>
-            <ul className="ai-features">
-              {fleet.features.map((feature, index) => (
-                <li key={feature.key} className="ai-feature" style={{ "--i": index } as CSSProperties}>
-                  <span className="ai-feature__icon" aria-hidden="true"><FeatureIcon name={feature.key} /></span>
-                  <span className="ai-feature__text">
-                    <span className="ai-feature__tag">{feature.tag}</span>
-                    <strong>{feature.title}</strong>
-                    <small>{feature.body}</small>
-                    {feature.key === "govern" ? (
-                      <span className="ai-feature__brands">
-                        {fleet.providers.map((source) => (
-                          <span key={source.brand} className="ai-brand-chip">
-                            <ProviderMark brand={source.brand} />{source.name}
-                          </span>
-                        ))}
-                      </span>
-                    ) : null}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div className="ai-proof">
-              <b>{fleet.proof.figure}</b>
-              <p>{fleet.proof.text}</p>
+          <article id="fleet" className="ai-product ai-product--fleet ai-showcase reveal" data-delay="2">
+            <div className="ai-showcase__body">
+              <p className="ai-tag ai-tag--pilot">{fleet.tag}</p>
+              <h3 className="ai-showcase__name"><Mark />{fleet.name}</h3>
+              <p className="ai-showcase__line">{fleet.line}</p>
+              <p className="ai-verbs">
+                {fleet.verbs.map((verb, index) => (
+                  <span key={verb} style={{ "--i": index } as CSSProperties}>{verb}</span>
+                ))}
+              </p>
+              <ul className="ai-features">
+                {fleet.features.map((feature, index) => (
+                  <li key={feature.key} className="ai-feature" style={{ "--i": index } as CSSProperties}>
+                    <span className="ai-feature__icon" aria-hidden="true"><FeatureIcon name={feature.key} /></span>
+                    <span className="ai-feature__text">
+                      <span className="ai-feature__tag">{feature.tag}</span>
+                      <strong>{feature.title}</strong>
+                      <small>{feature.body}</small>
+                      {feature.key === "govern" ? (
+                        <span className="ai-feature__brands">
+                          {fleet.providers.map((source) => (
+                            <span key={source.brand} className="ai-brand-chip">
+                              <ProviderMark brand={source.brand} />{source.name}
+                            </span>
+                          ))}
+                        </span>
+                      ) : null}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="ai-showcase__actions">
+                <SiteLink to={{ site: "fleet" }} className="ai-btn">{fleet.action} <span aria-hidden="true">→</span></SiteLink>
+              </div>
             </div>
-            <div className="ai-showcase__actions">
-              <SiteLink to={{ site: "fleet" }} className="ai-btn">{fleet.action} <span aria-hidden="true">→</span></SiteLink>
-            </div>
-            <p className="ai-fineprint">{fleet.trademarks}</p>
-          </div>
-          <FleetArchitecture plan={fleet.architecture} providers={fleet.providers} />
-        </article>
+            <FleetArchitecture plan={fleet.architecture} providers={fleet.providers} proof={fleet.proof} trademarks={fleet.trademarks} />
+          </article>
 
-        <article id="secret-guard" className="ai-product ai-product--guard ai-showcase ai-showcase--reverse reveal" data-delay="2">
-          <GuardInAction demo={guard.demo} />
-          <div className="ai-showcase__body">
-            <p className="ai-tag ai-tag--ok">{guard.tag}</p>
-            <h3 className="ai-showcase__name"><Mark />{guard.name}</h3>
-            <p className="ai-showcase__audience">{guard.audience}</p>
-            <p className="ai-showcase__line">{guard.line}</p>
-            <ul className="ai-checks">{guard.points.map((point) => <li key={point}>{point}</li>)}</ul>
-            <p className="ai-tag ai-tag--soon"><CodeGlyph />{guard.vscode}</p>
-            <div className="ai-showcase__actions">
-              <SiteLink to={{ site: "guard" }} className="ai-btn">{guard.action} <span aria-hidden="true">→</span></SiteLink>
-              <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="ai-link">{guard.source} <span aria-hidden="true">↗</span></SiteLink>
+          <article id="secret-guard" className="ai-product ai-product--guard ai-showcase ai-showcase--reverse reveal" data-delay="2">
+            <GuardInAction demo={guard.demo} />
+            <div className="ai-showcase__body">
+              <p className="ai-tag ai-tag--ok">{guard.tag}</p>
+              <h3 className="ai-showcase__name"><Mark />{guard.name}</h3>
+              <p className="ai-showcase__audience">{guard.audience}</p>
+              <p className="ai-showcase__line">{guard.line}</p>
+              <ul className="ai-checks">{guard.points.map((point) => <li key={point}>{point}</li>)}</ul>
+              <p className="ai-tag ai-tag--soon"><CodeGlyph />{guard.vscode}</p>
+              <div className="ai-showcase__actions">
+                <SiteLink to={{ site: "guard" }} className="ai-btn">{guard.action} <span aria-hidden="true">→</span></SiteLink>
+                <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="ai-link">{guard.source} <span aria-hidden="true">↗</span></SiteLink>
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
         </ProductCarousel>
       </div>
     </section>
@@ -108,7 +104,8 @@ export function AiProducts({ copy }: { copy: Products }) {
  * sur chaque vitrine ; l'onglet actif suit le défilement. Prêt pour d'autres produits :
  * il suffit d'ajouter une vitrine et son onglet.
  */
-function ProductCarousel({ labels, slides, children }: {
+function ProductCarousel({ head, labels, slides, children }: {
+  head: ReactNode;
   labels: Products["carousel"];
   slides: readonly { id: string; name: string }[];
   children: ReactNode;
@@ -151,24 +148,27 @@ function ProductCarousel({ labels, slides, children }: {
   const count = String(slides.length).padStart(2, "0");
   return (
     <div className="ai-carousel" role="region" aria-roledescription="carrousel" aria-label={labels.label}>
-      <div className="ai-carousel__bar reveal" data-delay="2">
-        <div className="ai-carousel__tabs">
-          {slides.map((slide, index) => (
-            <a
-              key={slide.id}
-              href={`#${slide.id}`}
-              className="ai-carousel__tab"
-              aria-current={index === active ? "true" : undefined}
-              onClick={(event) => { event.preventDefault(); go(index); }}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>{slide.name}
-            </a>
-          ))}
-        </div>
-        <div className="ai-carousel__nav">
-          <span className="ai-carousel__count" aria-hidden="true">{String(active + 1).padStart(2, "0")} / {count}</span>
-          <button type="button" onClick={() => go(active - 1)} disabled={active === 0} aria-label={labels.prev}>←</button>
-          <button type="button" onClick={() => go(active + 1)} disabled={active === slides.length - 1} aria-label={labels.next}>→</button>
+      <div className="ai-carousel__top">
+        {head}
+        <div className="ai-carousel__bar reveal" data-delay="2">
+          <div className="ai-carousel__tabs">
+            {slides.map((slide, index) => (
+              <a
+                key={slide.id}
+                href={`#${slide.id}`}
+                className="ai-carousel__tab"
+                aria-current={index === active ? "true" : undefined}
+                onClick={(event) => { event.preventDefault(); go(index); }}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>{slide.name}
+              </a>
+            ))}
+          </div>
+          <div className="ai-carousel__nav">
+            <span className="ai-carousel__count" aria-hidden="true">{String(active + 1).padStart(2, "0")} / {count}</span>
+            <button type="button" onClick={() => go(active - 1)} disabled={active === 0} aria-label={labels.prev}>←</button>
+            <button type="button" onClick={() => go(active + 1)} disabled={active === slides.length - 1} aria-label={labels.next}>→</button>
+          </div>
         </div>
       </div>
       <div ref={track} className="ai-carousel__track">{children}</div>
@@ -230,10 +230,16 @@ const WIRES = [
  * (Secret Guard en local) avant les fournisseurs ; la console signe la Politique, reçoit
  * des Événements sans contenu et en tire la facture et le dossier de preuves.
  */
-function FleetArchitecture({ plan, providers }: { plan: Products["fleet"]["architecture"]; providers: Products["fleet"]["providers"] }) {
+function FleetArchitecture({ plan, providers, proof, trademarks }: {
+  plan: Products["fleet"]["architecture"];
+  providers: Products["fleet"]["providers"];
+  proof: Products["fleet"]["proof"];
+  trademarks: string;
+}) {
   return (
-    <figure className="ai-panel ai-schema" role="img" aria-label={plan.label}>
-      <div className="ai-schema__stage" aria-hidden="true">
+    <figure className="ai-panel ai-schema">
+      <p className="ai-panel__proof"><b>{proof.figure}</b><span>{proof.text}</span></p>
+      <div className="ai-schema__stage" role="img" aria-label={plan.label}>
         <svg className="ai-schema__wires" viewBox="0 0 520 400" preserveAspectRatio="none">
           {WIRES.map((d, index) => (
             <g key={d} style={{ "--i": index } as CSSProperties}>
@@ -270,7 +276,10 @@ function FleetArchitecture({ plan, providers }: { plan: Products["fleet"]["archi
           </span>
         ))}
       </div>
-      <figcaption className="ai-panel__caption"><span className="ai-demo">{plan.tag}</span>{plan.caption}</figcaption>
+      <figcaption className="ai-panel__caption ai-schema__caption">
+        <span><span className="ai-demo">{plan.tag}</span>{plan.caption}</span>
+        <small>{trademarks}</small>
+      </figcaption>
     </figure>
   );
 }

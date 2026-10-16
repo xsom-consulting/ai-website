@@ -237,7 +237,7 @@
 }
 .xai .ai-h2 {
   max-width: 18ch;
-  margin: 1.25rem 0 0;
+  margin: .9rem 0 0;
   font-size: clamp(2.25rem, 3.7vw, 3.25rem);
   font-weight: 650;
   line-height: 1.08;
@@ -252,10 +252,10 @@
 /* ---- Les vitrines : le texte d'un côté, un panneau marine animé de l'autre. */
 .xai .ai-showcase {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: clamp(2rem, 4vw, 4rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
   align-items: center;
-  padding: clamp(1.25rem, 3.2vw, 3rem);
+  padding: clamp(1.25rem, 2.4vw, 2.25rem);
   border: 1px solid var(--ai-line);
   border-radius: 22px;
   background: var(--ai-card);
@@ -267,7 +267,7 @@
   box-shadow: 0 50px 100px -60px rgba(18, 37, 62, .5), 0 1px 2px rgba(18, 37, 62, .05);
 }
 .xai .ai-showcase--reverse {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
 }
 .xai .ai-showcase__body {
   display: flex;
@@ -308,8 +308,8 @@
   display: flex;
   align-items: center;
   gap: .75rem;
-  margin: 1rem 0 0;
-  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  margin: .75rem 0 0;
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
   font-weight: 650;
   line-height: 1;
   letter-spacing: -.035em;
@@ -326,9 +326,9 @@
 }
 .xai .ai-showcase__line {
   max-width: 42ch;
-  margin: .75rem 0 0;
+  margin: .5rem 0 0;
   color: var(--ai-text);
-  font-size: clamp(1.0625rem, 1.3vw, 1.1875rem);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   line-height: 1.5;
 }
 .xai .ai-verbs {
@@ -336,7 +336,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: .35rem .9rem;
-  margin: 1.25rem 0 0;
+  margin: .9rem 0 0;
   color: var(--ai-ink);
   font-family: var(--font-display, inherit);
   font-size: clamp(1.125rem, 1.5vw, 1.375rem);
@@ -358,7 +358,7 @@
 .xai .ai-features {
   display: grid;
   width: 100%;
-  margin: 1.5rem 0 0;
+  margin: 1rem 0 0;
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--ai-line);
@@ -366,8 +366,8 @@
 .xai .ai-feature {
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr);
-  gap: 1rem;
-  padding: .9rem 0;
+  gap: .9rem;
+  padding: .7rem 0;
   border-bottom: 1px solid var(--ai-line);
 }
 .xai .ai-feature__icon {
@@ -402,14 +402,14 @@
 }
 .xai .ai-feature small {
   color: var(--ai-muted);
-  font-size: .9375rem;
+  font-size: .875rem;
   line-height: 1.45;
 }
 .xai .ai-feature__brands {
   display: flex;
   flex-wrap: wrap;
   gap: .5rem;
-  margin-top: .45rem;
+  margin-top: .35rem;
 }
 .xai .ai-brand-chip {
   display: inline-flex;
@@ -431,32 +431,6 @@
 }
 .xai .ai-provider[data-brand="claude"] {
   fill: #d97757;
-}
-.xai .ai-proof {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  margin-top: 1.25rem;
-  padding: .9rem 1.1rem;
-  border-left: 3px solid var(--signal-accent, #195dad);
-  border-radius: 4px 12px 12px 4px;
-  background: var(--ai-paper);
-}
-.xai .ai-proof b {
-  flex: none;
-  color: var(--ai-blue-text);
-  font-family: var(--font-display, inherit);
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
-  font-weight: 700;
-  letter-spacing: -.03em;
-  white-space: nowrap;
-}
-.xai .ai-proof p {
-  margin: 0;
-  color: var(--ai-muted);
-  font-size: .875rem;
-  line-height: 1.45;
 }
 .xai .ai-checks {
   display: grid;
@@ -482,7 +456,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem 1.5rem;
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
 }
 .xai .ai-btn {
   display: inline-flex;
@@ -519,26 +493,24 @@
 .xai .ai-link:hover {
   border-bottom-color: var(--ai-blue-text);
 }
-.xai .ai-fineprint {
-  max-width: 62ch;
-  margin: 1.25rem 0 0;
-  color: #6a7d92;
-  font-size: .75rem;
-  line-height: 1.45;
-}
 
 /* ---- Le carrousel : onglets et flèches au-dessus, une vitrine par cran, la suivante
    qui dépasse au bord. Défilement natif aimanté, barre de défilement masquée. */
-.xai .ai-carousel {
-  margin-top: clamp(2rem, 4vw, 3rem);
+/* L'en-tête de la section à gauche, les onglets et les flèches à droite : une seule
+   rangée, pour que la vitrine tienne à l'écran. */
+.xai .ai-carousel__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  margin-bottom: clamp(1rem, 2.2vh, 1.5rem);
 }
 .xai .ai-carousel__bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  margin-bottom: 1.25rem;
+  gap: .75rem 1.5rem;
 }
 .xai .ai-carousel__tabs {
   display: flex;
@@ -678,11 +650,52 @@
   color: #f2c14e;
 }
 
+/* La mesure réelle, en tête du panneau de Fleet. */
+.xai .ai-panel__proof {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  margin: 0 0 1rem;
+  padding: .6rem .9rem;
+  border-left: 3px solid #6fb2ff;
+  border-radius: 4px 10px 10px 4px;
+  background: rgba(111, 178, 255, .09);
+}
+.xai .ai-panel__proof b {
+  flex: none;
+  color: #a9d2ff;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  white-space: nowrap;
+}
+.xai .ai-panel__proof span {
+  color: var(--ai-hero-soft);
+  font-size: .8125rem;
+  line-height: 1.4;
+}
+.xai .ai-schema {
+  padding-bottom: 1.25rem;
+}
+.xai .ai-schema .ai-schema__caption {
+  position: static;
+  display: grid;
+  gap: .35rem;
+  margin-top: 1rem;
+}
+.xai .ai-schema__caption small {
+  color: rgba(202, 215, 231, .5);
+  font-family: var(--font-body, inherit);
+  font-size: .6875rem;
+  line-height: 1.4;
+}
+
 /* L'architecture de Fleet : repère 520 × 360, les nœuds posés en pourcentages. */
 .xai .ai-schema__stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 520 / 400;
+  aspect-ratio: 520 / 350;
   font-size: clamp(.625rem, 1.05vw, .8125rem);
 }
 .xai .ai-schema__wires {
@@ -1249,10 +1262,6 @@
   animation: ai-rise .6s var(--xp-ease) both;
   animation-delay: calc(.6s + var(--i) * .12s);
 }
-[data-motion="on"] .xai .ai-showcase.is-visible .ai-proof {
-  animation: ai-rise .6s var(--xp-ease) both;
-  animation-delay: 1s;
-}
 [data-motion="on"] .xai .ai-showcase.is-visible :is(.ai-node--in, .ai-node--provider, .ai-node--out) {
   animation: ai-pop .55s var(--xp-ease) both;
   animation-delay: calc(.3s + var(--i) * .16s);
@@ -1311,13 +1320,43 @@
   .xai .ai-verbs {
     font-size: 1.0625rem;
   }
-  .xai .ai-proof {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: .25rem;
-  }
   .xai .ai-showcase__actions,
   .xai .ai-btn {
     width: 100%;
+  }
+}
+
+/* ---- Le défilement aimanté (« scroll snapping ») : sur un écran d'ordinateur, un coup
+   de molette mène d'une section à la suivante, chacune à la hauteur de l'écran. Sur
+   téléphone, ou si l'écran est trop bas, le défilement reste continu. */
+@media (min-width: 1001px) and (min-height: 640px) {
+  html:has(.xai) {
+    scroll-snap-type: y mandatory;
+  }
+  .xai main > section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .xai .studio-footer {
+    scroll-snap-align: end;
+  }
+  .xai .ai-offer {
+    display: grid;
+    align-content: center;
+    min-height: 100svh;
+    padding: calc(var(--home-header) + 1rem) 0 1.5rem;
+  }
+  .xai #prestations .xp-screen,
+  .xai #contact {
+    min-height: 100svh;
+  }
+  .xai #contact {
+    display: grid;
+    align-content: center;
+  }
+}
+@media (min-width: 1001px) and (max-height: 860px) {
+  .xai .ai-h2 {
+    font-size: clamp(2rem, 3vw, 2.5rem);
   }
 }

@@ -49,7 +49,7 @@ test("the products put xSOM Fleet first, say what it does and point to their own
   // Les marques citées sont accompagnées de leur mention, le chiffre de sa source.
   await expect(fleet.locator(".ai-brand-chip")).toHaveText(["Claude Code", "Codex"]);
   await expect(fleet).toContainText("sans partenariat ni approbation");
-  await expect(fleet.locator(".ai-proof")).toContainText("Mesure réelle chez xSOM, septembre 2026");
+  await expect(fleet.locator(".ai-panel__proof")).toContainText("Mesure réelle chez xSOM, septembre 2026");
   // En développement : la plateforme se décrit par son architecture cible, dite comme telle.
   await expect(fleet.getByRole("img", { name: /^Architecture cible de xSOM Fleet, en développement/ })).toBeVisible();
   await expect(fleet.locator("figcaption")).toContainText("Architecture cible · en développement");
