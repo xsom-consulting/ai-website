@@ -28,20 +28,59 @@ test("the cover says who we are and opens on products and services", async ({ pa
   await expect(page.locator(".xai")).toHaveClass(/\bxp\b/);
 });
 
-test("the products put xSOM Fleet first and point to their own sites", async ({ page }) => {
+test("the products put xSOM Fleet first, say what it does and point to their own sites", async ({ page }) => {
+  // Sans animation : la démonstration s'affiche directement dans son état final.
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const products = page.locator("#produits");
+  await expect(products.getByRole("heading", { level: 2 })).toHaveText("Aperçu de nos produits.");
   const fleet = products.locator(".ai-product").nth(0);
   await expect(fleet.getByRole("heading", { name: "xSOM Fleet" })).toBeVisible();
   await expect(fleet).toHaveClass(/ai-product--fleet/);
-  await expect(fleet.locator(".ai-modules strong")).toHaveText(["Fleet Guard", "Fleet Sièges", "Fleet Gateway"]);
-  await expect(fleet.locator(".ai-modules li").nth(2)).toContainText("Disponible pour pilote.");
+  await expect(fleet).toContainText("La plateforme de gestion de l’IA d’entreprise.");
+  await expect(fleet.locator(".ai-verbs span")).toHaveText(["Optimiser", "Sécuriser", "Superviser"]);
+  await expect(fleet.locator(".ai-feature strong")).toHaveText([
+    "Optimiser votre facture IA.",
+    "Les meilleures IA du marché, en toute sécurité.",
+    "Superviser et tracer l’IA dans votre entreprise.",
+  ]);
+  // Les noms de modules ne sont plus affichés : la vitrine dit ce que fait la plateforme.
+  await expect(fleet).not.toContainText("Fleet Gateway");
+  // Les marques citées sont accompagnées de leur mention, le chiffre de sa source.
+  await expect(fleet.locator(".ai-brand-chip")).toHaveText(["Claude Code", "Codex"]);
+  await expect(fleet).toContainText("sans partenariat ni approbation");
+  await expect(fleet.locator(".ai-proof")).toContainText("Mesure réelle chez xSOM, septembre 2026");
+  // En développement : la plateforme se décrit par son architecture cible, dite comme telle.
+  await expect(fleet.getByRole("img", { name: /^Architecture cible de xSOM Fleet, en développement/ })).toBeVisible();
+  await expect(fleet.locator("figcaption")).toContainText("Architecture cible · en développement");
   await expect(fleet.getByRole("link", { name: /Découvrir xSOM Fleet/ })).toHaveAttribute("href", "/fleet");
+
   const guard = products.locator(".ai-product").nth(1);
   await expect(guard.getByRole("heading", { name: "Secret Guard" })).toBeVisible();
   await expect(guard).toContainText("Apache-2.0");
+  await expect(guard).toContainText("Pour les entreprises et les indépendants");
+  // Ce qui fonctionne se montre en action : l'expurgation, avec le marqueur réel de
+  // l'extension. Dans son état final, le modèle n'a reçu que le marqueur.
+  const demo = guard.getByRole("group", { name: /^Secret Guard en action dans VS Code/ });
+  await expect(demo).toBeVisible();
+  await expect(demo.locator(".ai-vsc__received")).toContainText("<REDACTED_aws_access_key_id>");
+  await expect(demo.locator(".ai-vsc__results li")).toHaveText(["Le prompt est parti : le développeur continue.", "La clé est restée sur le poste."]);
+  await expect(demo.getByRole("button", { name: /Rejouer/ })).toBeVisible();
+  await expect(guard).toContainText("Extension VS Code · nouvelle version en préparation");
   await expect(guard.getByRole("link", { name: /Découvrir Secret Guard/ })).toHaveAttribute("href", "/secret-guard");
   await expect(guard.getByRole("link", { name: /Code source/ })).toHaveAttribute("href", "https://github.com/xsom-consulting/secret-guard");
+});
+
+test("the Secret Guard demo plays once when it comes into view, then rests on its outcome", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const demo = page.locator(".ai-vsc");
+  // Hors de la vue, la démonstration attend à sa première étape.
+  await expect(demo).not.toHaveClass(/\bs9\b/);
+  await demo.scrollIntoViewIfNeeded();
+  await expect(demo).toHaveClass(/\bs9\b/, { timeout: 15_000 });
+  await expect(demo.locator(".ai-vsc__marker")).toBeVisible();
+  await expect(demo.locator(".ai-vsc__results li").last()).toBeVisible();
 });
 
 test("the services come from the consulting site, in a few lines, and invent nothing", async ({ page }) => {
@@ -88,7 +127,7 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Consulting and products for enterprise AI.");
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · AI");
   await expect(page.locator("#produits .ai-product")).toHaveCount(2);
-  await expect(page.locator("#produits .ai-modules li").nth(2)).toContainText("Available for pilot.");
+  await expect(page.locator("#produits .ai-verbs span")).toHaveText(["Optimise", "Secure", "Oversee"]);
   await expect(page.locator("#prestations .ai-service")).toHaveCount(3);
   await expect(page.locator("#contact").getByRole("link", { name: "Write to xSOM" })).toHaveAttribute("href", /^mailto:/);
   await context.close();

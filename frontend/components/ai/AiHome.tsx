@@ -6,8 +6,8 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
-import { SECRET_GUARD_REPOSITORY } from "@/lib/sites";
 import { AI_CONTACT, AI_COPY, AI_HERO_FILM } from "./ai-copy";
+import { AiProducts } from "./AiProducts";
 
 /**
  * La page d'accueil de la division IA (`ai.xsom.fr`), dans la charte de fleet.xsom.fr
@@ -19,8 +19,6 @@ import { AI_CONTACT, AI_COPY, AI_HERO_FILM } from "./ai-copy";
 export function AiHome() {
   const { lang } = useT();
   const copy = AI_COPY[lang];
-  const fleet = copy.products.fleet;
-  const guard = copy.products.guard;
 
   return (
     <div className="guard-landing xhome xp xai">
@@ -43,40 +41,7 @@ export function AiHome() {
           </a>
         </section>
 
-        <section id="produits" className="xp-chapter" aria-labelledby="ai-products-title">
-          <div className="xp-screen guard-wrap">
-            <header className="xp-head">
-              <p className="xp-mark reveal"><span className="xp-mark__n">{copy.products.name}</span></p>
-              <h2 id="ai-products-title" className="xp-head__title reveal" data-delay="1">{copy.products.title}</h2>
-            </header>
-            <div className="ai-products">
-              <article className="ai-product ai-product--fleet reveal" data-delay="2">
-                <p className="xp-pill xp-pill--pilot">{fleet.tag}</p>
-                <h3>{fleet.name}</h3>
-                <p className="ai-product__line">{fleet.line}</p>
-                <ul className="ai-modules">
-                  {fleet.modules.map((module) => (
-                    <li key={module.name}>
-                      <span className="ai-modules__tag">{module.tag}</span>
-                      <span><strong>{module.name}</strong><small>{module.detail}</small></span>
-                    </li>
-                  ))}
-                </ul>
-                <SiteLink to={{ site: "fleet" }} className="xp-btn">{fleet.action}</SiteLink>
-              </article>
-              <article className="ai-product ai-product--guard reveal" data-delay="3">
-                <p className="xp-pill xp-pill--ok">{guard.tag}</p>
-                <h3>{guard.name}</h3>
-                <p className="ai-product__line">{guard.line}</p>
-                <ul className="ai-points">{guard.points.map((point) => <li key={point}>{point}</li>)}</ul>
-                <div className="ai-product__actions">
-                  <SiteLink to={{ site: "guard" }} className="xp-btn xp-btn--ghost">{guard.action}</SiteLink>
-                  <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="xp-link">{guard.source} <span aria-hidden="true">↗</span></SiteLink>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
+        <AiProducts copy={copy.products} />
 
         <section id="prestations" className="xp-chapter" aria-labelledby="ai-services-title">
           <div className="xp-screen guard-wrap ai-services">
