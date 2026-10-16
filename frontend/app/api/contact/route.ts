@@ -13,17 +13,27 @@ export const runtime = "nodejs";
  * « indisponible » et les formulaires proposent d'écrire directement.
  *
  * Variables : `RESEND_API_KEY` (clé d'envoi seule), `CONTACT_FROM` (expéditeur sur un
- * domaine vérifié chez Resend, par défaut `xSOM <site@xsom.fr>`), `CONTACT_TO`
- * (destinataire des demandes de ai.xsom.fr), `CONTACT_TO_WWW` (destinataire des
- * demandes de www.xsom.fr), `CONTACT_EXTRA_ORIGINS` (origines de test, séparées par
- * des virgules, traitées comme www.xsom.fr).
+ * domaine vérifié chez Resend, par défaut `xSOM <site@xsom.fr>`), `CONTACT_TO` et
+ * `CONTACT_TO_WWW` (destinataires des demandes de ai.xsom.fr et de www.xsom.fr, une
+ * ou plusieurs adresses séparées par des virgules ; par défaut, les deux associés),
+ * `CONTACT_EXTRA_ORIGINS` (origines de test, séparées par des virgules, traitées comme
+ * www.xsom.fr).
  */
 
 type Site = "ai" | "www";
 
-const SITES: Record<Site, { label: string; to: () => string }> = {
-  ai: { label: "ai.xsom.fr", to: () => process.env.CONTACT_TO || CONTACT_EMAIL },
-  www: { label: "www.xsom.fr", to: () => process.env.CONTACT_TO_WWW || "jean-philippe.talou@xsom.fr" },
+/** Les deux associés reçoivent chaque demande, d'où qu'elle vienne. */
+const PARTNERS = ["jean-philippe.talou@xsom.fr", CONTACT_EMAIL];
+
+/** Une liste d'adresses lue dans une variable (séparées par des virgules), sinon `fallback`. */
+function recipients(value: string | undefined, fallback: string[]) {
+  const list = (value ?? "").split(",").map((address) => address.trim()).filter(Boolean);
+  return list.length ? list : fallback;
+}
+
+const SITES: Record<Site, { label: string; to: () => string[] }> = {
+  ai: { label: "ai.xsom.fr", to: () => recipients(process.env.CONTACT_TO, PARTNERS) },
+  www: { label: "www.xsom.fr", to: () => recipients(process.env.CONTACT_TO_WWW, PARTNERS) },
 };
 const WWW_ORIGINS = ["https://www.xsom.fr", "https://xsom.fr"];
 
@@ -136,7 +146,7 @@ async function send(site: Site, body: Record<string, unknown> | null, limited: (
     },
     body: JSON.stringify({
       from: process.env.CONTACT_FROM || "xSOM <site@xsom.fr>",
-      to: [to()],
+      to: to(),
       reply_to: email,
       subject: `[${label}] ${subject || "Demande de contact"} · ${who}`,
       text,
