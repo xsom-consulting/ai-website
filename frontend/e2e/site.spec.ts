@@ -12,7 +12,7 @@ test("un visiteur sans cookie reçoit le français, et le document le déclare",
   // pendant que le texte sortait en anglais, si bien qu'un lecteur d'écran lisait de
   // l'anglais avec une voix française.
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(page.locator("h1")).toHaveText("La division IA de xSOM Consulting.");
+  await expect(page.locator("h1")).toHaveText("Conseil et produits pour l’IA d’entreprise.");
   await expect(page).toHaveTitle("xSOM · IA · la division IA de xSOM Consulting");
   const description = await page.locator('head meta[name="description"]').getAttribute("content");
   expect(description).toContain("La division IA de xSOM Consulting : xSOM Fleet");
@@ -20,20 +20,20 @@ test("un visiteur sans cookie reçoit le français, et le document le déclare",
   // Le français est dans la **première réponse**, pas posé après coup : un robot, qui
   // n'hydrate pas, doit le lire.
   const html = (await reponse?.text()) ?? "";
-  expect(html).toContain("La division IA de xSOM Consulting.");
+  expect(html).toContain("Conseil et produits pour l’IA d’entreprise.");
 });
 
 test("basculer en anglais tient au rechargement", async ({ page }) => {
   await page.goto("/");
   // `exact` : sans lui, le nom accessible est cherché en sous-chaîne insensible à la casse.
   await page.getByRole("button", { name: "EN", exact: true }).click();
-  await expect(page.locator("h1")).toHaveText("The AI division of xSOM Consulting.");
+  await expect(page.locator("h1")).toHaveText("Consulting and products for enterprise AI.");
 
   // Le rechargement est le point : la préférence tient dans un cookie que le serveur
   // relit, elle ne vit pas seulement dans l'état d'un composant.
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.locator("h1")).toHaveText("The AI division of xSOM Consulting.");
+  await expect(page.locator("h1")).toHaveText("Consulting and products for enterprise AI.");
   await expect(page).toHaveTitle("xSOM · AI · the AI division of xSOM Consulting");
 });
 
@@ -67,9 +67,9 @@ test("chaque film déclaré et chaque affiche existent", async ({ page, request 
     );
     for (const url of urls) declared.add(url);
   }
-  // Fleet (le film de présentation seul) et Secret Guard : au moins quatre fichiers,
-  // vidéos et affiches. L'accueil de la division IA n'a plus de film.
-  expect(declared.size).toBeGreaterThanOrEqual(4);
+  // La couverture de la division IA, Fleet (le film de présentation seul) et Secret
+  // Guard : au moins six fichiers, vidéos et affiches.
+  expect(declared.size).toBeGreaterThanOrEqual(6);
   for (const url of declared) {
     // Les premiers octets suffisent : on prouve que le fichier est servi, sans le télécharger.
     const reponse = await request.get(url, { headers: { range: "bytes=0-1" } });

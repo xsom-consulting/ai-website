@@ -7,6 +7,7 @@ musique de synthèse. Aucune étape FFmpeg à la main, aucun clip généré par 
 | Composition | Fichier produit | Page |
 |---|---|---|
 | `home-fr`, `home-en` | `frontend/public/signal-media/xsom-ia-home-{fr,en}.mp4` + `.jpg` (15 s, 24 fps) | Ancien accueil de ai.xsom.fr, retiré du site (fichiers supprimés ; à recréer par un rendu si besoin) |
+| `ai-hero` | `frontend/public/signal-media/xsom-ia-hero.mp4` + `.jpg` (16 s en boucle, 24 fps, muet, sans texte, ≤ 5 Mo) | Couverture de ai.xsom.fr : quartier d’affaires au crépuscule, code, La Défense, réseau |
 | `extension` | `frontend/public/signal-media/secret-guard-loop.webm` + `.jpg` (10 s en boucle, muet) | Ouverture de guard.xsom.fr |
 | `fleet-hero-fr`, `fleet-hero-en` | `frontend/public/signal-media/xsom-fleet-hero-{fr,en}.mp4` + `.jpg` (16 s en boucle, 24 fps, ≤ 6 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
 | `fleet-how-{orgs,policy,block,coverage,costs}-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-<sujet>-{fr,en}.mp4` + `.jpg` (10 s en boucle, muets, 30 fps, ≤ 2,5 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
@@ -22,7 +23,7 @@ où paraît une marque). Les films de présentation commerciale de xSOM Fleet se
 cd films
 npm ci
 npm run footage   # télécharge les clips de footage.json, copie polices et logo dans public/
-npm run render    # tout ; ou par nom : npm run render -- home extension fleet-hero fleet-how
+npm run render    # tout ; ou par nom : npm run render -- ai-hero home extension fleet-hero fleet-how
 npm run studio    # prévisualisation interactive
 npm run stills -- fleet-hero-fr:2,13.8   # images clés dans out/stills, avec la sonde de mise en page
 ```
@@ -64,6 +65,8 @@ Les noms de Fournisseur visibles sur les captures restent lisibles (usage nomina
 - `src/HomeFilm.tsx` : le film de ai.xsom.fr, ses plans, ses mots (FR/EN) et ses minutages.
   Les mots restent synchronisés avec les `label` de `AI_HERO_MEDIA`
   (`frontend/components/ai/ai-copy.ts`).
+- `src/AiHero.tsx` : le fond de la couverture de ai.xsom.fr, sans mots (le titre est le HTML
+  de la page) ; il alterne le conseil et les produits, et boucle comme `ExtensionLoop`.
 - `src/ExtensionLoop.tsx` : boucle sans raccord visible (la dernière seconde se fond dans
   la seconde qui précède la première image).
 - `src/fleet/` : les films de xSOM Fleet et une sonde de mise en page qui signale, au rendu,

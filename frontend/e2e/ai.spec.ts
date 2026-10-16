@@ -3,15 +3,26 @@ import { expect, test } from "@playwright/test";
 /**
  * ai.xsom.fr, la division IA, réduite à l'essentiel et dans la charte de Fleet : qui
  * nous sommes, nos produits (xSOM Fleet en vedette, Secret Guard en open source), nos
- * prestations de conseil IA en quelques lignes, le contact. Ni film, ni campus des
- * équipes, ni encart du glossaire (le glossaire reste dans le menu).
+ * prestations de conseil IA en quelques lignes, le contact. La couverture, comme celle
+ * de www.xsom.fr, pose un film muet sans texte ; ni campus des équipes, ni encart du
+ * glossaire (le glossaire reste dans le menu).
  */
-test("the home page says who we are, without an opening film", async ({ page }) => {
+test("the cover says who we are and opens on products and services", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · IA");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("La division IA de xSOM Consulting.");
-  await expect(page.locator("#intro")).toContainText("Cabinet indépendant depuis 2007.");
-  await expect(page.locator("video")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Conseil et produits pour l’IA d’entreprise.");
+  const intro = page.locator("#intro");
+  await expect(intro).toContainText("La division IA de xSOM Consulting");
+  await expect(intro).toContainText("Cabinet indépendant depuis 2007.");
+  // Les deux portes de la couverture mènent aux deux premières entrées du menu.
+  await expect(intro.getByRole("link", { name: "Découvrir nos produits" })).toHaveAttribute("href", "#produits");
+  await expect(intro.getByRole("link", { name: "Découvrir nos prestations" })).toHaveAttribute("href", "#prestations");
+  // Le film : muet, en boucle, sans texte incrusté, et un bouton pour l'arrêter.
+  const film = intro.locator("video");
+  await expect(film).toHaveCount(1);
+  await expect(film).toHaveJSProperty("muted", true);
+  await expect(film).toHaveAttribute("loop", "");
+  await expect(intro.getByRole("button", { name: /film/ })).toBeVisible();
   for (const id of ["home-film", "usages", "campus-detail"]) await expect(page.locator(`#${id}`)).toHaveCount(0);
   await expect(page.locator(".guard-glossary-link")).toHaveCount(0);
   await expect(page.locator(".xai")).toHaveClass(/\bxp\b/);
@@ -74,7 +85,7 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The AI division of xSOM Consulting.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Consulting and products for enterprise AI.");
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · AI");
   await expect(page.locator("#produits .ai-product")).toHaveCount(2);
   await expect(page.locator("#produits .ai-modules li").nth(2)).toContainText("Available for pilot.");
@@ -98,7 +109,7 @@ for (const width of [390, 768, 1440]) {
     const menu = page.getByRole("button", { name: "Menu", exact: true });
     if (await menu.isVisible()) await menu.click();
     await page.getByRole("button", { name: "EN", exact: true }).click();
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("The AI division of xSOM Consulting.");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Consulting and products for enterprise AI.");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }

@@ -1,4 +1,5 @@
 import { Composition } from "remotion";
+import { AiHero, AI_HERO_SECONDS } from "./AiHero";
 import { ExtensionLoop, EXTENSION_SECONDS } from "./ExtensionLoop";
 import { FleetHero, FLEET_HERO_SECONDS } from "./fleet/FleetHero";
 import { HowBlockFilm, HOW_BLOCK_SECONDS } from "./fleet/HowBlock";
@@ -15,6 +16,7 @@ export function Root() {
       {(["fr", "en"] as const).map((lang) => (
         <Composition key={`home-${lang}`} id={`home-${lang}`} component={HomeFilm} defaultProps={{ lang }} durationInFrames={HOME_SECONDS * FILM.fps} {...FILM} />
       ))}
+      <Composition id="ai-hero" component={AiHero} durationInFrames={AI_HERO_SECONDS * FILM.fps} {...FILM} />
       <Composition id="extension" component={ExtensionLoop} durationInFrames={EXTENSION_SECONDS * 30} fps={30} width={1920} height={1080} />
       {(["fr", "en"] as const).map((lang) => (
         <Composition key={`fleet-hero-${lang}`} id={`fleet-hero-${lang}`} component={FleetHero} defaultProps={{ lang }} durationInFrames={FLEET_HERO_SECONDS * FILM.fps} {...FILM} />

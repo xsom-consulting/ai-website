@@ -1,7 +1,7 @@
 // Renders every film of ai.xsom.fr, fleet.xsom.fr and guard.xsom.fr with Remotion into the frontend's
 // public media, with their posters. Run `npm run footage` first (the fleet films also need the
 // console captures in public/screens, see README). Optional arguments filter the jobs by name:
-//   npm run render -- home extension fleet-hero fleet-how
+//   npm run render -- ai-hero home extension fleet-hero fleet-how
 // A job with a `budget` (bytes) is moved to fast start and re-encoded at a higher CRF, two steps
 // at a time, until it fits; the layout probe of the fleet films writes out/<file>.probe.log.
 import { execFileSync } from 'node:child_process';
@@ -34,6 +34,11 @@ const JOBS = [
     outputs: [[path.join(media, `xsom-ia-home-${lang}.mp4`), film]],
     poster: [path.join(media, `xsom-ia-home-${lang}.jpg`), 13.4, 'jpeg'],
   })),
+  {
+    name: 'ai-hero', id: 'ai-hero', budget: 5 * MB,
+    outputs: [[path.join(media, 'xsom-ia-hero.mp4'), { ...clip, crf: 25 }]],
+    poster: [path.join(media, 'xsom-ia-hero.jpg'), 0, 'jpeg'],
+  },
   {
     name: 'extension', id: 'extension',
     outputs: [[path.join(media, 'secret-guard-loop.webm'), loop]],

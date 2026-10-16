@@ -17,6 +17,12 @@ import { MAIN_SITE_ORIGIN } from "@/lib/sites";
 export const AI_CONTACT = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("xSOM · IA")}`;
 export const AI_ORIGIN = "https://ai.xsom.fr";
 
+/**
+ * Le film de la couverture (Remotion, composition `ai-hero` de `films/`) : sans texte,
+ * muet, en boucle. Le titre reste le HTML de la page.
+ */
+export const AI_HERO_FILM = { mp4: "/signal-media/xsom-ia-hero.mp4", poster: "/signal-media/xsom-ia-hero.jpg" } as const;
+
 /** L'image Open Graph : la couverture de la page, un fichier par langue. */
 export const aiOgImage = (lang: Lang) => `/signal-media/xsom-ia-og-${lang}.jpg`;
 
@@ -28,10 +34,15 @@ export const AI_COPY = {
       ogAlt: "xSOM · IA, la division IA de xSOM Consulting",
     },
     hero: {
-      title: "La division IA de xSOM Consulting.",
-      lead: "Des produits pour gérer l’IA en entreprise, et le conseil pour la mettre en production. Cabinet indépendant depuis 2007.",
-      fleet: "Découvrir xSOM Fleet",
+      kicker: "La division IA de xSOM Consulting",
+      title: "Conseil et produits pour l’IA d’entreprise.",
+      lead: "Nos consultants mettent l’IA en production, nos produits la gouvernent au quotidien. Cabinet indépendant depuis 2007.",
+      products: "Découvrir nos produits",
+      services: "Découvrir nos prestations",
       contact: "Nous écrire",
+      next: "Aller à nos produits",
+      pause: "Mettre le film en pause",
+      play: "Lire le film",
     },
     products: {
       name: "Produits",
@@ -83,10 +94,15 @@ export const AI_COPY = {
       ogAlt: "xSOM · AI, the AI division of xSOM Consulting",
     },
     hero: {
-      title: "The AI division of xSOM Consulting.",
-      lead: "Products to manage AI in the enterprise, and the consulting to take it to production. An independent firm since 2007.",
-      fleet: "Discover xSOM Fleet",
+      kicker: "The AI division of xSOM Consulting",
+      title: "Consulting and products for enterprise AI.",
+      lead: "Our consultants take AI to production, our products govern it day to day. An independent firm since 2007.",
+      products: "Discover our products",
+      services: "Discover our services",
       contact: "Write to us",
+      next: "Go to our products",
+      pause: "Pause the film",
+      play: "Play the film",
     },
     products: {
       name: "Products",
