@@ -23,3 +23,5 @@
 .studio-footer .brand__product { color: #c9dcf2; }
 .studio-footer .xsom-brand-mark__dark { display: none; }
 .studio-footer .xsom-brand-mark__light { display: block; }
+.studio-footer__linkedin { display: inline-flex; align-items: center; gap: .5rem; }
+.studio-footer__linkedin .linkedin-mark { width: 1.05rem; height: 1.05rem; color: #fff; }

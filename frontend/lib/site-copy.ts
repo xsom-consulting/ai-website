@@ -11,6 +11,10 @@ import type { Lang } from "@/lib/lang-types";
 
 export const CONTACT_EMAIL = "julian.talou@xsom.fr";
 
+/** La page LinkedIn de xSOM Consulting, et son logo « in » (tracé repris de www.xsom.fr). */
+export const LINKEDIN_URL = "https://www.linkedin.com/company/xsom-consulting";
+export const LINKEDIN_PATH = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zm1.782 13.019H3.555V9h3.564v11.452z";
+
 /** Où mène un lien : une page d'un des trois sites, ou une adresse externe. */
 export type NavTarget =
   | { readonly site: Site; readonly path?: string }
@@ -142,6 +146,10 @@ export const SITE_UI: Record<Lang, {
   readonly explore: string;
   readonly sites: string;
   readonly legal: string;
+  readonly reach: string;
+  readonly write: string;
+  readonly linkedin: string;
+  readonly rights: string;
   readonly display: string;
   readonly home: string;
   readonly menu: string;
@@ -152,6 +160,10 @@ export const SITE_UI: Record<Lang, {
     explore: "Explorer",
     sites: "Les sites xSOM",
     legal: "Informations légales",
+    reach: "Nous joindre",
+    write: "Nous écrire",
+    linkedin: "xSOM Consulting sur LinkedIn",
+    rights: "Tous droits réservés",
     display: "Préférences d’affichage",
     home: "Accueil",
     menu: "Menu",
@@ -162,6 +174,10 @@ export const SITE_UI: Record<Lang, {
     explore: "Explore",
     sites: "xSOM sites",
     legal: "Legal information",
+    reach: "Get in touch",
+    write: "Write to us",
+    linkedin: "xSOM Consulting on LinkedIn",
+    rights: "All rights reserved",
     display: "Display preferences",
     home: "Home",
     menu: "Menu",

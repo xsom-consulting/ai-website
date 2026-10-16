@@ -58,7 +58,7 @@ test("guard.xsom.fr shows Secret Guard at its root", async ({ request }) => {
 
 test("ai.xsom.fr shows the AI division at its root", async ({ request }) => {
   const response = await request.get("/", { headers: { host: "ai.xsom.fr" } });
-  expect(await response.text()).toContain("La division IA de xSOM Consulting.");
+  expect(await response.text()).toContain("Conseil et produits pour l’IA d’entreprise.");
 });
 
 /** Titre, adresse canonique et marque de chaque site, lus dans la première réponse. */

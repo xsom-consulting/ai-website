@@ -12,7 +12,7 @@ test("un visiteur sans cookie reçoit le français, et le document le déclare",
   // pendant que le texte sortait en anglais, si bien qu'un lecteur d'écran lisait de
   // l'anglais avec une voix française.
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(page.locator("h1")).toHaveText("La division IA de xSOM Consulting.");
+  await expect(page.locator("h1")).toHaveText("Conseil et produits pour l’IA d’entreprise.");
   await expect(page).toHaveTitle("xSOM · IA · la division IA de xSOM Consulting");
   const description = await page.locator('head meta[name="description"]').getAttribute("content");
   expect(description).toContain("La division IA de xSOM Consulting : xSOM Fleet");
@@ -20,20 +20,20 @@ test("un visiteur sans cookie reçoit le français, et le document le déclare",
   // Le français est dans la **première réponse**, pas posé après coup : un robot, qui
   // n'hydrate pas, doit le lire.
   const html = (await reponse?.text()) ?? "";
-  expect(html).toContain("La division IA de xSOM Consulting.");
+  expect(html).toContain("Conseil et produits pour l’IA d’entreprise.");
 });
 
 test("basculer en anglais tient au rechargement", async ({ page }) => {
   await page.goto("/");
   // `exact` : sans lui, le nom accessible est cherché en sous-chaîne insensible à la casse.
   await page.getByRole("button", { name: "EN", exact: true }).click();
-  await expect(page.locator("h1")).toHaveText("The AI division of xSOM Consulting.");
+  await expect(page.locator("h1")).toHaveText("Consulting and products for enterprise AI.");
 
   // Le rechargement est le point : la préférence tient dans un cookie que le serveur
   // relit, elle ne vit pas seulement dans l'état d'un composant.
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.locator("h1")).toHaveText("The AI division of xSOM Consulting.");
+  await expect(page.locator("h1")).toHaveText("Consulting and products for enterprise AI.");
   await expect(page).toHaveTitle("xSOM · AI · the AI division of xSOM Consulting");
 });
 
@@ -67,9 +67,9 @@ test("chaque film déclaré et chaque affiche existent", async ({ page, request 
     );
     for (const url of urls) declared.add(url);
   }
-  // Fleet (le film de présentation seul) et Secret Guard : au moins quatre fichiers,
-  // vidéos et affiches. L'accueil de la division IA n'a plus de film.
-  expect(declared.size).toBeGreaterThanOrEqual(4);
+  // La couverture de la division IA, Fleet (le film de présentation seul) et Secret
+  // Guard : au moins six fichiers, vidéos et affiches.
+  expect(declared.size).toBeGreaterThanOrEqual(6);
   for (const url of declared) {
     // Les premiers octets suffisent : on prouve que le fichier est servi, sans le télécharger.
     const reponse = await request.get(url, { headers: { range: "bytes=0-1" } });
@@ -141,7 +141,7 @@ test("reducing motion reveals the content instead of hiding it for good", async 
 
   // L'effet existe bien : sans `is-visible`, la cible est masquée.
   const masquee = await page.evaluate(() => {
-    const cible = document.querySelector("#prestations .ai-service") as HTMLElement;
+    const cible = document.querySelector("#prestations .ai-closing__title") as HTMLElement;
     cible.classList.remove("is-visible");
     document.documentElement.dataset.motion = "on";
     return getComputedStyle(cible).opacity;
@@ -152,7 +152,7 @@ test("reducing motion reveals the content instead of hiding it for good", async 
   // un sélecteur de présence gardait l'opacité à zéro sur un contenu que plus rien
   // n'allait révéler.
   const reduite = await page.evaluate(() => {
-    const cible = document.querySelector("#prestations .ai-service") as HTMLElement;
+    const cible = document.querySelector("#prestations .ai-closing__title") as HTMLElement;
     cible.classList.remove("is-visible");
     document.documentElement.dataset.motion = "off";
     return getComputedStyle(cible).opacity;
@@ -168,7 +168,7 @@ test("a page reached by an internal link still reveals what it hides", async ({ 
 
   // Le layout racine reste monté d'une page à l'autre : sans relevé des cibles à
   // chaque navigation, cette page gardait ses révélations à zéro pour toujours.
-  const cible = page.locator("#prestations .ai-service").first();
+  const cible = page.locator("#prestations .ai-closing__title");
   await cible.scrollIntoViewIfNeeded();
   await expect.poll(() => cible.evaluate((n) => getComputedStyle(n).opacity), { timeout: 5_000 }).toBe("1");
 });

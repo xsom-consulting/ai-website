@@ -46,14 +46,25 @@ et `llms.txt` de chaque adresse. `E2E_SKIP_BUILD=1` réutilise un `.next` déjà
 
 ## Variables d'environnement
 
-Aucune n'est obligatoire. Une seule est facultative : `MISTRAL_API_KEY_SEARCHFRONTEND`, qui active la
-recherche par IA du glossaire (`/api/threat-search`). Sans elle, la route répond « indisponible » et le
-glossaire filtre le texte dans le navigateur. La politique de confidentialité en parle.
+Aucune n'est obligatoire. Toutes sont facultatives, et la politique de confidentialité en parle :
+
+| Variable | Rôle | Sans elle |
+|---|---|---|
+| `MISTRAL_API_KEY_SEARCHFRONTEND` | Recherche par IA du glossaire (`/api/threat-search`) | La route répond « indisponible » ; le glossaire filtre le texte dans le navigateur |
+| `RESEND_API_KEY` | Envoi des formulaires de contact (`/api/contact`) par [Resend](https://resend.com), pour ai.xsom.fr et pour www.xsom.fr | La route répond « indisponible » ; les formulaires affichent l'adresse de contact |
+| `CONTACT_FROM` | Expéditeur, sur un domaine vérifié chez Resend (défaut : `xSOM <site@xsom.fr>`) | Valeur par défaut |
+| `CONTACT_TO` | Destinataire des demandes de ai.xsom.fr (défaut : l'adresse de contact du site) | Valeur par défaut |
+| `CONTACT_TO_WWW` | Destinataire des demandes de www.xsom.fr (défaut : jean-philippe.talou@xsom.fr) | Valeur par défaut |
+| `CONTACT_EXTRA_ORIGINS` | Origines de test traitées comme www.xsom.fr (ex. `http://localhost:8080`) ; jamais en production | Seules `https://www.xsom.fr` et `https://xsom.fr` |
+
+Pour activer l'envoi : vérifier le domaine `xsom.fr` dans Resend (enregistrements DNS SPF et DKIM qu'il
+fournit), créer une clé « envoi seulement » limitée à ce domaine, puis la renseigner dans Vercel.
 
 ## Déploiement
 
 Projet Vercel : racine `frontend`, Next.js, Node 24. Les trois noms d'hôte (`ai.xsom.fr`,
-`fleet.xsom.fr`, `guard.xsom.fr`) pointent vers ce même projet. Aucune variable n'est à renseigner.
+`fleet.xsom.fr`, `guard.xsom.fr`) pointent vers ce même projet. Aucune variable n'est obligatoire (voir plus haut celles qui
+activent la recherche et le formulaire).
 
 ## Recherche de secrets
 

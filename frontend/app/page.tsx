@@ -7,6 +7,7 @@ import { MAIN_SITE_ORIGIN } from "@/lib/sites";
 import "./guard-landing.css";
 import "./home.css";
 import "./pitch.css";
+import "./ai-home.css";
 
 /**
  * Titre absolu : le gabarit du site (« · xSOM · IA ») ne s'applique pas à la page
