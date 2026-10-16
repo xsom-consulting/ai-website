@@ -31,7 +31,14 @@ export function AiProducts({ copy }: { copy: Products }) {
           </h2>
         </header>
 
-        <article className="ai-product ai-product--fleet ai-showcase reveal" data-delay="2">
+        <ProductCarousel
+          labels={copy.carousel}
+          slides={[
+            { id: "fleet", name: fleet.name },
+            { id: "secret-guard", name: guard.name },
+          ]}
+        >
+        <article id="fleet" className="ai-product ai-product--fleet ai-showcase reveal" data-delay="2">
           <div className="ai-showcase__body">
             <p className="ai-tag ai-tag--pilot">{fleet.tag}</p>
             <h3 className="ai-showcase__name"><Mark />{fleet.name}</h3>
@@ -49,7 +56,7 @@ export function AiProducts({ copy }: { copy: Products }) {
                     <span className="ai-feature__tag">{feature.tag}</span>
                     <strong>{feature.title}</strong>
                     <small>{feature.body}</small>
-                    {feature.key === "security" ? (
+                    {feature.key === "govern" ? (
                       <span className="ai-feature__brands">
                         {fleet.providers.map((source) => (
                           <span key={source.brand} className="ai-brand-chip">
@@ -74,7 +81,7 @@ export function AiProducts({ copy }: { copy: Products }) {
           <FleetArchitecture plan={fleet.architecture} providers={fleet.providers} />
         </article>
 
-        <article className="ai-product ai-product--guard ai-showcase ai-showcase--reverse reveal" data-delay="2">
+        <article id="secret-guard" className="ai-product ai-product--guard ai-showcase ai-showcase--reverse reveal" data-delay="2">
           <GuardInAction demo={guard.demo} />
           <div className="ai-showcase__body">
             <p className="ai-tag ai-tag--ok">{guard.tag}</p>
@@ -89,8 +96,83 @@ export function AiProducts({ copy }: { copy: Products }) {
             </div>
           </div>
         </article>
+        </ProductCarousel>
       </div>
     </section>
+  );
+}
+
+/**
+ * Le carrousel des produits : une vitrine à la fois, la suivante qui dépasse au bord
+ * pour inviter à passer. Défilement natif (glisser au doigt, flèches, onglets), aimanté
+ * sur chaque vitrine ; l'onglet actif suit le défilement. Prêt pour d'autres produits :
+ * il suffit d'ajouter une vitrine et son onglet.
+ */
+function ProductCarousel({ labels, slides, children }: {
+  labels: Products["carousel"];
+  slides: readonly { id: string; name: string }[];
+  children: ReactNode;
+}) {
+  const track = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  /** La position de défilement qui aligne une vitrine sur le bord gauche du rail. */
+  const start = (rail: HTMLElement, item: HTMLElement) => item.offsetLeft - parseFloat(getComputedStyle(rail).paddingLeft);
+
+  const go = (index: number) => {
+    const rail = track.current;
+    const element = rail?.children[index] as HTMLElement | undefined;
+    if (!rail || !element) return;
+    rail.scrollTo({ left: start(rail, element), behavior: motionReduced() ? "auto" : "smooth" });
+  };
+
+  useEffect(() => {
+    const element = track.current;
+    if (!element) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const items = Array.from(element.children) as HTMLElement[];
+      const distance = (item: HTMLElement) => Math.abs(start(element, item) - element.scrollLeft);
+      let best = 0;
+      items.forEach((item, index) => { if (distance(item) < distance(items[best])) best = index; });
+      // Au bout du rail, la dernière vitrine est la courante même si elle ne touche pas le bord.
+      if (element.scrollLeft + element.clientWidth >= element.scrollWidth - 2) best = items.length - 1;
+      setActive(best);
+    };
+    const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update); };
+    element.addEventListener("scroll", schedule, { passive: true });
+    return () => {
+      element.removeEventListener("scroll", schedule);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const count = String(slides.length).padStart(2, "0");
+  return (
+    <div className="ai-carousel" role="region" aria-roledescription="carrousel" aria-label={labels.label}>
+      <div className="ai-carousel__bar reveal" data-delay="2">
+        <div className="ai-carousel__tabs">
+          {slides.map((slide, index) => (
+            <a
+              key={slide.id}
+              href={`#${slide.id}`}
+              className="ai-carousel__tab"
+              aria-current={index === active ? "true" : undefined}
+              onClick={(event) => { event.preventDefault(); go(index); }}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>{slide.name}
+            </a>
+          ))}
+        </div>
+        <div className="ai-carousel__nav">
+          <span className="ai-carousel__count" aria-hidden="true">{String(active + 1).padStart(2, "0")} / {count}</span>
+          <button type="button" onClick={() => go(active - 1)} disabled={active === 0} aria-label={labels.prev}>←</button>
+          <button type="button" onClick={() => go(active + 1)} disabled={active === slides.length - 1} aria-label={labels.next}>→</button>
+        </div>
+      </div>
+      <div ref={track} className="ai-carousel__track">{children}</div>
+    </div>
   );
 }
 
@@ -117,29 +199,30 @@ function Stroke({ children }: { children: ReactNode }) {
 }
 
 function FeatureIcon({ name }: { name: FeatureKey }) {
-  if (name === "finops") {
-    return <Stroke><path d="M4 3h16v18l-3-2-2.5 2-2.5-2-2.5 2L7 19l-3 2z" /><path d="M14.5 8.5a3 3 0 1 0 0 5M8.5 10h5M8.5 12h5" /></Stroke>;
-  }
-  if (name === "security") {
+  if (name === "govern") {
     return <Stroke><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8 7.5 9.5 4.4-1.5 7.5-4.9 7.5-9.5V6z" /><path d="m8.8 12 2.2 2.2 4.3-4.4" /></Stroke>;
   }
-  return <Stroke><path d="M8 6h12M8 12h12M8 18h12" /><circle cx="4" cy="6" r="1" /><circle cx="4" cy="12" r="1" /><circle cx="4" cy="18" r="1" /></Stroke>;
+  if (name === "measure") {
+    return <Stroke><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></Stroke>;
+  }
+  return <Stroke><circle cx="6" cy="6" r="2.2" /><circle cx="6" cy="18" r="2.2" /><circle cx="18" cy="12" r="2.2" /><path d="M6 8.2v7.6M8 6.8c4 .6 6 2.4 7.9 4.4M8 17.2c4-.6 6-2.4 7.9-4.4" /></Stroke>;
 }
 
 function CodeGlyph() {
   return <Stroke><path d="m8 8-4 4 4 4" /><path d="m16 8 4 4-4 4" /><path d="m13.5 5-3 14" /></Stroke>;
 }
 
-/** Les fils de l'architecture, dans le repère 520 × 360 du schéma (voir `ai-home.css`). */
+/** Les fils de l'architecture, dans le repère 520 × 400 du schéma (voir `ai-home.css`). */
 const WIRES = [
   "M122 70 C 165 70, 160 97, 195 97",
   "M122 125 C 165 125, 160 97, 195 97",
   "M325 97 C 360 97, 360 70, 395 70",
   "M325 97 C 360 97, 360 125, 395 125",
-  "M248 236 L 248 127",
-  "M272 127 L 272 236",
-  "M291 268 C 330 268, 330 232, 364 232",
-  "M291 268 C 330 268, 330 304, 364 304",
+  "M248 258 L 248 127",
+  "M272 127 L 272 258",
+  "M291 290 C 330 290, 330 230, 360 230",
+  "M291 290 L 360 290",
+  "M291 290 C 330 290, 330 350, 360 350",
 ];
 
 /**
@@ -151,7 +234,7 @@ function FleetArchitecture({ plan, providers }: { plan: Products["fleet"]["archi
   return (
     <figure className="ai-panel ai-schema" role="img" aria-label={plan.label}>
       <div className="ai-schema__stage" aria-hidden="true">
-        <svg className="ai-schema__wires" viewBox="0 0 520 360" preserveAspectRatio="none">
+        <svg className="ai-schema__wires" viewBox="0 0 520 400" preserveAspectRatio="none">
           {WIRES.map((d, index) => (
             <g key={d} style={{ "--i": index } as CSSProperties}>
               <path className="ai-wire" d={d} pathLength={1} />
@@ -162,7 +245,7 @@ function FleetArchitecture({ plan, providers }: { plan: Products["fleet"]["archi
         <span className="ai-group ai-group--left">{plan.postes}</span>
         <span className="ai-group ai-group--right">{plan.providers}</span>
         {providers.map((source, index) => (
-          <span key={source.brand} className="ai-node ai-node--in" style={{ "--i": index, top: `${index ? 34.7 : 19.4}%` } as CSSProperties}>
+          <span key={source.brand} className="ai-node ai-node--in" style={{ "--i": index, top: `${index ? 31.25 : 17.5}%` } as CSSProperties}>
             <ProviderMark brand={source.brand} />{source.name}
           </span>
         ))}
@@ -171,7 +254,7 @@ function FleetArchitecture({ plan, providers }: { plan: Products["fleet"]["archi
           <small>{plan.agent.detail}</small>
         </span>
         {["Anthropic", "OpenAI"].map((name, index) => (
-          <span key={name} className="ai-node ai-node--provider" style={{ "--i": index + 3, top: `${index ? 34.7 : 19.4}%` } as CSSProperties}>{name}</span>
+          <span key={name} className="ai-node ai-node--provider" style={{ "--i": index + 3, top: `${index ? 31.25 : 17.5}%` } as CSSProperties}>{name}</span>
         ))}
         <span className="ai-link-label ai-link-label--policy">{plan.policy} ↑</span>
         <span className="ai-link-label ai-link-label--events">↓ {plan.events}</span>
@@ -181,7 +264,7 @@ function FleetArchitecture({ plan, providers }: { plan: Products["fleet"]["archi
           <b>{plan.console}</b>
         </span>
         {plan.outputs.map((output, index) => (
-          <span key={output.key} className="ai-node ai-node--out" data-key={output.key} style={{ "--i": index + 5, top: `${index ? 84.4 : 64.4}%` } as CSSProperties}>
+          <span key={output.key} className="ai-node ai-node--out" data-key={output.key} style={{ "--i": index + 5, top: `${[57.5, 72.5, 87.5][index]}%` } as CSSProperties}>
             <FeatureIcon name={output.key} />
             <span><b>{output.name}</b><small>{output.detail}</small></span>
           </span>

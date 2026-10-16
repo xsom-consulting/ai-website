@@ -254,17 +254,13 @@
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: clamp(2rem, 4vw, 4rem);
-  align-items: stretch;
-  margin-top: clamp(2.5rem, 5vw, 3.75rem);
+  align-items: center;
   padding: clamp(1.25rem, 3.2vw, 3rem);
   border: 1px solid var(--ai-line);
   border-radius: 22px;
   background: var(--ai-card);
   box-shadow: 0 40px 90px -60px rgba(18, 37, 62, .4), 0 1px 2px rgba(18, 37, 62, .05);
   transition: border-color var(--signal-normal) var(--xp-ease), box-shadow var(--signal-normal) var(--xp-ease);
-}
-.xai .ai-showcase + .ai-showcase {
-  margin-top: 1.75rem;
 }
 .xai .ai-showcase:hover {
   border-color: var(--ai-line-2);
@@ -371,7 +367,7 @@
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr);
   gap: 1rem;
-  padding: 1.05rem 0;
+  padding: .9rem 0;
   border-bottom: 1px solid var(--ai-line);
 }
 .xai .ai-feature__icon {
@@ -531,12 +527,115 @@
   line-height: 1.45;
 }
 
+/* ---- Le carrousel : onglets et flèches au-dessus, une vitrine par cran, la suivante
+   qui dépasse au bord. Défilement natif aimanté, barre de défilement masquée. */
+.xai .ai-carousel {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.xai .ai-carousel__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 1.25rem;
+}
+.xai .ai-carousel__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.xai .ai-carousel__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 44px;
+  padding: .5rem 1rem;
+  border: 1px solid var(--ai-line-2);
+  border-radius: 999px;
+  background: var(--ai-card);
+  color: var(--ai-ink);
+  font-weight: 600;
+  transition: background var(--signal-normal) var(--xp-ease), color var(--signal-normal) var(--xp-ease), border-color var(--signal-normal) var(--xp-ease);
+}
+.xai .ai-carousel__tab span {
+  color: var(--ai-blue-text);
+  font-family: var(--font-mono), monospace;
+  font-size: .75rem;
+}
+.xai .ai-carousel__tab:hover {
+  border-color: var(--ai-blue-text);
+}
+.xai .ai-carousel__tab[aria-current="true"] {
+  border-color: var(--ai-ink);
+  background: var(--ai-ink);
+  color: #fff;
+}
+.xai .ai-carousel__tab[aria-current="true"] span {
+  color: #9fc8ff;
+}
+.xai .ai-carousel__nav {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.xai .ai-carousel__count {
+  margin-right: .5rem;
+  color: var(--ai-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: .875rem;
+}
+.xai .ai-carousel__nav button {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--ai-line-2);
+  border-radius: 50%;
+  background: var(--ai-card);
+  color: var(--ai-ink);
+  font-size: 1.125rem;
+  cursor: pointer;
+  transition: background var(--signal-normal) var(--xp-ease), color var(--signal-normal) var(--xp-ease), opacity var(--signal-normal) var(--xp-ease);
+}
+.xai .ai-carousel__nav button:hover:not(:disabled) {
+  background: var(--ai-ink);
+  color: #fff;
+}
+.xai .ai-carousel__nav button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+.xai .ai-carousel__track {
+  position: relative;
+  display: grid;
+  grid-auto-columns: calc(100% - clamp(2.5rem, 6vw, 5rem));
+  grid-auto-flow: column;
+  align-items: start;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin: -1.5rem calc(var(--gutter) * -1) -3rem;
+  padding: 1.5rem var(--gutter) 3rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: var(--gutter);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.xai .ai-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+.xai .ai-carousel__track > * {
+  scroll-snap-align: start;
+}
+.xai .ai-carousel__track > :not(:only-child):last-child {
+  scroll-snap-align: end;
+}
+
 /* ---- Les panneaux marine. */
 .xai .ai-panel {
   position: relative;
   display: grid;
   align-content: center;
-  min-height: 100%;
   margin: 0;
   padding: clamp(1.25rem, 3vw, 2.25rem) clamp(.75rem, 2vw, 1.5rem) 3rem;
   overflow: hidden;
@@ -548,15 +647,6 @@
     linear-gradient(160deg, #0c1c33, #040c18);
   color: var(--ai-hero-ink);
   isolation: isolate;
-}
-/* Le panneau suit la lecture du texte, plus long que lui. */
-@media (min-width: 1001px) {
-  .xai .ai-panel {
-    position: sticky;
-    top: calc(var(--home-header) + 1.5rem);
-    align-self: start;
-    min-height: min(30rem, 100%);
-  }
 }
 .xai .ai-panel__caption {
   position: absolute;
@@ -592,7 +682,7 @@
 .xai .ai-schema__stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 520 / 360;
+  aspect-ratio: 520 / 400;
   font-size: clamp(.625rem, 1.05vw, .8125rem);
 }
 .xai .ai-schema__wires {
@@ -669,7 +759,7 @@
   justify-content: center;
 }
 .xai .ai-agent {
-  top: 27%;
+  top: 24.25%;
   left: 50%;
   display: grid;
   gap: .15rem;
@@ -692,7 +782,7 @@
 }
 .xai .ai-link-label {
   position: absolute;
-  top: 50%;
+  top: 48%;
   color: rgba(202, 215, 231, .75);
   font-family: var(--font-mono), monospace;
   font-size: .85em;
@@ -706,18 +796,25 @@
   left: 54%;
 }
 .xai .ai-node--out {
-  left: 70%;
-  width: 28.5%;
+  left: 69.2%;
+  width: 29.5%;
 }
-.xai .ai-node--out[data-key="finops"] svg {
+/* Le détail des sorties est dans la description du schéma : le nœud garde son nom. */
+.xai .ai-node--out small {
+  display: none;
+}
+.xai .ai-node--out[data-key="govern"] svg {
+  color: #3dd598;
+}
+.xai .ai-node--out[data-key="measure"] svg {
   color: #6fb2ff;
 }
-.xai .ai-node--out[data-key="trace"] svg {
+.xai .ai-node--out[data-key="decide"] svg {
   color: #c7b5ff;
 }
 .xai .ai-hub {
   position: absolute;
-  top: 74.4%;
+  top: 72.5%;
   left: 50%;
   display: grid;
   place-items: center;
@@ -1196,10 +1293,7 @@
     margin: 0 calc(-.25rem);
   }
   .xai .ai-schema__stage {
-    aspect-ratio: 520 / 400;
-  }
-  .xai .ai-node--out small {
-    display: none;
+    aspect-ratio: 520 / 460;
   }
   .xai .ai-link-label {
     font-size: .75em;

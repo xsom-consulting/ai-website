@@ -38,11 +38,11 @@ test("the products put xSOM Fleet first, say what it does and point to their own
   await expect(fleet.getByRole("heading", { name: "xSOM Fleet" })).toBeVisible();
   await expect(fleet).toHaveClass(/ai-product--fleet/);
   await expect(fleet).toContainText("La plateforme de gestion de l’IA d’entreprise.");
-  await expect(fleet.locator(".ai-verbs span")).toHaveText(["Optimiser", "Sécuriser", "Superviser"]);
+  await expect(fleet.locator(".ai-verbs span")).toHaveText(["Gouverner", "Mesurer", "Décider"]);
   await expect(fleet.locator(".ai-feature strong")).toHaveText([
-    "Optimiser votre facture IA.",
     "Les meilleures IA du marché, en toute sécurité.",
-    "Superviser et tracer l’IA dans votre entreprise.",
+    "Vos coûts réels, pour optimiser votre facture IA.",
+    "Abonnements, API ou modèle sur site : choisir sur des chiffres.",
   ]);
   // Les noms de modules ne sont plus affichés : la vitrine dit ce que fait la plateforme.
   await expect(fleet).not.toContainText("Fleet Gateway");
@@ -75,9 +75,14 @@ test("the Secret Guard demo plays once when it comes into view, then rests on it
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   const demo = page.locator(".ai-vsc");
-  // Hors de la vue, la démonstration attend à sa première étape.
+  // Hors de la vue, la démonstration attend à sa première étape ; l'onglet du carrousel
+  // l'amène, et elle se joue.
   await expect(demo).not.toHaveClass(/\bs9\b/);
-  await demo.scrollIntoViewIfNeeded();
+  const tab = page.locator(".ai-carousel__tab", { hasText: "Secret Guard" });
+  await tab.scrollIntoViewIfNeeded();
+  await tab.click();
+  await expect(tab).toHaveAttribute("aria-current", "true");
+  await page.locator(".ai-carousel").evaluate((element) => element.scrollIntoView({ block: "start" }));
   await expect(demo).toHaveClass(/\bs9\b/, { timeout: 15_000 });
   await expect(demo.locator(".ai-vsc__marker")).toBeVisible();
   await expect(demo.locator(".ai-vsc__results li").last()).toBeVisible();
@@ -127,7 +132,7 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Consulting and products for enterprise AI.");
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM · AI");
   await expect(page.locator("#produits .ai-product")).toHaveCount(2);
-  await expect(page.locator("#produits .ai-verbs span")).toHaveText(["Optimise", "Secure", "Oversee"]);
+  await expect(page.locator("#produits .ai-verbs span")).toHaveText(["Govern", "Measure", "Decide"]);
   await expect(page.locator("#prestations .ai-service")).toHaveCount(3);
   await expect(page.locator("#contact").getByRole("link", { name: "Write to xSOM" })).toHaveAttribute("href", /^mailto:/);
   await context.close();
