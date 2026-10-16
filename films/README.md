@@ -6,7 +6,7 @@ musique de synthèse. Aucune étape FFmpeg à la main, aucun clip généré par 
 
 | Composition | Fichier produit | Page |
 |---|---|---|
-| `home-fr`, `home-en` | `frontend/public/signal-media/xsom-ia-home-{fr,en}.mp4` + `.jpg` (15 s, 24 fps) | Accueil de ai.xsom.fr |
+| `home-fr`, `home-en` | `frontend/public/signal-media/xsom-ia-home-{fr,en}.mp4` + `.jpg` (15 s, 24 fps) | Ancien accueil de ai.xsom.fr, retiré du site (fichiers supprimés ; à recréer par un rendu si besoin) |
 | `extension` | `frontend/public/signal-media/secret-guard-loop.webm` + `.jpg` (10 s en boucle, muet) | Ouverture de guard.xsom.fr |
 | `fleet-hero-fr`, `fleet-hero-en` | `frontend/public/signal-media/xsom-fleet-hero-{fr,en}.mp4` + `.jpg` (16 s en boucle, 24 fps, ≤ 6 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |
 | `fleet-how-{orgs,policy,block,coverage,costs}-{fr,en}` | `frontend/public/signal-media/xsom-fleet-how-<sujet>-{fr,en}.mp4` + `.jpg` (10 s en boucle, muets, 30 fps, ≤ 2,5 Mo) | Version 1, retirée du site (fichiers supprimés ; à recréer par un rendu si besoin) |

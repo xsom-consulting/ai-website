@@ -40,34 +40,34 @@ const WWW: Record<Lang, NavItem> = {
 export const NAV: Record<Site, Record<Lang, readonly NavItem[]>> = {
   ai: {
     fr: [
-      { label: "Prestations", to: { site: "ai", path: "/#prestations" } },
       { label: "Produits", to: { site: "ai", path: "/#produits" } },
+      { label: "Prestations", to: { site: "ai", path: "/#prestations" } },
       { label: "Menaces IA", to: { site: "ai", path: "/menaces" } },
       WWW.fr,
     ],
     en: [
-      { label: "Services", to: { site: "ai", path: "/#prestations" } },
       { label: "Products", to: { site: "ai", path: "/#produits" } },
+      { label: "Services", to: { site: "ai", path: "/#prestations" } },
       { label: "AI threats", to: { site: "ai", path: "/menaces" } },
       WWW.en,
     ],
   },
   fleet: {
     fr: [
-      { label: "Pourquoi Fleet", to: { site: "fleet", path: "/#pourquoi" } },
-      { label: "Comment ça marche", to: { site: "fleet", path: "/#fonctionnement" } },
-      { label: "Engagements", to: { site: "fleet", path: "/#engagements" } },
+      { label: "Plateforme", to: { site: "fleet", path: "/#promesse" } },
+      { label: "Sécurité", to: { site: "fleet", path: "/#securite" } },
+      { label: "FinOps", to: { site: "fleet", path: "/#finops" } },
+      { label: "Stratégie", to: { site: "fleet", path: "/#strategie" } },
+      { label: "Démo vidéo", to: { site: "fleet", path: "/#film" } },
       { label: "Questions", to: { site: "fleet", path: "/#questions" } },
-      { label: "Division IA", to: { site: "ai" } },
-      WWW.fr,
     ],
     en: [
-      { label: "Why Fleet", to: { site: "fleet", path: "/#pourquoi" } },
-      { label: "How it works", to: { site: "fleet", path: "/#fonctionnement" } },
-      { label: "Commitments", to: { site: "fleet", path: "/#engagements" } },
+      { label: "Platform", to: { site: "fleet", path: "/#promesse" } },
+      { label: "Security", to: { site: "fleet", path: "/#securite" } },
+      { label: "FinOps", to: { site: "fleet", path: "/#finops" } },
+      { label: "Strategy", to: { site: "fleet", path: "/#strategie" } },
+      { label: "Video demo", to: { site: "fleet", path: "/#film" } },
       { label: "Questions", to: { site: "fleet", path: "/#questions" } },
-      { label: "AI division", to: { site: "ai" } },
-      WWW.en,
     ],
   },
   guard: {
@@ -95,8 +95,8 @@ export const FOOTER_TAGLINE: Record<Site, Record<Lang, string>> = {
     en: "The AI division of xSOM Consulting: services and products for using AI in the enterprise.",
   },
   fleet: {
-    fr: "La plateforme de gouvernance de vos IA : Sièges, coûts, sécurité sur le Poste, preuves.",
-    en: "The governance platform for your AI: seats, costs, security on the workstation, evidence.",
+    fr: "La gestion de l’IA d’entreprise : sécurité sur chaque Poste, pilotage FinOps, stratégie IA.",
+    en: "Enterprise AI management: security on every workstation, FinOps steering, AI strategy.",
   },
   guard: {
     fr: "Le moteur de détection de secrets de xSOM, open source (Apache-2.0).",
@@ -176,8 +176,8 @@ export const SITE_DEFAULT_META: Record<Site, Record<Lang, { readonly title: stri
     en: { title: "xSOM · AI", description: "The AI division of xSOM Consulting: AI consulting services and products for using AI in the enterprise." },
   },
   fleet: {
-    fr: { title: "xSOM Fleet", description: "xSOM Fleet : les meilleurs modèles d’IA, aux standards de sécurité de l’entreprise. Coûts, sécurité sur le Poste, preuves." },
-    en: { title: "xSOM Fleet", description: "xSOM Fleet: the best AI models, at enterprise security standards. Costs, security on the workstation, evidence." },
+    fr: { title: "xSOM Fleet", description: "xSOM Fleet : la gestion de l’IA d’entreprise. Sécurité sur chaque Poste, pilotage FinOps, stratégie IA." },
+    en: { title: "xSOM Fleet", description: "xSOM Fleet: enterprise AI management. Security on every workstation, FinOps steering, AI strategy." },
   },
   guard: {
     fr: { title: "Secret Guard", description: "Secret Guard : le moteur open source (Apache-2.0) de détection de secrets de xSOM. Analyse locale, sans réseau ni modèle de langage." },

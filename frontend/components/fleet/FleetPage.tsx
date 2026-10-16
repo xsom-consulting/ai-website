@@ -1,247 +1,257 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { glideTo } from "@/components/home/motion";
-import { useHomeReveal } from "@/components/home/useHomeReveal";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_REPOSITORY } from "@/lib/sites";
 import { CHATGPT_MARK, CLAUDE_MARK } from "./brand-marks";
-import { CountUp } from "./CountUp";
+import { FleetCapture } from "./FleetCapture";
+import { FleetConsole } from "./FleetConsole";
+import { FleetFlow } from "./FleetFlow";
+import { FleetGateway } from "./FleetGateway";
+import { FleetGuardFlow } from "./FleetGuardFlow";
+import { FleetHowFilm } from "./FleetHowFilm";
+import { FleetSankey } from "./FleetSankey";
 import {
+  FLEET_CHAPTERS,
+  FLEET_CONSOLE,
+  FLEET_CONSOLE_URL,
   FLEET_CONTACT,
   FLEET_COPY,
-  FLEET_DEMO_FIGURES,
   FLEET_MEASUREMENT,
   FLEET_PRICE_CONTACT,
   FLEET_SIMULATION_CONTACT,
-  codexMeasureLine,
   fleetHowMedia,
+  type FleetChapter,
 } from "./fleet-copy";
-import { FleetCapture } from "./FleetCapture";
-import { FleetHeroVisual } from "./FleetHeroVisual";
-import { FleetHowFilm } from "./FleetHowFilm";
+import { PitchProgress } from "./PitchProgress";
 
 /** Une longueur de barre, en pourcentage de la plus longue (au moins un trait visible). */
 const share = (part: number, whole: number) => `${Math.max((100 * part) / whole, 1.5).toFixed(1)}%`;
-/** Tuile Coût : forfait et usage au tarif API mesurés chez xSOM, à l'échelle de l'usage Claude. */
 const SCALE = FLEET_MEASUREMENT.claude.usageCents;
-const CLAUDE_PLAN_WIDTH = share(FLEET_MEASUREMENT.claude.planCents, SCALE);
-const CODEX_USAGE_WIDTH = share(FLEET_MEASUREMENT.codex.usageCents, SCALE);
-/** Tuile FinOps : la Facture réelle contre l'Équivalent API estimé du Groupe de démonstration. */
-const REAL_INVOICE_WIDTH = share(FLEET_DEMO_FIGURES.realInvoiceCents, FLEET_DEMO_FIGURES.apiEquivalentCents);
+const CLAUDE_PLAN = share(FLEET_MEASUREMENT.claude.planCents, SCALE);
+const CODEX_USAGE = share(FLEET_MEASUREMENT.codex.usageCents, SCALE);
+const bar = (width: string) => ({ "--w": width }) as CSSProperties;
 
-const vars = (value: Record<string, string>) => value as CSSProperties;
+const number = (chapter: FleetChapter) => String(FLEET_CHAPTERS.indexOf(chapter) + 1).padStart(2, "0");
+
+/** L'en-tête d'un écran : le numéro du chapitre, son nom, l'étape s'il en a plusieurs, puis le titre. */
+function ScreenHead({ chapter, name, step, title, lead, level = 2, id }: { chapter: FleetChapter; name: string; step?: string; title: string; lead?: string; level?: 2 | 3; id?: string }) {
+  const Title = level === 2 ? "h2" : "h3";
+  return (
+    <header className="xp-head">
+      <p className="xp-mark reveal"><span className="xp-mark__n">{number(chapter)}</span><span>{name}</span>{step ? <span className="xp-mark__step">{step}</span> : null}</p>
+      <Title id={id} className="xp-head__title reveal" data-delay="1">{title}</Title>
+      {lead ? <p className="xp-head__lead reveal" data-delay="2">{lead}</p> : null}
+    </header>
+  );
+}
+
+function Chapter({ id, children, className = "" }: { id: FleetChapter; children: ReactNode; className?: string }) {
+  return (
+    <section id={id} className={`xp-chapter ${className}`} data-n={number(id)} aria-labelledby={`${id}-title`}>
+      {children}
+    </section>
+  );
+}
 
 /**
- * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`. La promesse et son
- * illustration animée (`FleetHeroVisual`), la phrase qui définit la plateforme, la ligne
- * « Pris en charge » et les trois solutions, « Pourquoi choisir
- * xSOM Fleet » en grille, le film « Comment ça marche » et ses chapitres, les licences
- * et engagements en badges, puis les questions et le contact. En-tête et style de l'accueil (`.xhome`) ; ce qui est
- * propre à Fleet vit sous `.xfl`.
+ * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`, lue comme un dossier de
+ * présentation : la couverture (la plateforme en un mot et son schéma), trois piliers
+ * (sécurité, FinOps en trois écrans, stratégie), le film, les licences et engagements,
+ * les questions et le contact. Une idée par écran ; un indicateur de progression
+ * discret ; les révélations au défilement sont celles du site (`.reveal`), coupées
+ * quand le mouvement est réduit. Charte commune avec `ai.xsom.fr` : `app/pitch.css`.
  */
 export function FleetPage() {
-  const root = useRef<HTMLDivElement>(null);
-  useHomeReveal(root);
   const { lang } = useT();
   const copy = FLEET_COPY[lang];
-  const locale = lang === "fr" ? "fr-FR" : "en-GB";
-  const title = (text: string) => ({ "--chars": text.length }) as CSSProperties;
-  const healthy = FLEET_DEMO_FIGURES.healthyPostes / FLEET_DEMO_FIGURES.postes;
-  const supported = copy.platform.supported;
-  const cost = copy.why.cost;
+  const hero = copy.hero;
+  const measure = copy.finops.measure;
+  const sankey = copy.finops.sankey;
+  const consoleCopy = copy.finops.console;
+  const chapters = FLEET_CHAPTERS.map((id) => ({ id, n: number(id), name: copy.chapters[id] }));
+
+  const consoleTabs = [
+    {
+      id: "costs",
+      label: consoleCopy.costs.tab,
+      shot: FLEET_CONSOLE.costs,
+      alt: consoleCopy.costs.alt,
+      marks: [
+        { label: consoleCopy.costs.markReal, box: [11.6, 52.4, 32.6, 44] as const },
+        { label: consoleCopy.costs.markEstimate, box: [44.7, 52.4, 53.7, 44] as const, dashed: true },
+      ],
+      side: (
+        <>
+          <div className="fl-stat">
+            <p>{consoleCopy.costs.real}</p>
+            <strong>{consoleCopy.costs.realValue}</strong>
+            <small>{consoleCopy.costs.realNote}</small>
+          </div>
+          <div className="fl-stat fl-stat--estimate">
+            <p>{consoleCopy.costs.estimate}</p>
+            <strong>{consoleCopy.costs.estimateValue}</strong>
+            <small>{consoleCopy.costs.estimateNote}</small>
+          </div>
+          <p className="fl-console__note">{consoleCopy.costs.never}</p>
+        </>
+      ),
+    },
+    {
+      id: "seats",
+      label: consoleCopy.seats.tab,
+      shot: FLEET_CONSOLE.seats,
+      alt: consoleCopy.seats.alt,
+      marks: [{ label: consoleCopy.seats.mark, box: [89.4, 45.5, 9.8, 52.5] as const }],
+      side: (
+        <>
+          <div className="fl-stat">
+            <p>{consoleCopy.seats.valueNote}</p>
+            <strong>{consoleCopy.seats.value}</strong>
+          </div>
+          <p className="fl-console__line">{consoleCopy.seats.line}</p>
+          <p className="fl-console__note">{consoleCopy.seats.history}</p>
+        </>
+      ),
+    },
+  ];
 
   return (
-    <div ref={root} className="guard-landing xhome xfl">
-      <SiteHeader site="fleet" />
+    <div className="guard-landing xhome xp xfl">
+      <SiteHeader
+        site="fleet"
+        actions={[
+          { label: copy.signIn, href: FLEET_CONSOLE_URL, variant: "ghost" },
+          { label: hero.contact, href: FLEET_CONTACT, variant: "solid" },
+        ]}
+      />
+      <PitchProgress chapters={chapters} label={copy.progress} />
       <main>
-        <section id="promesse" className="fl-hero" aria-labelledby="fl-title">
-          <div className="guard-wrap fl-hero__inner">
-            <div className="fl-hero__text">
-              <p className="fl-hero__badge">{copy.hero.badge}</p>
-              <h1 id="fl-title" className="fl-hero__title">
-                <span>{copy.hero.title[0]}</span> <span>{copy.hero.title[1]}</span>
-              </h1>
-              <p className="fl-hero__lead">{copy.hero.lead}</p>
-              <div className="fl-hero__actions">
-                <a className="guard-button" href={FLEET_CONTACT}>{copy.hero.contact}</a>
-                <a className="fl-hero__how" href="#fonctionnement" onClick={glideTo}>{copy.hero.how}</a>
-              </div>
+        {/* Couverture : la plateforme en un mot, puis son schéma. */}
+        <section id="promesse" className="xp-cover" aria-labelledby="fl-title">
+          <div className="xp-cover__grid" aria-hidden="true" />
+          <div className="guard-wrap">
+            <h1 id="fl-title" className="xp-cover__title reveal">{hero.title}</h1>
+            <p className="xp-cover__lead reveal" data-delay="1">{hero.lead}</p>
+            <div className="xp-actions reveal" data-delay="2">
+              <a className="xp-btn" href={FLEET_CONTACT}>{hero.contact}</a>
+              <a className="xp-btn xp-btn--ghost" href="#film" onClick={glideTo}>{hero.film}</a>
+              <span className="xp-actions__note">{hero.pilot}</span>
             </div>
-            <FleetHeroVisual labels={copy.hero.visual} />
+            <div className="reveal" data-delay="3">
+              <FleetFlow labels={hero.flow} />
+            </div>
+            <div className="fl-supported reveal" data-delay="4">
+              <p className="fl-supported__label">{hero.flow.supported}</p>
+              <ul>
+                <li><span className="fl-node__icon" data-brand="claude" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CLAUDE_MARK} /></svg></span>Claude <small>Claude Code</small></li>
+                <li><span className="fl-node__icon" data-brand="chatgpt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CHATGPT_MARK} /></svg></span>ChatGPT <small>Codex</small></li>
+              </ul>
+              <p className="fl-supported__note">{hero.flow.trademarks}</p>
+              <span className="xp-pill">{hero.flow.schematic}</span>
+            </div>
           </div>
         </section>
 
-        <section id="modules" className="fl-platform" aria-labelledby="fl-platform-title">
-          <div className="guard-wrap">
-            <h2 id="fl-platform-title" className="fl-platform__punch" data-reveal>
-              {copy.platform.punch} <span>{copy.platform.rest}</span>
-            </h2>
-            <div className="fl-supported" data-reveal>
-              <p className="fl-supported__label">{supported.label}</p>
-              <div className="fl-supported__group">
-                <p>{supported.subscriptions}</p>
-                <ul>
-                  <li>
-                    <span className="fl-brand" data-brand="claude" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CLAUDE_MARK} /></svg></span>
-                    <span>{supported.claude.name} <small>{supported.claude.product}</small></span>
-                  </li>
-                  <li>
-                    <span className="fl-brand" data-brand="chatgpt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CHATGPT_MARK} /></svg></span>
-                    <span>{supported.chatgpt.name} <small>{supported.chatgpt.product}</small></span>
-                  </li>
-                </ul>
-              </div>
-              <div className="fl-supported__group">
-                <p>{supported.gateway}</p>
-                <ul>
-                  <li>
-                    <span className="fl-brand fl-brand--generic" aria-hidden="true">API</span>
-                    <span>{supported.api.name} <small>{supported.api.detail}</small></span>
-                  </li>
-                  <li>
-                    <span className="fl-brand fl-brand--generic" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="6" rx="1.5" /><rect x="4" y="14.5" width="16" height="6" rx="1.5" /><circle cx="8" cy="6.5" r="1" /><circle cx="8" cy="17.5" r="1" /></svg>
-                    </span>
-                    <span>{supported.hosted.name} <small>{supported.hosted.detail}</small></span>
-                  </li>
-                </ul>
+        {/* 01 · Sécurité */}
+        <Chapter id="securite">
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="securite" name={copy.chapters.securite} title={copy.guard.title} lead={copy.guard.lead} id="securite-title" />
+            <div className="reveal" data-delay="3"><FleetGuardFlow labels={copy.guard} /></div>
+            <div className="fl-guard__foot reveal" data-delay="4">
+              <p className="fl-seal">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M8 1.5l5 2v3.8c0 3.2-2.1 5.5-5 6.7-2.9-1.2-5-3.5-5-6.7V3.5z" /><path d="M5.6 8l1.7 1.7 3.1-3.2" /></svg>
+                {copy.guard.policy}
+              </p>
+              <p>{copy.guard.failClosed}</p>
+              <p className="xp-caption">{copy.guard.caption}</p>
+              <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="xp-link">{copy.guard.source} <span aria-hidden="true">↗</span></SiteLink>
+            </div>
+          </div>
+        </Chapter>
+
+        {/* 02 · FinOps : la mesure réelle, la simulation, la console. */}
+        <Chapter id="finops">
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="finops" name={copy.chapters.finops} step="1/3" title={copy.finops.title} id="finops-title" />
+            <div className="fl-measure">
+              <figure className="fl-measure__card reveal" data-delay="2">
+                <p className="fl-measure__top"><span className="xp-pill xp-pill--ok">{measure.tag}</span><span>{measure.when}</span></p>
+                <p className="fl-measure__ratio"><strong>{measure.ratio}</strong><span>{measure.ratioLine}</span></p>
+                <div className="fl-bars">
+                  <p className="fl-bars__group">{measure.claude}</p>
+                  <div className="fl-bars__row"><span>{measure.plan}</span><i style={bar(CLAUDE_PLAN)} /><b>{measure.claudePlan}</b></div>
+                  <div className="fl-bars__row" data-bar="usage"><span>{measure.usage}</span><i style={bar("100%")} /><b>{measure.claudeUsage}</b></div>
+                  <p className="fl-bars__group">{measure.codex}</p>
+                  <div className="fl-bars__row" data-bar="text"><span>{measure.plan}</span><em>{measure.codexPlanNote}</em><b>{measure.codexPlan}</b></div>
+                  <div className="fl-bars__row" data-bar="usage"><span>{measure.usage}</span><i style={bar(CODEX_USAGE)} /><b>{measure.codexUsage}</b></div>
+                </div>
+                <figcaption className="fl-measure__source">{measure.source} <code>{measure.command}</code></figcaption>
+              </figure>
+              <div className="fl-measure__capture reveal" data-delay="3">
+                <FleetCapture image={FLEET_MEASUREMENT.capture} alt={measure.captureAlt} open={measure.capture} close={measure.captureClose} />
               </div>
             </div>
-            <ul className="fl-modules">
-              {copy.platform.modules.map((module) => (
-                <li key={module.name} className="fl-module" data-reveal>
-                  <p className="fl-module__status">{copy.platform.badge}</p>
-                  <h3>{module.title}</h3>
-                  <p className="fl-module__name">{module.name}</p>
-                  <p>{module.line}</p>
-                  {"engine" in module && module.engine ? (
-                    <SiteLink to={{ site: "guard" }} className="fl-module__link">{module.engine} <span aria-hidden="true">↗</span></SiteLink>
-                  ) : null}
-                </li>
-              ))}
+          </div>
+
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="finops" name={copy.chapters.finops} step="2/3" title={sankey.title} lead={sankey.lead} level={3} />
+            <figure className="fl-sankey-card reveal" data-delay="3">
+              <figcaption className="fl-sankey-card__top"><span className="xp-pill xp-pill--sim">{copy.simulation}</span></figcaption>
+              <FleetSankey labels={sankey} />
+              <p className="fl-sankey-card__hyp">{sankey.hypotheses}</p>
+            </figure>
+            <div className="xp-actions reveal" data-delay="4">
+              <a className="xp-btn xp-btn--ghost" href={FLEET_SIMULATION_CONTACT}>{sankey.action}</a>
+              <span className="xp-pill xp-pill--sim">{copy.simulation}</span>
+            </div>
+          </div>
+
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="finops" name={copy.chapters.finops} step="3/3" title={consoleCopy.title} lead={consoleCopy.consoleLanguage ?? undefined} level={3} />
+            <div className="reveal" data-delay="3">
+              <FleetConsole tabs={consoleTabs} label={consoleCopy.tabs} demo={copy.demo} />
+            </div>
+          </div>
+        </Chapter>
+
+        {/* 03 · Stratégie : Fleet Gateway, disponible pour pilote. */}
+        <Chapter id="strategie">
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="strategie" name={copy.chapters.strategie} title={copy.strategy.title} lead={copy.strategy.lead} id="strategie-title" />
+            <p className="reveal" data-delay="2"><span className="xp-pill xp-pill--pilot">{copy.strategy.pilot}</span></p>
+            <div className="reveal" data-delay="3"><FleetGateway labels={copy.strategy} /></div>
+            <ul className="fl-points reveal" data-delay="4">
+              {copy.strategy.points.map((point) => <li key={point}>{point}</li>)}
             </ul>
           </div>
-        </section>
+        </Chapter>
 
-        <section id="pourquoi" className="fl-section" aria-labelledby="fl-why-title">
-          <div className="guard-wrap">
-            <h2 id="fl-why-title" className="home-title fl-title" data-reveal style={title(copy.why.title)}>{copy.why.title}</h2>
-            <div className="fl-bento">
-              <article className="fl-tile fl-tile--cost" data-reveal>
-                <div className="fl-tile__text">
-                  <h3>{cost.name}</h3>
-                  <p className="fl-tile__line">{cost.line}</p>
-                  <div className="fl-tile__action">
-                    <a className="guard-button" href={FLEET_SIMULATION_CONTACT}>{cost.action}</a>
-                    <p>{cost.actionNote}</p>
-                  </div>
-                </div>
-                {/* Mesure réelle de xSOM, datée, sourcée et montrée (relevé ccusage,
-                    `FLEET_MEASUREMENT`, `CODEX_PLAN`) : ni moyenne, ni promesse. Un autre chiffre ne
-                    s'ajoute qu'avec sa source. */}
-                <figure className="fl-plan">
-                  <p className="fl-plan__head">{cost.measure}</p>
-                  <div className="fl-plan__agent">
-                    <p className="fl-plan__name">
-                      <span className="fl-brand" data-brand="claude" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CLAUDE_MARK} /></svg></span>
-                      Claude
-                      <b className="fl-plan__ratio" aria-hidden="true">{cost.ratio}</b>
-                    </p>
-                    <div className="fl-plan__bars" aria-hidden="true">
-                      <div className="fl-plan__row" data-bar="plan"><span>{cost.plan}</span><i style={vars({ "--w": CLAUDE_PLAN_WIDTH })} /><b>{cost.claudePlan}</b></div>
-                      <div className="fl-plan__row" data-bar="usage"><span>{cost.usage}</span><i style={vars({ "--w": "100%" })} /><b>{cost.claudeUsage}</b></div>
-                    </div>
-                    <p className="fl-plan__line">{cost.claudeLine}</p>
-                  </div>
-                  <div className="fl-plan__agent">
-                    <p className="fl-plan__name">
-                      <span className="fl-brand" data-brand="chatgpt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d={CHATGPT_MARK} /></svg></span>
-                      Codex
-                    </p>
-                    <div className="fl-plan__bars" aria-hidden="true">
-                      <div className="fl-plan__row" data-bar="usage"><span>{cost.usage}</span><i style={vars({ "--w": CODEX_USAGE_WIDTH })} /><b>{cost.codexUsage}</b></div>
-                    </div>
-                    <p className="fl-plan__line">{codexMeasureLine(lang)}</p>
-                  </div>
-                  <FleetCapture image={FLEET_MEASUREMENT.capture} alt={cost.captureAlt} open={cost.capture} close={cost.captureClose} />
-                  <figcaption>{cost.measureNote}</figcaption>
-                </figure>
-              </article>
-
-              <article className="fl-tile fl-tile--price" data-reveal>
-                <h3>{copy.why.price.name}</h3>
-                <p className="fl-tile__line">{copy.why.price.line}</p>
-                <a className="guard-button" href={FLEET_PRICE_CONTACT}>{copy.why.price.action}</a>
-              </article>
-
-              <article className="fl-tile fl-tile--finops" data-reveal>
-                <h3>{copy.why.finops.name}</h3>
-                <p className="fl-tile__line">{copy.why.finops.line}</p>
-                <div className="fl-bars" aria-hidden="true">
-                  <div className="fl-bars__row" data-bar="real">
-                    <span>{copy.why.finops.real}</span>
-                    <i style={vars({ "--w": REAL_INVOICE_WIDTH })} />
-                  </div>
-                  <div className="fl-bars__row" data-bar="estimate">
-                    <span>{copy.why.finops.estimate} <em>{copy.why.finops.estimateTag}</em></span>
-                    <i style={vars({ "--w": "100%" })} />
-                  </div>
-                </div>
-                <p className="fl-stat">
-                  <CountUp value={FLEET_DEMO_FIGURES.developers} locale={locale} /> {copy.why.finops.count}
-                </p>
-                <p className="fl-demo">{copy.why.demo}</p>
-              </article>
-
-              <article className="fl-tile fl-tile--security" data-reveal>
-                <h3>{copy.why.security.name}</h3>
-                <p className="fl-tile__line">{copy.why.security.line}</p>
-                <div className="fl-shield" style={{ "--healthy": healthy } as CSSProperties}>
-                  <svg viewBox="0 0 120 140" aria-hidden="true">
-                    <circle className="fl-shield__pulse" cx="60" cy="70" r="56" />
-                    <path className="fl-shield__body" d="M60 10 L104 28 V68 C104 98 84 120 60 130 C36 120 16 98 16 68 V28 Z" />
-                    <path className="fl-shield__check" d="M40 70 l14 14 l27 -30" />
-                  </svg>
-                  <p className="fl-stat">
-                    <strong><CountUp value={FLEET_DEMO_FIGURES.healthyPostes} locale={locale} />/{FLEET_DEMO_FIGURES.postes}</strong>
-                    {copy.why.security.count}
-                  </p>
-                </div>
-                <p className="fl-demo">{copy.why.demo}</p>
-              </article>
+        {/* 04 · Film */}
+        <Chapter id="film" className="xp-chapter--film">
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="film" name={copy.chapters.film} title={copy.film.title} lead={copy.film.lead} id="film-title" />
+            <div className="reveal" data-delay="3">
+              <FleetHowFilm key={lang} media={fleetHowMedia(lang)} chapters={copy.film.steps} labels={{ ...copy.film, demo: copy.demo }} />
             </div>
           </div>
-        </section>
+        </Chapter>
 
-        <section id="fonctionnement" className="fl-section fl-section--tint" aria-labelledby="fl-how-title">
-          <div className="guard-wrap">
-            <h2 id="fl-how-title" className="home-title fl-title" data-reveal style={title(copy.how.title)}>{copy.how.title}</h2>
-            <div data-reveal>
-              <FleetHowFilm key={lang} media={fleetHowMedia(lang)} chapters={copy.how.steps} labels={copy.how} />
-            </div>
-          </div>
-        </section>
-
-        <section id="engagements" className="fl-section fl-section--ink" aria-labelledby="fl-commitments-title">
-          <div className="guard-wrap">
-            <h2 id="fl-commitments-title" className="home-title fl-title" data-reveal style={title(copy.commitments.title)}>{copy.commitments.title}</h2>
-            <p className="fl-commitments__lead" data-reveal>{copy.commitments.lead}</p>
+        {/* 05 · Licences, sources et engagements */}
+        <Chapter id="engagements">
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="engagements" name={copy.chapters.engagements} title={copy.commitments.title} lead={copy.commitments.lead} id="engagements-title" />
             <ul className="fl-badges">
-              {copy.commitments.badges.map((badge) => {
-                const body = (
-                  <>
-                    <strong>{badge.value}</strong>
-                    <span>{badge.caption}</span>
-                  </>
-                );
+              {copy.commitments.badges.map((badge, index) => {
+                const body = (<><strong>{badge.value}</strong><span>{badge.caption}</span></>);
                 return (
-                  <li key={badge.id} data-reveal>
+                  <li key={badge.id} className="reveal" data-delay={String(Math.min(index + 2, 5))}>
                     {"link" in badge && badge.link ? (
-                      <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="fl-badge" aria-label={`${copy.commitments.source} : ${badge.value}`}>
+                      <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="fl-badge fl-badge--link" aria-label={`${copy.commitments.source} : ${badge.value}`}>
                         {body}
                         <span className="fl-badge__go" aria-hidden="true">↗</span>
                       </SiteLink>
@@ -252,14 +262,14 @@ export function FleetPage() {
                 );
               })}
             </ul>
-            <p className="fl-commitments__evidence" data-reveal>{copy.commitments.evidence}</p>
           </div>
-        </section>
+        </Chapter>
 
-        <section id="questions" className="fl-section" aria-labelledby="fl-faq-title">
-          <div className="guard-wrap fl-faq">
-            <h2 id="fl-faq-title" className="home-title fl-title" data-reveal style={title(copy.faq.title)}>{copy.faq.title}</h2>
-            <div className="fl-faq__list" data-reveal>
+        {/* 06 · Questions, puis l'appel final. */}
+        <Chapter id="questions" className="xp-chapter--faq">
+          <div className="xp-screen guard-wrap fl-faq">
+            <ScreenHead chapter="questions" name={copy.chapters.questions} title={copy.faq.title} id="questions-title" />
+            <div className="fl-faq__list reveal" data-delay="2">
               {copy.faq.items.map(([question, answer]) => (
                 <details key={question}>
                   <summary>{question}</summary>
@@ -267,9 +277,19 @@ export function FleetPage() {
                 </details>
               ))}
             </div>
-            <div className="fl-faq__contact" data-reveal>
-              <a className="guard-button" href={FLEET_CONTACT}>{copy.faq.contact}</a>
+          </div>
+        </Chapter>
+
+        <section className="xp-final" aria-labelledby="fl-final-title">
+          <div className="xp-cover__grid" aria-hidden="true" />
+          <div className="guard-wrap xp-final__inner reveal">
+            <h2 id="fl-final-title">{copy.final.title}</h2>
+            <p>{copy.final.lead}</p>
+            <div className="xp-actions xp-actions--center">
+              <a className="xp-btn" href={FLEET_CONTACT}>{copy.final.demo}</a>
+              <a className="xp-btn xp-btn--ghost" href={FLEET_PRICE_CONTACT}>{copy.final.price}</a>
             </div>
+            <small>{copy.final.note}</small>
           </div>
         </section>
       </main>

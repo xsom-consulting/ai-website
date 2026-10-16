@@ -4,13 +4,13 @@ import { FleetPage } from "@/components/fleet/FleetPage";
 import { FLEET_COPY, FLEET_ORIGIN, fleetOgImage } from "@/components/fleet/fleet-copy";
 import { getLang } from "@/lib/lang";
 import "../guard-landing.css";
-import "../guard-home.css";
 import "../home.css";
-import "../fleet.css";
+import "../pitch.css";
 
 /**
  * Titre absolu : le gabarit du site (« · xSOM Fleet ») ne s'applique pas à
- * la page d'accueil de fleet.xsom.fr. Une capture du haut de page sert d'image Open Graph.
+ * la page d'accueil de fleet.xsom.fr. Une capture de la couverture (titre et schéma) sert d'image
+ * Open Graph.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const lang = await getLang();
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "xSOM Fleet",
       locale: lang === "fr" ? "fr_FR" : "en_US",
       type: "website",
-      images: [{ url: poster, width: 1920, height: 992, alt: copy.ogAlt }],
+      images: [{ url: poster, width: 1200, height: 630, alt: copy.ogAlt }],
     },
     twitter: { card: "summary_large_image", title: copy.title, description: copy.description, images: [poster] },
   };
