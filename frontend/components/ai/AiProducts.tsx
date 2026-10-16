@@ -184,7 +184,7 @@ function Mark() {
 
 function ProviderMark({ brand }: { brand: string }) {
   return (
-    <svg className="ai-provider" data-brand={brand} viewBox="0 0 24 24" aria-hidden="true">
+    <svg className="ai-provider" data-brand={brand} viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true">
       <path d={brand === "claude" ? CLAUDE_MARK : CHATGPT_MARK} />
     </svg>
   );
@@ -192,7 +192,7 @@ function ProviderMark({ brand }: { brand: string }) {
 
 function Stroke({ children }: { children: ReactNode }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {children}
     </svg>
   );
@@ -359,7 +359,7 @@ function GuardInAction({ demo }: { demo: Products["guard"]["demo"] }) {
               </div>
               <div className="ai-vsc__input">
                 <span className="ai-vsc__typed"><b>{shown.slice(0, tag)}</b>{shown.slice(tag)}<span className="ai-vsc__caret" /></span>
-                <span className="ai-vsc__send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20.5 21 12 3 3.5 5.5 12z" /></svg></span>
+                <span className="ai-vsc__send"><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><path d="M3 20.5 21 12 3 3.5 5.5 12z" /></svg></span>
               </div>
             </div>
             <div className="ai-vsc__editor">
