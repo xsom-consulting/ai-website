@@ -1,5 +1,4 @@
 import type { Lang } from "@/lib/i18n";
-import { CONTACT_EMAIL } from "@/lib/site-copy";
 import { MAIN_SITE_ORIGIN } from "@/lib/sites";
 
 /**
@@ -14,7 +13,6 @@ import { MAIN_SITE_ORIGIN } from "@/lib/sites";
  * pilote, sans autre promesse.
  */
 
-export const AI_CONTACT = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("xSOM · IA")}`;
 export const AI_ORIGIN = "https://ai.xsom.fr";
 
 /**
@@ -131,8 +129,9 @@ export const AI_COPY = {
       },
     },
     services: {
-      name: "Conseil",
-      title: "Nos prestations de conseil IA.",
+      number: "02",
+      name: "Nos prestations",
+      title: { before: "Nos prestations de ", accent: "conseil IA", after: "." },
       lead: "Du conseil jusqu’à la production. Trois exigences, jamais l’une au détriment des autres : sérénité, sécurité, souveraineté.",
       items: [
         { name: "Infrastructures IA & cloud souverain", body: "Dimensionner, héberger et exploiter les charges IA sous contrôle." },
@@ -141,6 +140,26 @@ export const AI_COPY = {
       ],
       more: "Voir IA & Souveraineté sur www.xsom.fr",
       moreHref: `${MAIN_SITE_ORIGIN}/ia-souverainete.html`,
+      request: {
+        title: "Besoin d’une prestation personnalisée ?",
+        body: "Décrivez votre contexte en quelques lignes : nous revenons vers vous.",
+        open: "Contactez-nous",
+        close: "Refermer",
+        name: "Nom",
+        email: "Email professionnel",
+        company: "Entreprise",
+        optional: "facultatif",
+        message: "Votre besoin",
+        placeholder: "Le contexte, l’objectif, l’échéance…",
+        submit: "Envoyer la demande",
+        sending: "Envoi en cours…",
+        sent: "Merci, votre demande est partie. Nous vous répondons rapidement.",
+        invalid: "Vérifiez votre nom, votre email et votre besoin (10 caractères au moins).",
+        error: "L’envoi n’a pas abouti.",
+        fallback: "Écrivez-nous directement à",
+        privacy: "Vos informations ne servent qu’à vous répondre.",
+        privacyLink: "Politique de confidentialité",
+      },
     },
     contact: {
       name: "Contact",
@@ -254,8 +273,9 @@ export const AI_COPY = {
       },
     },
     services: {
-      name: "Consulting",
-      title: "Our AI consulting services.",
+      number: "02",
+      name: "Our services",
+      title: { before: "Our ", accent: "AI consulting", after: " services." },
       lead: "From consulting to production. Three requirements, never one at the expense of the others: operational confidence, security, sovereignty.",
       items: [
         { name: "AI infrastructure & sovereign cloud", body: "Size, host and operate AI workloads with control." },
@@ -264,6 +284,26 @@ export const AI_COPY = {
       ],
       more: "See AI & Sovereignty on www.xsom.fr",
       moreHref: `${MAIN_SITE_ORIGIN}/en/ai-sovereignty.html`,
+      request: {
+        title: "Need a tailored engagement?",
+        body: "Describe your context in a few lines: we will get back to you.",
+        open: "Contact us",
+        close: "Close",
+        name: "Name",
+        email: "Work email",
+        company: "Company",
+        optional: "optional",
+        message: "Your need",
+        placeholder: "The context, the goal, the deadline…",
+        submit: "Send the request",
+        sending: "Sending…",
+        sent: "Thank you, your request is on its way. We will get back to you shortly.",
+        invalid: "Check your name, your email and your need (at least 10 characters).",
+        error: "The message could not be sent.",
+        fallback: "Write to us directly at",
+        privacy: "Your details are only used to reply to you.",
+        privacyLink: "Privacy policy (in French)",
+      },
     },
     contact: {
       name: "Contact",

@@ -102,11 +102,64 @@ test("the services come from the consulting site, in a few lines, and invent not
   expect(text).not.toMatch(/\d\s?(%|€|\$|clients?)/);
 });
 
+test("a tailored request opens a simple form and goes out by email, never by the mail app", async ({ page }) => {
+  await page.goto("/");
+  const services = page.locator("#prestations");
+  await expect(services.getByRole("heading", { level: 2 })).toHaveText("Nos prestations de conseil IA.");
+  const request = services.locator("#demande");
+  await expect(request).toContainText("Besoin d’une prestation personnalisée ?");
+  // Replié par défaut ; le bouton le déplie.
+  await expect(request.locator("form")).toHaveCount(0);
+  await request.getByRole("button", { name: /Contactez-nous/ }).click();
+  await expect(request.getByLabel("Nom")).toBeFocused();
+  // Ni l'en-tête ni l'appel final n'ouvrent la messagerie : ils mènent au formulaire.
+  await expect(page.locator(".guard-header, main").locator("a[href^='mailto:']")).toHaveCount(0);
+  await expect(page.locator("#contact").getByRole("link", { name: "Écrire à xSOM" })).toHaveAttribute("href", "#demande");
+
+  let sent: Record<string, string> | null = null;
+  await page.route("**/api/contact", async (route) => {
+    sent = route.request().postDataJSON();
+    await route.fulfill({ json: { ok: true } });
+  });
+  await request.getByLabel("Nom").fill("Camille Martin");
+  await request.getByLabel("Email professionnel").fill("camille@example.com");
+  await request.getByLabel(/Entreprise/).fill("Exemple SA");
+  await request.getByLabel("Votre besoin").fill("Industrialiser un assistant interne sur nos données.");
+  await request.getByRole("button", { name: "Envoyer la demande" }).click();
+  await expect(request.getByRole("status")).toContainText("Merci, votre demande est partie.");
+  expect(sent).toMatchObject({ name: "Camille Martin", email: "camille@example.com", company: "Exemple SA", website: "", lang: "fr" });
+});
+
+test("without a sending key, the form says so and gives the address instead", async ({ page }) => {
+  await page.goto("/#demande");
+  const request = page.locator("#demande");
+  await expect(request.getByLabel("Nom")).toBeFocused();
+  await request.getByLabel("Nom").fill("Camille Martin");
+  await request.getByLabel("Email professionnel").fill("camille@example.com");
+  await request.getByLabel("Votre besoin").fill("Un audit de sécurité de nos pipelines IA.");
+  await request.getByRole("button", { name: "Envoyer la demande" }).click();
+  await expect(request.getByRole("alert")).toContainText("L’envoi n’a pas abouti.");
+  await expect(request.getByRole("alert").getByRole("link")).toHaveAttribute("href", "mailto:julian.talou@xsom.fr");
+});
+
+test("the contact route refuses other origins and incomplete requests", async ({ request, baseURL }) => {
+  const origin = new URL(baseURL!).origin;
+  const valid = { name: "Camille", email: "camille@example.com", message: "Un projet de RAG souverain." };
+  expect((await request.post("/api/contact", { data: valid, headers: { origin: "https://evil.example" } })).status()).toBe(403);
+  expect((await request.post("/api/contact", { data: { ...valid, email: "pas-une-adresse" }, headers: { origin } })).status()).toBe(400);
+  expect((await request.post("/api/contact", { data: { ...valid, message: "court" }, headers: { origin } })).status()).toBe(400);
+  // Un robot qui remplit le champ piège reçoit un succès, sans rien envoyer.
+  expect((await request.post("/api/contact", { data: { ...valid, website: "spam" }, headers: { origin } })).status()).toBe(200);
+  // Sans RESEND_API_KEY (tests, développement), la route se dit indisponible.
+  expect((await request.post("/api/contact", { data: valid, headers: { origin } })).status()).toBe(503);
+});
+
 test("the contact closes the page", async ({ page }) => {
   await page.goto("/");
   const contact = page.locator("#contact");
   await expect(contact.getByRole("heading", { name: "Un projet IA ?" })).toBeVisible();
-  await expect(contact.getByRole("link", { name: "Écrire à xSOM" })).toHaveAttribute("href", /^mailto:/);
+  // Il mène au formulaire de demande, pas à la messagerie.
+  await expect(contact.getByRole("link", { name: "Écrire à xSOM" })).toHaveAttribute("href", "#demande");
 });
 
 test("the home page carries its JSON-LD, its own Open Graph image and no offer", async ({ request }) => {
@@ -134,7 +187,7 @@ test("the home page speaks English with the same sections", async ({ browser, ba
   await expect(page.locator("#produits .ai-product")).toHaveCount(2);
   await expect(page.locator("#produits .ai-verbs span")).toHaveText(["Govern", "Measure", "Decide"]);
   await expect(page.locator("#prestations .ai-service")).toHaveCount(3);
-  await expect(page.locator("#contact").getByRole("link", { name: "Write to xSOM" })).toHaveAttribute("href", /^mailto:/);
+  await expect(page.locator("#contact").getByRole("link", { name: "Write to xSOM" })).toHaveAttribute("href", "#demande");
   await context.close();
 });
 

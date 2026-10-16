@@ -6,8 +6,9 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
-import { AI_CONTACT, AI_COPY, AI_HERO_FILM } from "./ai-copy";
+import { AI_COPY, AI_HERO_FILM } from "./ai-copy";
 import { AiProducts } from "./AiProducts";
+import { AiServices, REQUEST_ANCHOR } from "./AiServices";
 import { useSectionSnap } from "./useSectionSnap";
 
 /**
@@ -24,7 +25,7 @@ export function AiHome() {
 
   return (
     <div className="guard-landing xhome xp xai">
-      <SiteHeader site="ai" actions={[{ label: copy.hero.contact, href: AI_CONTACT, variant: "solid" }]} />
+      <SiteHeader site="ai" actions={[{ label: copy.hero.contact, href: `#${REQUEST_ANCHOR}`, variant: "solid" }]} />
       <main>
         <section id="intro" className="ai-hero" aria-labelledby="ai-title">
           <HeroFilm pause={copy.hero.pause} play={copy.hero.play} />
@@ -45,26 +46,7 @@ export function AiHome() {
 
         <AiProducts copy={copy.products} />
 
-        <section id="prestations" className="xp-chapter" aria-labelledby="ai-services-title">
-          <div className="xp-screen guard-wrap ai-services">
-            <header className="xp-head">
-              <p className="xp-mark reveal"><span className="xp-mark__n">{copy.services.name}</span></p>
-              <h2 id="ai-services-title" className="xp-head__title reveal" data-delay="1">{copy.services.title}</h2>
-              <p className="xp-head__lead reveal" data-delay="2">{copy.services.lead}</p>
-            </header>
-            <ul className="ai-services__list">
-              {copy.services.items.map((item, index) => (
-                <li key={item.name} className="ai-service reveal" data-delay={String(index + 2)}>
-                  <h3>{item.name}</h3>
-                  <p>{item.body}</p>
-                </li>
-              ))}
-            </ul>
-            <p className="reveal" data-delay="4">
-              <SiteLink to={{ href: copy.services.moreHref }} className="xp-link">{copy.services.more} <span aria-hidden="true">↗</span></SiteLink>
-            </p>
-          </div>
-        </section>
+        <AiServices copy={copy.services} lang={lang} />
 
         <section id="contact" className="xp-final" aria-labelledby="ai-contact-title">
           <div className="xp-cover__grid" aria-hidden="true" />
@@ -72,7 +54,7 @@ export function AiHome() {
             <h2 id="ai-contact-title">{copy.contact.title}</h2>
             <p>{copy.contact.body}</p>
             <div className="xp-actions xp-actions--center">
-              <a className="xp-btn" href={AI_CONTACT}>{copy.contact.button}</a>
+              <a className="xp-btn" href={`#${REQUEST_ANCHOR}`}>{copy.contact.button}</a>
               <SiteLink to={{ href: "https://www.xsom.fr" }} className="xp-btn xp-btn--ghost">{copy.contact.main} <span aria-hidden="true">↗</span></SiteLink>
             </div>
           </div>
