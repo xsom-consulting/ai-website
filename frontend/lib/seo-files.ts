@@ -28,7 +28,7 @@ export function sitemapXml(site: Site | null): string {
 }
 
 const FLEET_SUMMARY =
-  "xSOM Fleet : les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise. Pilotez toute votre architecture IA en un seul endroit : abonnements (Claude Code et Codex sur chaque Poste, Windows, macOS, Linux), clés API et modèles hébergés chez le client, par une passerelle installée chez lui. Trois solutions, disponibles pour pilote : FinOps (Fleet Sièges : Sièges, Facture réelle, Équivalent API estimé, Paliers), cybersécurité (Fleet Guard : Contrôle avant envoi sur le Poste, Politique signée, Journal des blocages, Dossier de preuves) et architecture et stratégie IA (Fleet Gateway : passerelle LiteLLM installée chez le client, Applications API, Budgets API, modèles hébergés chez le client).";
+  "xSOM Fleet : la gestion de l’IA d’entreprise. Abonnements Claude et ChatGPT (Claude Code et Codex sur chaque Poste, Windows, macOS, Linux), clés API et modèles hébergés chez le client, gouvernés depuis une seule console. Trois piliers : sécurité (Fleet Guard : Contrôle avant envoi sur le Poste avec le moteur open source Secret Guard, Politique signée, Événements sans contenu, Dossier de preuves), pilotage FinOps (Fleet Sièges : Sièges, Facture réelle, Équivalent API estimé) et stratégie IA (Fleet Gateway, disponible pour pilote : passerelle LiteLLM installée chez le client, Politique de sélection des modèles, Budgets API, déploiement progressif). Programme pilote 2026, tarif sur devis.";
 
 /** Le texte `llms.txt` de chaque site : ce que c'est, et où lire le détail. */
 export function llmsTxt(site: Site | null): string {
@@ -41,7 +41,7 @@ export function llmsTxt(site: Site | null): string {
 
 ## Pages
 
-- [Accueil](${base}/) : les prestations IA (reprises du site de conseil), les produits IA et les équipes face à l’IA.
+- [Accueil](${base}/) : qui nous sommes (la division IA de xSOM Consulting, cabinet indépendant depuis 2007), nos produits (xSOM Fleet, Secret Guard), nos prestations de conseil IA (infrastructures IA et cloud souverain, données et MLOps, sécurité des pipelines IA) et le contact.
 - [Glossaire des menaces IA](${base}/menaces) : attaque type, parade de référence, outils libres et état de l’art de chaque menace.
 
 ## Produits
@@ -58,11 +58,12 @@ export function llmsTxt(site: Site | null): string {
   if (site === "fleet") {
     return `# xSOM Fleet
 
-> ${FLEET_SUMMARY} (EN: the governance platform for a company’s AI: Claude Code and Codex on every workstation, API applications through a gateway installed on the customer’s side.)
+> ${FLEET_SUMMARY} (EN: enterprise AI management: Claude Code and Codex on every workstation, API models and models hosted on the customer’s side through a gateway; security, FinOps steering and AI strategy.)
 
 ## Pages
 
-- [xSOM Fleet](${origin("fleet")}/) : la promesse (les meilleurs modèles d’IA du marché, aux standards de sécurité de l’entreprise), ce qui est pris en charge et les trois solutions (FinOps, cybersécurité, architecture et stratégie IA), pourquoi la choisir (valeur des forfaits d’abonnement mesurée chez xSOM avec ccusage, pilotage FinOps avec la Facture réelle face à l’Équivalent API estimé, sécurité), le film « Comment ça marche » avec voix off et chapitres, les licences, sources et engagements (Secret Guard en Apache-2.0, LiteLLM en partie MIT, SBOM CycloneDX, ce que xSOM ne voit jamais, Dossier de preuves) et les questions fréquentes.
+- [xSOM Fleet](${origin("fleet")}/) : une lecture en chapitres. Couverture : la gestion de l’IA d’entreprise et son schéma (vos IA, xSOM Fleet, vos équipes). 01 Sécurité : les meilleures IA, accessibles en toute sécurité (analyse locale sur le Poste, blocage avant envoi avec le message réel de l’Agent xSOM, Événement sans contenu, Politique signée). 02 FinOps : réduire fortement le budget IA (mesure réelle chez xSOM en septembre 2026 avec ccusage : forfait Claude de 200 $ par mois pour 7 815 $ d’usage au tarif API, soit 39 fois son prix ; Codex : forfait de 103 € TTC pour 1 173 $ ; une simulation Sankey aux hypothèses affichées ; la console, Coûts et Sièges, sur données de démonstration). 03 Stratégie : le bon modèle pour chaque cas métier, par une passerelle installée chez le client (Fleet Gateway, disponible pour pilote). 04 Démo vidéo : le film de présentation avec voix off et chapitres. 05 Licences, sources et engagements (Secret Guard en Apache-2.0, LiteLLM en partie MIT, SBOM CycloneDX, hébergement UE ou chez le client, 0 prompt chez xSOM, Dossier de preuves). 06 Questions fréquentes, puis la demande de démonstration ou de tarif.
+- [Console xSOM Fleet](https://plateforme.xsom.fr) : la connexion des Administrateurs.
 
 ## Liens
 

@@ -4,8 +4,8 @@ Les sites publics de la division IA de xSOM Consulting. Un seul déploiement ser
 
 | Adresse | Site |
 |---|---|
-| **ai.xsom.fr** | xSOM · IA : les prestations IA, les produits IA et le glossaire des menaces IA |
-| **fleet.xsom.fr** | xSOM Fleet : la plateforme de gouvernance des IA d'une entreprise (Fleet Sièges, Fleet Guard, Fleet Gateway) |
+| **ai.xsom.fr** | xSOM · IA : qui nous sommes, les produits IA, les prestations de conseil IA et le glossaire des menaces IA |
+| **fleet.xsom.fr** | xSOM Fleet : la gestion de l’IA d’entreprise (Fleet Guard, Fleet Sièges, Fleet Gateway) |
 | **guard.xsom.fr** | Secret Guard : le moteur open source de détection de secrets (Apache-2.0, [dépôt public](https://github.com/xsom-consulting/secret-guard)) |
 
 Chaque site renvoie vers [www.xsom.fr](https://www.xsom.fr), le site principal de conseil.

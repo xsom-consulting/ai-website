@@ -12,9 +12,13 @@ type HeaderState = { solid: boolean; hidden: boolean };
 /**
  * L'en-tête d'un site, posé sur le film d'ouverture sans le masquer : il devient opaque
  * dès qu'on défile, s'efface quand on descend au-delà du film et revient dès qu'on
- * remonte. La marque et le menu sont ceux du site (`Brand`, `SiteNav`).
+ * remonte. La marque et le menu sont ceux du site (`Brand`, `SiteNav`). `actions`, si
+ * elles sont données, s'ajoutent à droite du menu (contour ou plein) ; sur téléphone,
+ * elles restent visibles dans le panneau du menu.
  */
-export function SiteHeader({ site }: { site: Site }) {
+export type HeaderAction = { readonly label: string; readonly href: string; readonly variant: "solid" | "ghost" };
+
+export function SiteHeader({ site, actions = [] }: { site: Site; actions?: readonly HeaderAction[] }) {
   const { lang } = useT();
   const copy = SITE_UI[lang];
   const [state, setState] = useState<HeaderState>({ solid: false, hidden: false });
@@ -75,6 +79,13 @@ export function SiteHeader({ site }: { site: Site }) {
           onClick={(event) => { if ((event.target as HTMLElement).closest("a")) setOpen(false); }}
         >
           <SiteNav site={site} />
+          {actions.length > 0 ? (
+            <div className="home-header__actions">
+              {actions.map((action) => (
+                <a key={action.href} className="home-header__action" data-variant={action.variant} href={action.href}>{action.label}</a>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </header>

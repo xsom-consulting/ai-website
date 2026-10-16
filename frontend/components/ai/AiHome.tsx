@@ -1,127 +1,103 @@
 "use client";
 
-import Link from "next/link";
-import { useRef, type CSSProperties } from "react";
-import { XsomMark } from "@/components/brand";
-import { HomeExposure } from "@/components/home/HomeExposure";
-import { HomeFilm } from "@/components/home/HomeFilm";
-import { glideTo } from "@/components/home/motion";
-import { useHomeReveal } from "@/components/home/useHomeReveal";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_REPOSITORY } from "@/lib/sites";
-import { AI_CONTACT, AI_COPY, AI_HERO_MEDIA } from "./ai-copy";
+import { AI_CONTACT, AI_COPY } from "./ai-copy";
 
 /**
- * La page d'accueil de la division IA (`ai.xsom.fr`) : le film d'ouverture, ce que
- * xSOM est, ses prestations IA, ses deux produits, les équipes face à l'IA et le
- * contact. En-tête et style de l'accueil historique (`.xhome`) ; ce qui est propre à
- * cette page vit sous `.xai` (`app/ai.css`).
+ * La page d'accueil de la division IA (`ai.xsom.fr`), dans la charte de fleet.xsom.fr
+ * (`.xp`, `app/pitch.css`) : qui nous sommes, nos produits (xSOM Fleet en vedette, puis
+ * Secret Guard), nos prestations de conseil IA en quelques lignes, le contact.
  */
 export function AiHome() {
-  const root = useRef<HTMLDivElement>(null);
-  useHomeReveal(root);
   const { lang } = useT();
   const copy = AI_COPY[lang];
-  const title = (text: string) => ({ "--chars": text.length }) as CSSProperties;
+  const fleet = copy.products.fleet;
+  const guard = copy.products.guard;
 
   return (
-    <div ref={root} className="guard-landing xhome xai">
-      <SiteHeader site="ai" />
+    <div className="guard-landing xhome xp xai">
+      <SiteHeader site="ai" actions={[{ label: copy.hero.contact, href: AI_CONTACT, variant: "solid" }]} />
       <main>
-        <HomeFilm
-          media={AI_HERO_MEDIA}
-          next="#intro"
-          fallback={<><XsomMark className="ai-mark" /><p>xSOM · {lang === "fr" ? "IA" : "AI"}</p><span>{copy.film.fallback}</span></>}
-        />
-
-        <section id="intro" className="ai-intro" aria-labelledby="ai-title">
-          <div className="guard-wrap ai-intro__inner">
-            <p className="home-kicker">{copy.intro.kicker}</p>
-            <h1 id="ai-title" className="ai-intro__title">{copy.intro.title}</h1>
-            <p className="ai-intro__lead">{copy.intro.lead}</p>
-            <div className="ai-intro__actions">
-              <a className="guard-button" href="#prestations" onClick={glideTo}>{copy.intro.services}</a>
-              <a className="ai-intro__link" href="#produits" onClick={glideTo}>{copy.intro.products}</a>
+        <section id="intro" className="xp-cover ai-cover" aria-labelledby="ai-title">
+          <div className="xp-cover__grid" aria-hidden="true" />
+          <div className="guard-wrap">
+            <h1 id="ai-title" className="xp-cover__title ai-cover__title reveal">{copy.hero.title}</h1>
+            <p className="xp-cover__lead reveal" data-delay="1">{copy.hero.lead}</p>
+            <div className="xp-actions reveal" data-delay="2">
+              <SiteLink to={{ site: "fleet" }} className="xp-btn">{copy.hero.fleet}</SiteLink>
+              <a className="xp-btn xp-btn--ghost" href={AI_CONTACT}>{copy.hero.contact}</a>
             </div>
           </div>
         </section>
 
-        <section id="prestations" className="ai-section" aria-labelledby="ai-services-title">
-          <div className="guard-wrap">
-            <header className="ai-head">
-              <p className="home-kicker" data-reveal>{copy.services.kicker}</p>
-              <h2 id="ai-services-title" className="home-title" data-reveal style={title(copy.services.title)}>{copy.services.title}</h2>
-              <p className="home-lead" data-reveal>{copy.services.lead}</p>
-            </header>
-            <ul className="ai-cards">
-              {copy.services.items.map((item) => (
-                <li key={item.name} className="ai-card" data-reveal>
-                  <h3>{item.name}</h3>
-                  <p>{item.body}</p>
-                  <ul className="ai-tags">{item.tags.map((tag) => <li key={tag}>{tag}</li>)}</ul>
-                </li>
-              ))}
-            </ul>
-            <div className="ai-more" data-reveal>
-              <a className="guard-button" href={copy.services.moreHref} target="_blank" rel="noreferrer">{copy.services.more} <span aria-hidden="true">↗</span></a>
-              <a className="ai-intro__link" href={AI_CONTACT}>{copy.services.contact}</a>
-            </div>
-          </div>
-        </section>
-
-        <section id="produits" className="ai-section ai-section--tint" aria-labelledby="ai-products-title">
-          <div className="guard-wrap">
-            <header className="ai-head">
-              <p className="home-kicker" data-reveal>{copy.products.kicker}</p>
-              <h2 id="ai-products-title" className="home-title" data-reveal style={title(copy.products.title)}>{copy.products.title}</h2>
-              <p className="home-lead" data-reveal>{copy.products.lead}</p>
+        <section id="produits" className="xp-chapter" aria-labelledby="ai-products-title">
+          <div className="xp-screen guard-wrap">
+            <header className="xp-head">
+              <p className="xp-mark reveal"><span className="xp-mark__n">{copy.products.name}</span></p>
+              <h2 id="ai-products-title" className="xp-head__title reveal" data-delay="1">{copy.products.title}</h2>
             </header>
             <div className="ai-products">
-              <article className="ai-product" data-reveal>
-                <p className="ai-product__badge">{copy.products.fleet.badge}</p>
-                <h3>{copy.products.fleet.name}</h3>
-                <p>{copy.products.fleet.body}</p>
+              <article className="ai-product ai-product--fleet reveal" data-delay="2">
+                <p className="xp-pill xp-pill--pilot">{fleet.tag}</p>
+                <h3>{fleet.name}</h3>
+                <p className="ai-product__line">{fleet.line}</p>
                 <ul className="ai-modules">
-                  {copy.products.fleet.modules.map(([name, detail]) => (
-                    <li key={name}><strong>{name}</strong><span>{detail}</span></li>
+                  {fleet.modules.map((module) => (
+                    <li key={module.name}>
+                      <span className="ai-modules__tag">{module.tag}</span>
+                      <span><strong>{module.name}</strong><small>{module.detail}</small></span>
+                    </li>
                   ))}
                 </ul>
-                <SiteLink to={{ site: "fleet" }} className="guard-button">{copy.products.fleet.action} <span aria-hidden="true">↗</span></SiteLink>
+                <SiteLink to={{ site: "fleet" }} className="xp-btn">{fleet.action}</SiteLink>
               </article>
-              <article className="ai-product" data-reveal>
-                <p className="ai-product__badge">{copy.products.guard.badge}</p>
-                <h3>{copy.products.guard.name}</h3>
-                <p>{copy.products.guard.body}</p>
-                <ul className="ai-points">
-                  {copy.products.guard.points.map((point) => <li key={point}>{point}</li>)}
-                </ul>
+              <article className="ai-product ai-product--guard reveal" data-delay="3">
+                <p className="xp-pill xp-pill--ok">{guard.tag}</p>
+                <h3>{guard.name}</h3>
+                <p className="ai-product__line">{guard.line}</p>
+                <ul className="ai-points">{guard.points.map((point) => <li key={point}>{point}</li>)}</ul>
                 <div className="ai-product__actions">
-                  <SiteLink to={{ site: "guard" }} className="guard-button">{copy.products.guard.action} <span aria-hidden="true">↗</span></SiteLink>
-                  <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="ai-intro__link">{copy.products.guard.source} ↗</SiteLink>
+                  <SiteLink to={{ site: "guard" }} className="xp-btn xp-btn--ghost">{guard.action}</SiteLink>
+                  <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="xp-link">{guard.source} <span aria-hidden="true">↗</span></SiteLink>
                 </div>
               </article>
             </div>
           </div>
         </section>
 
-        <HomeExposure />
+        <section id="prestations" className="xp-chapter" aria-labelledby="ai-services-title">
+          <div className="xp-screen guard-wrap ai-services">
+            <header className="xp-head">
+              <p className="xp-mark reveal"><span className="xp-mark__n">{copy.services.name}</span></p>
+              <h2 id="ai-services-title" className="xp-head__title reveal" data-delay="1">{copy.services.title}</h2>
+              <p className="xp-head__lead reveal" data-delay="2">{copy.services.lead}</p>
+            </header>
+            <ul className="ai-services__list">
+              {copy.services.items.map((item, index) => (
+                <li key={item.name} className="ai-service reveal" data-delay={String(index + 2)}>
+                  <h3>{item.name}</h3>
+                  <p>{item.body}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="reveal" data-delay="4">
+              <SiteLink to={{ href: copy.services.moreHref }} className="xp-link">{copy.services.more} <span aria-hidden="true">↗</span></SiteLink>
+            </p>
+          </div>
+        </section>
 
-        <aside className="guard-glossary-link guard-wrap reveal">
-          <span className="guard-glossary-link__icon" aria-hidden="true">Aa</span>
-          <div><h3>{copy.glossary.title}</h3><p>{copy.glossary.body}</p></div>
-          <Link href="/menaces">{copy.glossary.action} ↗</Link>
-        </aside>
-
-        <section className="ai-contact" aria-labelledby="ai-contact-title">
-          <div className="guard-wrap ai-contact__inner" data-reveal>
+        <section id="contact" className="xp-final" aria-labelledby="ai-contact-title">
+          <div className="xp-cover__grid" aria-hidden="true" />
+          <div className="guard-wrap xp-final__inner reveal">
             <h2 id="ai-contact-title">{copy.contact.title}</h2>
             <p>{copy.contact.body}</p>
-            <div className="ai-contact__actions">
-              <a className="guard-button" href={AI_CONTACT}>{copy.contact.button}</a>
-              <SiteLink to={{ href: "https://www.xsom.fr" }} className="ai-contact__main">{copy.contact.main} ↗</SiteLink>
+            <div className="xp-actions xp-actions--center">
+              <a className="xp-btn" href={AI_CONTACT}>{copy.contact.button}</a>
+              <SiteLink to={{ href: "https://www.xsom.fr" }} className="xp-btn xp-btn--ghost">{copy.contact.main} <span aria-hidden="true">↗</span></SiteLink>
             </div>
           </div>
         </section>
