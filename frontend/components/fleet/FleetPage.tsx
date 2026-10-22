@@ -14,6 +14,9 @@ import { FleetFlow } from "./FleetFlow";
 import { FleetGateway } from "./FleetGateway";
 import { FleetGuardFlow } from "./FleetGuardFlow";
 import { FleetHowFilm } from "./FleetHowFilm";
+import { FleetMap } from "./FleetMap";
+import { FleetMatrix } from "./FleetMatrix";
+import { CATALOGUE, catalogueDate } from "./fleet-catalogue";
 import { FleetSankey } from "./FleetSankey";
 import {
   FLEET_CHAPTERS,
@@ -61,7 +64,8 @@ function Chapter({ id, children, className = "" }: { id: FleetChapter; children:
 /**
  * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`, lue comme un dossier de
  * présentation : la couverture (la plateforme en un mot et son schéma), trois piliers
- * (sécurité, FinOps en trois écrans, stratégie), le film, les licences et engagements,
+ * (sécurité, FinOps en trois écrans, stratégie), les options sur le schéma d’une
+ * entreprise type et leur matrice, le film, les licences et engagements,
  * les questions et le contact. Une idée par écran ; un indicateur de progression
  * discret ; les révélations au défilement sont celles du site (`.reveal`), coupées
  * quand le mouvement est réduit. Charte commune avec `ai.xsom.fr` : `app/pitch.css`.
@@ -231,7 +235,28 @@ export function FleetPage() {
           </div>
         </Chapter>
 
-        {/* 04 · Film */}
+        {/* 04 · Options : le schéma d’une entreprise type, puis la matrice de comparaison. */}
+        <Chapter id="options">
+          <div className="xp-screen guard-wrap">
+            <ScreenHead chapter="options" name={copy.chapters.options} step="1/2" title={copy.options.title} lead={copy.options.lead} id="options-title" />
+            <div className="reveal" data-delay="3">
+              <FleetMap lang={lang} labels={copy.options.map} />
+            </div>
+            <div className="fl-map__foot reveal" data-delay="4">
+              <span className="xp-pill">{copy.options.schematic}</span>
+              <p className="xp-caption">{copy.options.provenance(catalogueDate(CATALOGUE.date, lang), catalogueDate(CATALOGUE.provenance.researchDate, lang))}</p>
+              <p className="xp-caption">{copy.options.trademarks}</p>
+            </div>
+          </div>
+          <div className="xp-screen guard-wrap" id="matrice">
+            <ScreenHead chapter="options" name={copy.chapters.options} step="2/2" title={copy.options.matrix.title} lead={copy.options.matrix.lead} level={3} />
+            <div className="reveal" data-delay="3">
+              <FleetMatrix lang={lang} labels={copy.options.matrix} />
+            </div>
+          </div>
+        </Chapter>
+
+        {/* 05 · Film */}
         <Chapter id="film" className="xp-chapter--film">
           <div className="xp-screen guard-wrap">
             <ScreenHead chapter="film" name={copy.chapters.film} title={copy.film.title} lead={copy.film.lead} id="film-title" />
@@ -241,7 +266,7 @@ export function FleetPage() {
           </div>
         </Chapter>
 
-        {/* 05 · Licences, sources et engagements */}
+        {/* 06 · Licences, sources et engagements */}
         <Chapter id="engagements">
           <div className="xp-screen guard-wrap">
             <ScreenHead chapter="engagements" name={copy.chapters.engagements} title={copy.commitments.title} lead={copy.commitments.lead} id="engagements-title" />
@@ -265,7 +290,7 @@ export function FleetPage() {
           </div>
         </Chapter>
 
-        {/* 06 · Questions, puis l'appel final. */}
+        {/* 07 · Questions, puis l'appel final. */}
         <Chapter id="questions" className="xp-chapter--faq">
           <div className="xp-screen guard-wrap fl-faq">
             <ScreenHead chapter="questions" name={copy.chapters.questions} title={copy.faq.title} id="questions-title" />

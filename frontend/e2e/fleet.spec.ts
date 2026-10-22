@@ -3,11 +3,11 @@ import { expect, test } from "@playwright/test";
 /**
  * La page xSOM Fleet, lue comme un dossier de présentation : la couverture (la plateforme
  * en un mot et son schéma), trois piliers en chapitres numérotés (sécurité, FinOps,
- * stratégie), la démo vidéo, les licences et engagements, les questions et l'appel
+ * stratégie), les options sur le schéma d’une entreprise type, la démo vidéo, les licences et engagements, les questions et l'appel
  * final. Un indicateur de progression discret. Le film est produit à part (`films/`) :
  * la page doit tenir sans lui, et ne rien télécharger quand le mouvement est réduit.
  */
-const CHAPTERS = ["securite", "finops", "strategie", "film", "engagements", "questions"];
+const CHAPTERS = ["securite", "finops", "strategie", "options", "film", "engagements", "questions"];
 const FILM_CHAPTERS = ["choose", "policy", "coverage", "invisible", "costs", "proof"];
 
 test("the cover names the platform in a few words, next to its diagram", async ({ page }) => {
@@ -31,7 +31,7 @@ test("the cover names the platform in a few words, next to its diagram", async (
 test("the header follows the chapters and offers sign-in next to the demo request", async ({ page }) => {
   await page.goto("/fleet");
   const menu = page.getByRole("navigation", { name: "Navigation principale" });
-  await expect(menu.getByRole("link")).toHaveText(["Plateforme", "Sécurité", "FinOps", "Stratégie", "Démo vidéo", "Questions"]);
+  await expect(menu.getByRole("link")).toHaveText(["Plateforme", "Sécurité", "FinOps", "Stratégie", "Options", "Démo vidéo", "Questions"]);
   await expect(menu.getByRole("link", { name: "Sécurité" })).toHaveAttribute("href", "/fleet#securite");
   const header = page.locator("header.home-header");
   const signIn = header.getByRole("link", { name: "Se connecter" });
@@ -194,13 +194,82 @@ test("the page shows no price range and no unsourced figure outside the measurem
   for (const amount of amounts) expect(amount.trim().replace(/\s+/g, " ").replace(/ /g, " ")).toMatch(allowed);
 });
 
+test("options: the typical company map is a keyboard tablist, product kept apart from consulting", async ({ page }) => {
+  await page.goto("/fleet");
+  const section = page.locator("#options");
+  await expect(section.locator("h2")).toHaveText("Ce que fait xSOM Fleet, à chaque endroit de l’entreprise.");
+  const zones = section.getByRole("tablist", { name: "Zones de l’entreprise" });
+  await expect(zones.getByRole("tab")).toHaveCount(7);
+  const devices = zones.getByRole("tab", { name: /Développeurs et leurs Postes/ });
+  await expect(devices).toHaveAttribute("aria-selected", "true");
+  const panel = section.getByRole("tabpanel");
+  await expect(panel.locator("h3")).toHaveText("Développeurs et leurs Postes");
+  await expect(panel.locator("h4")).toHaveText(["Produit installable", "Conseil et intégration"]);
+  await expect(panel.locator('.fl-opt[data-kind="product"] h5').first()).toHaveText("Agent xSOM et Réglages administrés imposés");
+  await expect(panel.locator('.fl-opt[data-kind="consulting"] h5')).toContainText(["Recette de couverture par outil et par version"]);
+  // Clavier : flèches, Entrée pour zoomer, Échap pour revenir à la vue d'ensemble.
+  await devices.focus();
+  await page.keyboard.press("ArrowRight");
+  const proxy = zones.getByRole("tab", { name: /Proxy d’entreprise/ });
+  await expect(proxy).toBeFocused();
+  await expect(proxy).toHaveAttribute("aria-selected", "true");
+  await expect(panel.locator("h3")).toHaveText("Proxy d’entreprise");
+  await expect(panel).toContainText("Restriction de locataire sur le proxy");
+  const overview = section.getByRole("button", { name: "Zoomer sur la zone" });
+  await expect(overview).toHaveAttribute("aria-pressed", "false");
+  await page.keyboard.press("Enter");
+  await expect(section.getByRole("button", { name: "Vue d’ensemble" })).toHaveAttribute("aria-pressed", "true");
+  await page.keyboard.press("Escape");
+  await expect(overview).toHaveAttribute("aria-pressed", "false");
+  await page.keyboard.press("End");
+  await expect(zones.getByRole("tab", { name: /Console xSOM Fleet/ })).toHaveAttribute("aria-selected", "true");
+  // Un clic choisit la zone ; « Plus de détails » ouvre les limites, les prérequis et les sources.
+  await zones.getByRole("tab", { name: /Serveurs internes/ }).click();
+  const verdict = panel.locator(".fl-opt", { hasText: "Serveur de verdict pour les Inference hooks" });
+  await expect(verdict.locator(".fl-tag").first()).toHaveText("Produit, avec mise en place en conseil");
+  await verdict.getByText("Plus de détails").click();
+  await expect(verdict).toContainText("Contrôle après l’envoi");
+  await expect(verdict.getByRole("link", { name: "Anthropic" }).first()).toHaveAttribute("href", /^https:\/\/platform\.claude\.com\//);
+  await expect(section).toContainText("Catalogue d’options du 22/10/2026");
+  await expect(section).toContainText("Schéma de principe");
+});
+
+test("options: the comparison matrix lists every published option by level, FinOps included", async ({ page }) => {
+  await page.goto("/fleet");
+  const matrix = page.getByRole("region", { name: "Matrice de comparaison des options" });
+  await expect(matrix.locator('th[scope="rowgroup"]')).toHaveText(["Web (navigateur)", "Poste et applications de bureau", "Code et assistants de code", "API (applications et agents)", "Cloud des Fournisseurs", "FinOps et preuves"]);
+  await expect(matrix.locator('tbody th[scope="row"]')).toHaveCount(22);
+  const row = matrix.locator("#matrice-cloud-serveur-verdict");
+  await expect(row.locator("th")).toHaveText("Serveur de verdict pour les Inference hooks");
+  await expect(row.locator("td").nth(1)).toHaveText("Livré, recette réelle à faire");
+  await expect(row.locator(".fl-mx__cell").first()).toHaveText("Oui");
+  await expect(matrix.locator("#matrice-finops-sieges")).toContainText("Fleet Sièges");
+});
+
+test("options: on a 360 px phone, the map and the matrix stay inside the page", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ viewport: { width: 360, height: 780 } });
+  const page = await context.newPage();
+  const outside: string[] = [];
+  page.on("request", (request) => { if (new URL(request.url()).origin !== new URL(baseURL!).origin) outside.push(request.url()); });
+  await page.goto(`${baseURL}/fleet`);
+  await page.locator("#options").scrollIntoViewIfNeeded();
+  await expect(page.locator('#options .fl-map')).toHaveAttribute("data-layout", "narrow");
+  await page.getByRole("tab", { name: /Métiers/ }).click();
+  await expect(page.getByRole("tabpanel").locator("h3")).toHaveText("Métiers");
+  const frame = page.locator(".fl-mx__scroll");
+  expect(await frame.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  expect(outside).toEqual([]);
+  await context.close();
+});
+
 test("the Fleet page speaks English with the same chapters", async ({ browser, baseURL }) => {
   const context = await browser.newContext();
   await context.addCookies([{ name: "xsom_lang", value: "en", url: baseURL! }]);
   const page = await context.newPage();
   await page.goto("/fleet");
   await expect(page.locator("h1")).toHaveText("Enterprise AI management.");
-  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link")).toHaveText(["Platform", "Security", "FinOps", "Strategy", "Video demo", "Questions"]);
+  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link")).toHaveText(["Platform", "Security", "FinOps", "Strategy", "Options", "Video demo", "Questions"]);
   await expect(page.locator("header.home-header").getByRole("link", { name: "Sign in" })).toHaveAttribute("href", "https://plateforme.xsom.fr");
   await expect(page.locator("#securite h2")).toHaveText("The best AI, made safe to use.");
   await expect(page.locator("#securite .fl-guard")).toContainText("Sending blocked by xSOM Fleet: a secret was detected on this Poste. Its value is neither displayed nor transmitted.");
@@ -210,6 +279,9 @@ test("the Fleet page speaks English with the same chapters", async ({ browser, b
   await expect(page.locator("#finops")).toContainText("The console is shown in French.");
   await expect(page.locator(".fl-frame .xp-pill--demo").first()).toHaveText("Demonstration · illustrative data");
   await expect(page.locator("#strategie h2")).toHaveText("A real AI strategy, optimised.");
+  await expect(page.locator("#options h2")).toHaveText("What xSOM Fleet does, at every point of the company.");
+  await expect(page.locator("#options").getByRole("tablist", { name: "Areas of the company" }).getByRole("tab")).toHaveCount(7);
+  await expect(page.locator("#options .fl-map__panel h4")).toHaveText(["Installable product", "Consulting and integration"]);
   await expect(page.locator("#film h2")).toHaveText("See it in 80 seconds.");
   await expect(page.locator("#film video")).toHaveAttribute("src", "/signal-media/xsom-fleet-how-v2-en.mp4");
   await expect(page.locator("#film").getByRole("button", { name: "Turn sound on" })).toBeVisible();
