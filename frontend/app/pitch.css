@@ -2182,3 +2182,470 @@ h3.xp-head__title {
 .xai .xp-screen {
   min-height: 0;
 }
+
+/* ---- 04 · Options : le schéma d’une entreprise type, puis la matrice de comparaison.
+   Textes des options : le catalogue de xSOM Fleet (`lib/generated/fleet-catalogue-options.json`).
+   Vert : produit installable ; ambre : conseil et intégration ; le schéma garde la charte sombre. */
+.xfl .fl-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.xfl .fl-map {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+.xfl .fl-map__stage,
+.xfl .fl-map__panel {
+  border: 1px solid var(--xp-line-2);
+  border-radius: var(--xp-r);
+  background: var(--xp-s1);
+}
+.xfl .fl-map__stage {
+  overflow: hidden;
+}
+@media (min-width: 1101px) {
+  /* Le schéma reste en vue pendant qu’on lit les options de la zone. */
+  .xfl .fl-map__stage {
+    position: sticky;
+    top: calc(var(--home-header, 4.5rem) + 1rem);
+  }
+}
+.xfl .fl-map__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem 1rem;
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--xp-line);
+}
+.xfl .fl-map__hint {
+  font-size: .8125rem;
+  color: var(--xp-mu);
+}
+.xfl .fl-map__overview {
+  flex: none;
+  padding: .45rem .8rem;
+  border: 1px solid var(--xp-line-3);
+  border-radius: 8px;
+  background: var(--xp-s2);
+  color: var(--xp-tx);
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.xfl .fl-map__overview:hover {
+  border-color: var(--xp-ac);
+}
+.xfl .fl-map__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.xfl .fl-map__view {
+  transform-origin: 0 0;
+  transform-box: view-box;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .xfl .fl-map__view {
+    transition: transform .5s var(--xp-ease);
+  }
+}
+.xfl .fl-map__group {
+  fill: #6b95ff08;
+  stroke: var(--xp-line-3);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 6;
+}
+.xfl .fl-map__group-label {
+  fill: var(--xp-mu);
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.xfl .fl-map__edge path {
+  fill: none;
+  stroke: var(--xp-mu);
+  stroke-width: 2;
+}
+.xfl .fl-map__edge[data-kind="bypass"] path {
+  stroke: var(--xp-dg);
+  stroke-dasharray: 5 5;
+}
+.xfl .fl-map__edge[data-kind="hooks"] path {
+  stroke: var(--xp-vi);
+  stroke-dasharray: 5 4;
+}
+.xfl .fl-map__edge[data-kind="events"] path {
+  stroke: var(--xp-ok);
+}
+.xfl .fl-map__head {
+  fill: var(--xp-mu);
+}
+.xfl .fl-map__edge text,
+.xfl .fl-map__edge-note {
+  fill: var(--xp-tx-2);
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+}
+.xfl .fl-map__zone {
+  cursor: pointer;
+  outline: none;
+}
+.xfl .fl-map__box {
+  fill: var(--xp-s2);
+  stroke: var(--xp-line-3);
+  stroke-width: 1.5;
+  transition: fill .2s, stroke .2s;
+}
+.xfl .fl-map__zone[data-zone="externes"] .fl-map__box {
+  stroke-dasharray: 5 4;
+}
+.xfl .fl-map__zone:hover .fl-map__box {
+  stroke: var(--xp-ac);
+}
+.xfl .fl-map__zone[aria-selected="true"] .fl-map__box {
+  fill: #6b95ff26;
+  stroke: var(--xp-ac-2);
+  stroke-width: 2.5;
+}
+.xfl .fl-map__ring {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 3;
+}
+.xfl .fl-map__zone:focus-visible .fl-map__ring {
+  stroke: #fff;
+  stroke-dasharray: 6 4;
+}
+.xfl .fl-map__label {
+  fill: var(--xp-tx);
+  font-family: var(--font-body), sans-serif;
+  font-size: 16px;
+  font-weight: 650;
+}
+.xfl .fl-map__detail {
+  fill: var(--xp-tx-2);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+}
+.xfl .fl-map__count {
+  fill: var(--xp-ac-2);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+.xfl .fl-map__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1.25rem 1.5rem;
+  overflow-wrap: anywhere;
+}
+.xfl .fl-map__panel:focus-visible {
+  outline: 2px solid var(--xp-ac-2);
+  outline-offset: 3px;
+}
+.xfl .fl-map__panel-head h3 {
+  font-size: 1.375rem;
+}
+.xfl .fl-map__panel-head p {
+  margin-top: .35rem;
+  color: var(--xp-tx-2);
+}
+.xfl .fl-kind {
+  display: inline-flex;
+  align-items: center;
+  padding: .25rem .6rem;
+  border: 1px solid;
+  border-radius: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.xfl .fl-kind[data-kind="product"] {
+  color: var(--xp-ok);
+  border-color: #3dd5984d;
+  background: #3dd59814;
+}
+.xfl .fl-kind[data-kind="consulting"] {
+  color: var(--xp-am);
+  border-color: #f2c14e47;
+  background: #f2c14e14;
+}
+.xfl .fl-map__group-hint {
+  margin-top: .5rem;
+  font-size: .875rem;
+  color: var(--xp-mu);
+}
+.xfl .fl-map__none {
+  margin-top: .5rem;
+  font-size: .875rem;
+  color: var(--xp-mu);
+}
+.xfl .fl-map__options {
+  display: grid;
+  gap: .75rem;
+  margin-top: .75rem;
+}
+.xfl .fl-opt {
+  padding: .9rem 1rem;
+  border: 1px solid var(--xp-line-2);
+  border-left: 3px solid var(--xp-ok);
+  border-radius: 10px;
+  background: var(--xp-s2);
+}
+.xfl .fl-opt[data-kind="consulting"] {
+  border-left-color: var(--xp-am);
+}
+.xfl .fl-opt h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--xp-tx);
+}
+.xfl .fl-opt__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .5rem;
+}
+.xfl .fl-tag {
+  display: inline-block;
+  padding: .12rem .45rem;
+  border: 1px solid var(--xp-line-3);
+  border-radius: 5px;
+  font-family: var(--font-mono), monospace;
+  font-size: .72rem;
+  line-height: 1.4;
+  color: var(--xp-tx-2);
+}
+.xfl .fl-tag:is([data-nature="produit"], [data-nature="produit-conseil"]) {
+  color: var(--xp-ok);
+  border-color: #3dd5984d;
+}
+.xfl .fl-tag:is([data-nature="integration"], [data-nature="conseil"]) {
+  color: var(--xp-am);
+  border-color: #f2c14e47;
+}
+.xfl .fl-tag--state {
+  color: var(--xp-ac-2);
+  border-color: #6b95ff4d;
+}
+.xfl .fl-tag--state:is([data-state="en-cours"], [data-state="prevu"], [data-state="a-l-etude"], [data-state="non-recommande"]) {
+  color: var(--xp-mu);
+  border-style: dashed;
+}
+.xfl .fl-tag--module {
+  color: var(--xp-vi);
+  border-color: #a58bff4d;
+}
+.xfl .fl-opt__covers {
+  margin-top: .6rem;
+  font-size: .9375rem;
+  line-height: 1.55;
+  color: var(--xp-tx-2);
+}
+.xfl .fl-opt__more {
+  margin-top: .6rem;
+}
+.xfl .fl-opt__more summary {
+  cursor: pointer;
+  color: var(--xp-ac-2);
+  font-size: .875rem;
+  font-weight: 600;
+}
+.xfl .fl-opt__more dl {
+  display: grid;
+  gap: .3rem;
+  margin-top: .6rem;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+.xfl .fl-opt__more dt {
+  margin-top: .4rem;
+  color: var(--xp-tx);
+  font-weight: 600;
+}
+.xfl .fl-opt__more dd {
+  margin: 0;
+  color: var(--xp-tx-2);
+}
+.xfl .fl-opt__sources {
+  display: grid;
+  gap: .2rem;
+}
+.xfl .fl-opt__sources a {
+  color: var(--xp-ac-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.xfl .fl-opt__sources small {
+  color: var(--xp-mu);
+}
+.xfl .fl-opt__matrix {
+  margin-top: .75rem;
+  font-size: .875rem;
+}
+.xfl .fl-map__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.25rem;
+}
+.xfl .fl-mx {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+.xfl .fl-mx__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--xp-line-2);
+  border-radius: var(--xp-r);
+  background: var(--xp-s1);
+}
+.xfl .fl-mx__scroll:focus-visible {
+  outline: 2px solid var(--xp-ac-2);
+  outline-offset: 3px;
+}
+.xfl .fl-mx table {
+  width: 100%;
+  min-width: 66rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: .875rem;
+}
+.xfl .fl-mx caption {
+  padding: .75rem 1rem;
+  text-align: left;
+  font-family: var(--font-mono), monospace;
+  font-size: .75rem;
+  color: var(--xp-mu);
+}
+.xfl .fl-mx :is(th, td) {
+  padding: .6rem .7rem;
+  border-bottom: 1px solid var(--xp-line);
+  text-align: left;
+  vertical-align: top;
+}
+.xfl .fl-mx thead th {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--xp-mu);
+}
+.xfl .fl-mx :is(thead th:first-child, tbody th[scope="row"]) {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 12rem;
+  max-width: 16rem;
+  border-right: 1px solid var(--xp-line);
+  background: var(--xp-s1);
+}
+.xfl .fl-mx tbody th[scope="row"] {
+  font-weight: 600;
+  color: var(--xp-tx);
+}
+.xfl .fl-mx tbody tr:target th[scope="row"] {
+  box-shadow: inset 3px 0 0 var(--xp-ac);
+}
+.xfl .fl-mx__level th {
+  background: var(--xp-s2);
+  font-family: var(--font-mono), monospace;
+  font-size: .72rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--xp-ac-2);
+}
+.xfl .fl-mx__cell {
+  text-align: center;
+  font-family: var(--font-mono), monospace;
+  font-size: .78rem;
+  white-space: nowrap;
+}
+.xfl .fl-mx td.fl-mx__cell {
+  text-align: center;
+}
+.xfl .fl-mx__cell[data-value="oui"] {
+  color: var(--xp-ok);
+  font-weight: 600;
+}
+.xfl .fl-mx__cell[data-value="partiel"] {
+  color: var(--xp-am);
+}
+.xfl .fl-mx__cell[data-value="vendeur"] {
+  color: var(--xp-vi);
+}
+.xfl .fl-mx__cell[data-value="a-mesurer"] {
+  color: var(--xp-ac-2);
+}
+.xfl .fl-mx__cell[data-value="non"] {
+  color: var(--xp-mu);
+}
+.xfl .fl-mx__legend {
+  display: grid;
+  gap: .5rem;
+  font-size: .8125rem;
+  color: var(--xp-tx-2);
+}
+.xfl .fl-mx__legend strong {
+  color: var(--xp-tx);
+}
+.xfl .fl-mx__legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+.xfl .fl-mx__legend dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: .4rem 1.25rem;
+}
+.xfl .fl-mx__legend dl div {
+  display: flex;
+  gap: .6rem;
+  align-items: baseline;
+}
+.xfl .fl-mx__legend dt {
+  flex: none;
+  min-width: 7.5rem;
+  text-align: left;
+}
+.xfl .fl-mx__legend dd {
+  margin: 0;
+}
+.xfl .fl-mx__scroll-hint {
+  color: var(--xp-mu);
+}
+@media (max-width: 1100px) {
+  .xfl .fl-map {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 720px) {
+  .xfl .fl-map__bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .xfl .fl-map__panel {
+    padding: 1rem;
+  }
+  .xfl .fl-mx :is(thead th:first-child, tbody th[scope="row"]) {
+    min-width: 9.5rem;
+  }
+}
+@media (forced-colors: active) {
+  .xfl .fl-map__zone[aria-selected="true"] .fl-map__box,
+  .xfl .fl-map__zone:focus-visible .fl-map__ring {
+    stroke: Highlight;
+  }
+}

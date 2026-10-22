@@ -1,0 +1,1673 @@
+{
+  "schemaVersion": 1,
+  "id": "xsom-fleet-catalogue-options",
+  "date": "2026-10-22",
+  "nextReview": "2026-11-01",
+  "provenance": {
+    "note": "Copie publique du catalogue d’options de xSOM Fleet (source privée, docs/offre/catalogue-options.json), options marquées « public » seulement ; ne pas éditer à la main : recopier depuis la source.",
+    "catalogueDate": "2026-10-22",
+    "researchDate": "2026-10-21",
+    "stateCheckedOn": "2026-10-22"
+  },
+  "notice": {
+    "fr": "Catalogue daté du 2026-10-22. Chaque option dit ce qu’elle couvre, ce qu’elle ne couvre pas, ses prérequis, sa part produit et sa part conseil, et son état réel. Les capacités des outils tiers sont celles de leur documentation à la date de lecture ; « selon le vendeur » signale une affirmation non vérifiée par xSOM. Aucune option ne suffit seule : la recette de couverture mesure ce qui marche vraiment chez le Groupe.",
+    "en": "Catalogue dated 2026-10-22. Each option states what it covers, what it does not cover, its prerequisites, its product and consulting parts, and its actual state. Third-party capabilities are those of their documentation on the reading date; “according to the vendor” marks a claim xSOM has not verified. No option is enough on its own: the coverage test measures what actually works at the Group."
+  },
+  "levels": [
+    {
+      "id": "web",
+      "label": {
+        "fr": "Web (navigateur)",
+        "en": "Web (browser)"
+      },
+      "summary": {
+        "fr": "claude.ai et chatgpt.com ouverts dans un navigateur, par les salariés et par les Externes.",
+        "en": "claude.ai and chatgpt.com in a browser, used by employees and by Externals."
+      }
+    },
+    {
+      "id": "poste",
+      "label": {
+        "fr": "Poste et applications de bureau",
+        "en": "Workstation and desktop apps"
+      },
+      "summary": {
+        "fr": "Le Poste géré du Développeur : installation, réglages imposés, état.",
+        "en": "The Developer’s managed workstation: installation, enforced settings, state."
+      }
+    },
+    {
+      "id": "code",
+      "label": {
+        "fr": "Code et assistants de code",
+        "en": "Code and coding assistants"
+      },
+      "summary": {
+        "fr": "Les assistants de code et les dépôts : contrôle avant envoi, expurgation, outils.",
+        "en": "Coding assistants and repositories: check before sending, redaction, tools."
+      }
+    },
+    {
+      "id": "api",
+      "label": {
+        "fr": "API (applications et agents)",
+        "en": "API (applications and agents)"
+      },
+      "summary": {
+        "fr": "Le trafic API des applications et des agents du Groupe, par une passerelle chez le Groupe.",
+        "en": "API traffic of the Group’s applications and agents, through a gateway at the Group."
+      }
+    },
+    {
+      "id": "cloud",
+      "label": {
+        "fr": "Cloud des Fournisseurs",
+        "en": "Provider cloud"
+      },
+      "summary": {
+        "fr": "Les contrôles qu’un Fournisseur exécute chez lui, avant l’inférence ou après coup.",
+        "en": "Controls a Provider runs on its side, before inference or after the fact."
+      }
+    },
+    {
+      "id": "finops",
+      "label": {
+        "fr": "FinOps et preuves",
+        "en": "FinOps and evidence"
+      },
+      "summary": {
+        "fr": "Sièges, coûts, dépenses API et preuves pour l’audit.",
+        "en": "Seats, costs, API spend and audit evidence."
+      }
+    }
+  ],
+  "zones": [
+    {
+      "id": "metiers",
+      "label": {
+        "fr": "Métiers",
+        "en": "Business teams"
+      },
+      "summary": {
+        "fr": "Salariés qui utilisent claude.ai ou chatgpt.com dans leur navigateur.",
+        "en": "Employees using claude.ai or chatgpt.com in their browser."
+      }
+    },
+    {
+      "id": "externes",
+      "label": {
+        "fr": "Externes",
+        "en": "Externals"
+      },
+      "summary": {
+        "fr": "Prestataires et comptes personnels, hors des organisations du Groupe.",
+        "en": "Contractors and personal accounts, outside the Group’s organisations."
+      }
+    },
+    {
+      "id": "postes-dev",
+      "label": {
+        "fr": "Développeurs et leurs Postes",
+        "en": "Developers and their workstations"
+      },
+      "summary": {
+        "fr": "Claude Code et Codex sur des Postes gérés.",
+        "en": "Claude Code and Codex on managed workstations."
+      }
+    },
+    {
+      "id": "proxy",
+      "label": {
+        "fr": "Proxy d’entreprise",
+        "en": "Corporate proxy"
+      },
+      "summary": {
+        "fr": "La sortie Internet du Groupe, avec inspection TLS.",
+        "en": "The Group’s Internet egress, with TLS inspection."
+      }
+    },
+    {
+      "id": "serveurs",
+      "label": {
+        "fr": "Serveurs internes",
+        "en": "Internal servers"
+      },
+      "summary": {
+        "fr": "Passerelle API et Serveur de verdict, installés chez le Groupe.",
+        "en": "API Gateway and Verdict Server, installed at the Group."
+      }
+    },
+    {
+      "id": "cloud",
+      "label": {
+        "fr": "Cloud des Fournisseurs",
+        "en": "Provider cloud"
+      },
+      "summary": {
+        "fr": "Les services des Fournisseurs d’IA, hors du Groupe.",
+        "en": "The AI Providers’ services, outside the Group."
+      }
+    },
+    {
+      "id": "console",
+      "label": {
+        "fr": "Console xSOM Fleet",
+        "en": "xSOM Fleet console"
+      },
+      "summary": {
+        "fr": "Politique, couverture, coûts et preuves, sans aucun contenu de prompt.",
+        "en": "Policy, coverage, costs and evidence, with no prompt content."
+      }
+    }
+  ],
+  "states": [
+    {
+      "id": "livre-teste",
+      "label": {
+        "fr": "Livré, testé en local",
+        "en": "Delivered, tested locally"
+      },
+      "description": {
+        "fr": "Code fusionné ; tests automatisés passants sur les postes de développement ; aucune recette réelle consignée dans le dépôt.",
+        "en": "Code merged; automated tests pass on development machines; no real-world test recorded in the repository."
+      }
+    },
+    {
+      "id": "livre-recette-a-faire",
+      "label": {
+        "fr": "Livré, recette réelle à faire",
+        "en": "Delivered, real-world test pending"
+      },
+      "description": {
+        "fr": "Code et tests en local ; l’essai sur un Poste, un locataire ou un serveur réel reste à faire.",
+        "en": "Code and local tests; the test on a real workstation, tenant or server is still to do."
+      }
+    },
+    {
+      "id": "compile-windows",
+      "label": {
+        "fr": "Testé en local, compilé seulement pour Windows",
+        "en": "Tested locally, compiled only for Windows"
+      },
+      "description": {
+        "fr": "Tests passants sous Linux et macOS ; sous Windows, compilation et analyse statique seulement, tests à exécuter sur le Poste de référence.",
+        "en": "Tests pass on Linux and macOS; on Windows, compilation and static analysis only, tests to run on the reference workstation."
+      }
+    },
+    {
+      "id": "en-cours",
+      "label": {
+        "fr": "En cours",
+        "en": "In progress"
+      },
+      "description": {
+        "fr": "Story ouverte ; aucune version livrée.",
+        "en": "Story open; no version delivered."
+      }
+    },
+    {
+      "id": "prevu",
+      "label": {
+        "fr": "Prévu",
+        "en": "Planned"
+      },
+      "description": {
+        "fr": "Story écrite, pas commencée.",
+        "en": "Story written, not started."
+      }
+    },
+    {
+      "id": "a-l-etude",
+      "label": {
+        "fr": "À l’étude",
+        "en": "Under study"
+      },
+      "description": {
+        "fr": "Option relevée par la recherche ou une étude ; aucune story de réalisation.",
+        "en": "Option identified by research or a study; no delivery story."
+      }
+    },
+    {
+      "id": "sans-code",
+      "label": {
+        "fr": "Sans code xSOM",
+        "en": "No xSOM code"
+      },
+      "description": {
+        "fr": "Paramétrage d’un outil du Groupe ou d’un Fournisseur, ou conseil.",
+        "en": "Configuration of a Group or Provider tool, or consulting."
+      }
+    },
+    {
+      "id": "non-recommande",
+      "label": {
+        "fr": "Non recommandé",
+        "en": "Not recommended"
+      },
+      "description": {
+        "fr": "Écarté par la recherche ; décrit pour répondre à la question.",
+        "en": "Ruled out by research; described to answer the question."
+      }
+    }
+  ],
+  "natures": [
+    {
+      "id": "produit",
+      "label": {
+        "fr": "Produit installable",
+        "en": "Installable product"
+      }
+    },
+    {
+      "id": "produit-conseil",
+      "label": {
+        "fr": "Produit, avec mise en place en conseil",
+        "en": "Product, with consulting setup"
+      }
+    },
+    {
+      "id": "integration",
+      "label": {
+        "fr": "Intégration d’un outil existant",
+        "en": "Integration of an existing tool"
+      }
+    },
+    {
+      "id": "conseil",
+      "label": {
+        "fr": "Conseil",
+        "en": "Consulting"
+      }
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "claude-web",
+      "label": {
+        "fr": "claude.ai du Groupe",
+        "en": "Group claude.ai"
+      }
+    },
+    {
+      "id": "chatgpt-web",
+      "label": {
+        "fr": "chatgpt.com du Groupe",
+        "en": "Group chatgpt.com"
+      }
+    },
+    {
+      "id": "comptes-personnels",
+      "label": {
+        "fr": "Comptes personnels (Externes)",
+        "en": "Personal accounts (Externals)"
+      }
+    },
+    {
+      "id": "assistants-code",
+      "label": {
+        "fr": "Claude Code et Codex",
+        "en": "Claude Code and Codex"
+      }
+    },
+    {
+      "id": "autres-code",
+      "label": {
+        "fr": "Autres assistants de code",
+        "en": "Other coding assistants"
+      }
+    },
+    {
+      "id": "depots",
+      "label": {
+        "fr": "Dépôts de code",
+        "en": "Code repositories"
+      }
+    },
+    {
+      "id": "api",
+      "label": {
+        "fr": "Applications API",
+        "en": "API Applications"
+      }
+    },
+    {
+      "id": "sieges",
+      "label": {
+        "fr": "Sièges et coûts",
+        "en": "Seats and costs"
+      }
+    }
+  ],
+  "coverageValues": [
+    {
+      "id": "oui",
+      "label": {
+        "fr": "Oui",
+        "en": "Yes"
+      },
+      "description": {
+        "fr": "L’option agit sur cette surface, dans les conditions de ses prérequis.",
+        "en": "The option acts on this surface, under its prerequisites."
+      }
+    },
+    {
+      "id": "partiel",
+      "label": {
+        "fr": "Partiel",
+        "en": "Partial"
+      },
+      "description": {
+        "fr": "Une partie seulement : voir ses limites.",
+        "en": "Only partly: see its limits."
+      }
+    },
+    {
+      "id": "vendeur",
+      "label": {
+        "fr": "Selon le vendeur",
+        "en": "According to the vendor"
+      },
+      "description": {
+        "fr": "Affirmé par le vendeur, non vérifié par xSOM.",
+        "en": "Claimed by the vendor, not verified by xSOM."
+      }
+    },
+    {
+      "id": "a-mesurer",
+      "label": {
+        "fr": "À mesurer",
+        "en": "To be measured"
+      },
+      "description": {
+        "fr": "Inconnu : seule la recette de couverture le dira.",
+        "en": "Unknown: only the coverage test will tell."
+      }
+    },
+    {
+      "id": "non",
+      "label": {
+        "fr": "Non",
+        "en": "No"
+      },
+      "description": {
+        "fr": "L’option n’agit pas sur cette surface.",
+        "en": "The option does not act on this surface."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "R1",
+      "publisher": "Zscaler",
+      "url": "https://raw.githubusercontent.com/zscaler/terraform-provider-zia/master/CHANGELOG.md",
+      "published": "2026-03-02 et 2026-08-26",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R2",
+      "publisher": "Zscaler",
+      "url": "https://raw.githubusercontent.com/zscaler/terraform-provider-zia/master/docs/resources/zia_dlp_web_rules.md",
+      "published": "dernier commit 2026-10-09",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R3",
+      "publisher": "Zscaler",
+      "url": "https://raw.githubusercontent.com/zscaler/terraform-provider-zia/master/docs/data-sources/zia_dlp_dictionary_predefined_identifiers.md",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R5",
+      "publisher": "Zscaler",
+      "url": "https://help.zscaler.com/zia/adding-ai-ml-applications-rule-cloud-app-control",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R6",
+      "publisher": "Zscaler",
+      "url": "https://help.zscaler.com/zia/about-gen-ai-security-report",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R7",
+      "publisher": "Jazz Security (concurrent)",
+      "url": "https://jazz.security/dlp-explained/dlp-basics/is-zscaler-dlp-enough/",
+      "published": "2026-10",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R11",
+      "publisher": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R14",
+      "publisher": "Anthropic",
+      "url": "https://code.claude.com/docs/en/hooks",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R16",
+      "publisher": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks-configuration",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R21",
+      "publisher": "Zscaler",
+      "url": "https://raw.githubusercontent.com/zscaler/terraform-provider-zia/master/docs/resources/zia_dlp_dictionaries.md",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R24",
+      "publisher": "Zscaler",
+      "url": "https://raw.githubusercontent.com/zscaler/terraform-provider-zia/master/docs/resources/zia_cloud_app_control_rule.md",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R33",
+      "publisher": "Zscaler",
+      "url": "https://help.zscaler.com/zia/about-data-loss-prevention",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R53",
+      "publisher": "Zscaler",
+      "url": "https://help.zscaler.com/zia/managing-quic-protocol",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R60",
+      "publisher": "Google (Chrome for Developers)",
+      "url": "https://developer.chrome.com/docs/extensions/reference/api/webRequest",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R66",
+      "publisher": "Google (Chrome for Developers)",
+      "url": "https://developer.chrome.com/docs/extensions/reference/manifest/content-security-policy",
+      "published": "2024-02-13",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R68",
+      "publisher": "Google (Chrome Enterprise Help)",
+      "url": "https://support.google.com/chrome/a/answer/9867568?hl=en",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R70",
+      "publisher": "Google (Chrome Enterprise Help)",
+      "url": "https://support.google.com/chrome/a/answer/13130396?hl=en",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R98",
+      "publisher": "Cloud Security Alliance",
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-browser-extension-security-gaps-2026041/",
+      "published": "2026-04-11",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R100",
+      "publisher": "The Register",
+      "url": "https://www.theregister.com/2025/12/16/chrome_edge_privacy_extensions_quietly/",
+      "published": "2025-12-16",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R103",
+      "publisher": "Anthropic",
+      "url": "https://support.claude.com/en/articles/13198485-enforce-network-level-access-control-with-tenant-restrictions",
+      "published": "mis à jour la semaine du 2026-10-21",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R104",
+      "publisher": "Cloudflare",
+      "url": "https://developers.cloudflare.com/cloudflare-one/traffic-policies/http-policies/tenant-control/",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R105",
+      "publisher": "Netskope",
+      "url": "https://community.netskope.com/generative-ai-anthropic-claude-176/anthropic-claude-access-to-corporate-instance-only-via-header-insertion-8757",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R107",
+      "publisher": "Anthropic",
+      "url": "https://support.claude.com/en/articles/13200993-restrict-access-to-claude-with-ip-allowlisting",
+      "published": "mis à jour la semaine du 2026-10-21",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R108",
+      "publisher": "Anthropic",
+      "url": "https://support.claude.com/en/articles/12622667-enterprise-configuration",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R109",
+      "publisher": "Anthropic",
+      "url": "https://code.claude.com/docs/en/managed-settings.md",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R110",
+      "publisher": "OpenAI",
+      "url": "https://help.openai.com/en/articles/20001323-corporate-network-controls-in-chatgpt-enterprise",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R111",
+      "publisher": "Diladele",
+      "url": "https://diladele.com/websafety/docs/web_filter/tenants/chatgpt_restrictions/",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R112",
+      "publisher": "Jazz Security",
+      "url": "https://jazz.security/dlp-explained/dlp-basics/how-to-block-chatgpt-at-work/",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R113",
+      "publisher": "Anthropic",
+      "url": "https://claude.com/blog/claude-enterprise-inference-hooks",
+      "published": "2026-08-05",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R114",
+      "publisher": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/release-notes/overview",
+      "published": "2026-10-20",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R116",
+      "publisher": "Check Point",
+      "url": "https://sc1.checkpoint.com/documents/Infinity_Portal/WebAdminGuides/EN/Workforce-AI-Security-Admin-Guide/Topics-Workforce-AI-Security-AG/Integration-Claude-Inference-Hooks.htm",
+      "published": "2026-09-10",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R117",
+      "publisher": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/manage-claude/inference-hooks-endpoint",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R125",
+      "publisher": "dope.security (concurrent)",
+      "url": "https://dope.security/post/chatgpt-data-loss-prevention-enterprise-controls-2026",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R138",
+      "publisher": "Anthropic",
+      "url": "https://code.claude.com/docs/en/plugins/mods/admin.md",
+      "published": "2026-10",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R139",
+      "publisher": "OpenAI",
+      "url": "https://developers.openai.com/codex/hooks",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R140",
+      "publisher": "OpenAI",
+      "url": "https://developers.openai.com/codex/enterprise/managed-configuration",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R145",
+      "publisher": "GitHub",
+      "url": "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-hooks-reference",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R146",
+      "publisher": "GitHub",
+      "url": "https://docs.github.com/en/copilot/reference/hooks-reference",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R150",
+      "publisher": "Microsoft (VS Code)",
+      "url": "https://code.visualstudio.com/docs/enterprise/manage-ai-settings",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R152",
+      "publisher": "Start Debugging",
+      "url": "https://startdebugging.net/2026/10/how-to-make-a-claude-code-hook-fail-closed-with-onfailure-block/",
+      "published": "2026-10-19",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R154",
+      "publisher": "GitHub (openai/codex)",
+      "url": "https://github.com/openai/codex/issues/33413",
+      "published": "2026-07-15",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R163",
+      "publisher": "BerriAI (GitHub)",
+      "url": "https://raw.githubusercontent.com/BerriAI/litellm/main/LICENSE",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R166",
+      "publisher": "LiteLLM (BerriAI)",
+      "url": "https://docs.litellm.ai/docs/proxy/guardrails/litellm_content_filter",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R169",
+      "publisher": "LiteLLM (BerriAI)",
+      "url": "https://docs.litellm.ai/docs/proxy/guardrails/secret_detection",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R174",
+      "publisher": "LiteLLM (BerriAI)",
+      "url": "https://docs.litellm.ai/docs/proxy/guardrails/custom_code_guardrail",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R176",
+      "publisher": "GitHub (BerriAI)",
+      "url": "https://api.github.com/repos/BerriAI/litellm/security-advisories",
+      "published": "2026-05-28 à 2026-10-01",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R202",
+      "publisher": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/build-with-claude/claude-code-analytics-api",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R203",
+      "publisher": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/manage-claude/analytics-api",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R208",
+      "publisher": "OpenAI",
+      "url": "https://learn.chatgpt.com/docs/enterprise/analytics-api.md",
+      "published": "non daté",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "R212",
+      "publisher": "FinOps Foundation (GitHub)",
+      "url": "https://github.com/FinOps-Open-Cost-and-Usage-Spec/FOCUS_Spec/releases/tag/v1.4",
+      "published": "2026-06-04",
+      "consulted": "2026-10-21"
+    },
+    {
+      "id": "SG",
+      "publisher": "xSOM Consulting",
+      "url": "https://github.com/xsom-consulting/secret-guard",
+      "published": "v0.4.1, 2026-10-20",
+      "consulted": "2026-10-22"
+    }
+  ],
+  "options": [
+    {
+      "id": "web-audit-couverture",
+      "level": "web",
+      "module": null,
+      "nature": "conseil",
+      "state": "sans-code",
+      "zones": [
+        "proxy",
+        "metiers",
+        "postes-dev"
+      ],
+      "coverage": {
+        "claude-web": "oui",
+        "chatgpt-web": "oui",
+        "comptes-personnels": "oui",
+        "assistants-code": "oui",
+        "autres-code": "oui",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R2",
+        "R5",
+        "R6",
+        "R7",
+        "R33"
+      ],
+      "fr": {
+        "name": "Audit de couverture du proxy et des outils en place",
+        "covers": "Ce que le proxy d’entreprise (par exemple Zscaler), les DLP de Microsoft et les navigateurs du Groupe bloquent, confirment ou laissent passer vers claude.ai, chatgpt.com, les applications de bureau et les assistants de code, mesuré avec de faux secrets, outil par outil.",
+        "limits": "Ne protège rien à lui seul. Photographie datée, à refaire à chaque changement de version ou de réglage.",
+        "prerequisites": "Accès en lecture à la console du proxy et à son support ; postes de test gérés comme ceux du Groupe ; comptes de test chez les Fournisseurs.",
+        "productPart": "Aucune : xSOM apporte le jeu de faux secrets et le protocole de la recette.",
+        "consultingPart": "Essais sur place, relevé outil par outil, rapport daté et recommandations."
+      },
+      "en": {
+        "name": "Coverage audit of the proxy and existing tools",
+        "covers": "What the corporate proxy (for example Zscaler), Microsoft DLP and the Group’s browsers block, confirm or let through to claude.ai, chatgpt.com, desktop apps and coding assistants, measured with fake secrets, tool by tool.",
+        "limits": "Protects nothing on its own. A dated snapshot, to redo after every version or setting change.",
+        "prerequisites": "Read access to the proxy console and its support; test workstations managed like the Group’s; test accounts at the Providers.",
+        "productPart": "None: xSOM brings the fake-secret set and the test protocol.",
+        "consultingPart": "On-site tests, tool-by-tool findings, dated report and recommendations."
+      }
+    },
+    {
+      "id": "web-restriction-locataire",
+      "level": "web",
+      "module": null,
+      "nature": "integration",
+      "state": "sans-code",
+      "zones": [
+        "proxy",
+        "externes",
+        "metiers"
+      ],
+      "coverage": {
+        "claude-web": "partiel",
+        "chatgpt-web": "partiel",
+        "comptes-personnels": "partiel",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "partiel",
+        "sieges": "non"
+      },
+      "sources": [
+        "R103",
+        "R104",
+        "R105",
+        "R110",
+        "R111",
+        "R112"
+      ],
+      "fr": {
+        "name": "Restriction de locataire sur le proxy",
+        "covers": "Seules les organisations du Groupe passent : le proxy écrase l’en-tête anthropic-allowed-org-ids (claude.ai, application de bureau, Claude Code, clés d’API) et ChatGPT-Allowed-Workspace-Id (chatgpt.com). Toute autre organisation, dont un compte personnel, reçoit un refus 403. Le proxy bloque aussi l’usage sans compte de chatgpt.com (backend-anon).",
+        "limits": "Aucun contenu contrôlé. Une requête qui ne passe pas par le proxy n’est pas filtrée. Côté OpenAI, l’offre Enterprise est documentée, les autres offres ne le sont pas, et l’aide n’a pas pu être relue. Le Fournisseur n’envoie aucun événement de blocage au proxy, qui peut seulement journaliser le 403.",
+        "prerequisites": "Inspection TLS sur ces domaines ; proxy capable d’écraser un en-tête (Zscaler ZIA, Netskope, Prisma Access, Cloudflare…) ; offre Entreprise du Fournisseur (Anthropic : Enterprise ou Console ; OpenAI : Enterprise) ; identifiants d’organisation et d’espace du Groupe.",
+        "productPart": "Aucune.",
+        "consultingPart": "Paramétrage, essai avec un compte personnel de test, relevé des refus."
+      },
+      "en": {
+        "name": "Tenant restriction on the proxy",
+        "covers": "Only the Group’s organisations get through: the proxy overwrites the anthropic-allowed-org-ids header (claude.ai, desktop app, Claude Code, API keys) and ChatGPT-Allowed-Workspace-Id (chatgpt.com). Any other organisation, including a personal account, gets a 403. The proxy also blocks logged-out use of chatgpt.com (backend-anon).",
+        "limits": "No content is checked. A request that bypasses the proxy is not filtered. On the OpenAI side, the Enterprise plan is documented, other plans are not, and the help page could not be re-read. The Provider sends no block event to the proxy, which can only log the 403.",
+        "prerequisites": "TLS inspection on these domains; a proxy able to overwrite a header (Zscaler ZIA, Netskope, Prisma Access, Cloudflare…); the Provider’s Enterprise plan (Anthropic: Enterprise or Console; OpenAI: Enterprise); the Group’s organisation and workspace identifiers.",
+        "productPart": "None.",
+        "consultingPart": "Configuration, test with a personal test account, record of refusals."
+      }
+    },
+    {
+      "id": "web-liste-ip",
+      "level": "web",
+      "module": null,
+      "nature": "integration",
+      "state": "sans-code",
+      "zones": [
+        "proxy",
+        "cloud"
+      ],
+      "coverage": {
+        "claude-web": "partiel",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R107"
+      ],
+      "fr": {
+        "name": "Liste d’adresses IP autorisées chez Anthropic",
+        "covers": "L’organisation Claude du Groupe n’est utilisable que depuis les adresses de sortie du proxy : hors du réseau, un salarié ne peut pas s’en servir sans passer par les contrôles du proxy.",
+        "limits": "Contrôle d’accès, pas de contenu. Les artefacts partagés hors de l’organisation ne sont pas couverts. N’empêche pas un compte personnel hors du réseau.",
+        "prerequisites": "Offre Entreprise du Fournisseur ; adresses de sortie fixes et connues du proxy.",
+        "productPart": "Aucune.",
+        "consultingPart": "Relevé des adresses de sortie, réglage, essai depuis un réseau extérieur."
+      },
+      "en": {
+        "name": "Anthropic IP allowlist",
+        "covers": "The Group’s Claude organisation can only be used from the proxy’s egress addresses: outside the network, an employee cannot use it without going through the proxy’s controls.",
+        "limits": "Access control, not content. Artifacts shared outside the organisation are not covered. Does not stop a personal account outside the network.",
+        "prerequisites": "The Provider’s Enterprise plan; fixed, known proxy egress addresses.",
+        "productPart": "None.",
+        "consultingPart": "Egress address survey, setting, test from an outside network."
+      }
+    },
+    {
+      "id": "web-proxy-dlp",
+      "level": "web",
+      "module": null,
+      "nature": "integration",
+      "state": "sans-code",
+      "zones": [
+        "proxy",
+        "metiers"
+      ],
+      "coverage": {
+        "claude-web": "vendeur",
+        "chatgpt-web": "partiel",
+        "comptes-personnels": "a-mesurer",
+        "assistants-code": "a-mesurer",
+        "autres-code": "a-mesurer",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R1",
+        "R2",
+        "R3",
+        "R5",
+        "R6",
+        "R7",
+        "R21",
+        "R24",
+        "R33",
+        "R53"
+      ],
+      "fr": {
+        "name": "Audit et DLP du proxy d’entreprise (Zscaler ZIA)",
+        "covers": "Capture et classement des prompts Claude et ChatGPT (enable_claude_prompt, enable_chatgpt_prompt, prompt_capture_enabled) ; règles DLP Web qui bloquent ou demandent une confirmation (BLOCK, CONFIRM), dictionnaire prédéfini de fuite d’identifiants (CRED_LEAKAGE) et dictionnaires du Groupe ; avertissement des usages d’IA (CAUTION_AI_ML_WEB_USE).",
+        "limits": "Aucune action de masquage. Blocage effectif sur claude.ai non démontré : deux pages d’aide de Zscaler se contredisent. Prompt capturé tronqué à 2 Ko. WebSockets et applications à certificat épinglé incertains. Une DLP tierce branchée par ICAP ne rend pas de verdict en ligne, selon Zscaler. Liste des détecteurs de CRED_LEAKAGE non publiée.",
+        "prerequisites": "ZIA avec protection des données ; inspection TLS sur les catégories d’IA ; QUIC bloqué (ou inspecté là où Zscaler l’annonce).",
+        "productPart": "Aucune.",
+        "consultingPart": "Paramétrage, recette avec de faux secrets, lecture des journaux."
+      },
+      "en": {
+        "name": "Corporate proxy audit and DLP (Zscaler ZIA)",
+        "covers": "Capture and classification of Claude and ChatGPT prompts (enable_claude_prompt, enable_chatgpt_prompt, prompt_capture_enabled); Web DLP rules that block or ask for confirmation (BLOCK, CONFIRM), the predefined credential-leakage dictionary (CRED_LEAKAGE) and the Group’s dictionaries; warning on AI use (CAUTION_AI_ML_WEB_USE).",
+        "limits": "No masking action. Actual blocking on claude.ai not shown: two Zscaler help pages contradict each other. Captured prompt truncated at 2 KB. WebSockets and certificate-pinned apps uncertain. A third-party DLP plugged in through ICAP gives no inline verdict, according to Zscaler. The list of CRED_LEAKAGE detectors is not published.",
+        "prerequisites": "ZIA with data protection; TLS inspection on AI categories; QUIC blocked (or inspected where Zscaler announces it).",
+        "productPart": "None.",
+        "consultingPart": "Configuration, test with fake secrets, log review."
+      }
+    },
+    {
+      "id": "web-extension-navigateur",
+      "level": "web",
+      "module": "Fleet Guard",
+      "nature": "produit-conseil",
+      "state": "en-cours",
+      "zones": [
+        "metiers",
+        "externes"
+      ],
+      "coverage": {
+        "claude-web": "partiel",
+        "chatgpt-web": "partiel",
+        "comptes-personnels": "partiel",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R60",
+        "R66",
+        "R68",
+        "R70",
+        "R98",
+        "R100"
+      ],
+      "fr": {
+        "name": "Extension de navigateur xSOM pour les Externes",
+        "covers": "Avertir et proposer d’expurger un secret avant l’envoi d’un prompt ou d’une pièce jointe sur claude.ai et chatgpt.com, dans Chrome et Edge, avec le moteur de détection exécuté dans le navigateur : rien n’est envoyé à xSOM. Couvre aussi un compte personnel ouvert dans ce navigateur.",
+        "limits": "Autres navigateurs, applications de bureau et mobile non couverts. Un profil ou un navigateur non géré échappe. La réécriture du texte passe par un script dans la page, fragile aux refontes des sites. Les extensions sont une cible d’attaque connue.",
+        "prerequisites": "Postes gérés ; installation forcée par stratégie (ExtensionSettings), navigation privée coupée, hôtes interdits aux autres extensions (runtime_blocked_hosts).",
+        "productPart": "Extension et moteur local.",
+        "consultingPart": "Stratégies de durcissement des navigateurs, recette, suivi des refontes des sites."
+      },
+      "en": {
+        "name": "xSOM browser extension for Externals",
+        "covers": "Warn and offer to redact a secret before a prompt or attachment is sent on claude.ai and chatgpt.com, in Chrome and Edge, with the detection engine running in the browser: nothing is sent to xSOM. Also covers a personal account opened in that browser.",
+        "limits": "Other browsers, desktop apps and mobile not covered. An unmanaged profile or browser escapes. Rewriting the text goes through an in-page script, fragile when the sites are redesigned. Extensions are a known attack target.",
+        "prerequisites": "Managed workstations; forced install by policy (ExtensionSettings), private browsing disabled, hosts blocked for other extensions (runtime_blocked_hosts).",
+        "productPart": "Extension and local engine.",
+        "consultingPart": "Browser hardening policies, testing, follow-up of site redesigns."
+      }
+    },
+    {
+      "id": "poste-agent",
+      "level": "poste",
+      "module": "Fleet Guard",
+      "nature": "produit",
+      "state": "compile-windows",
+      "zones": [
+        "postes-dev",
+        "console"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "oui",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R138",
+        "R139",
+        "R140"
+      ],
+      "fr": {
+        "name": "Agent xSOM et Réglages administrés imposés",
+        "covers": "Un service sur chaque Poste impose les Réglages administrés de Claude Code (registre HKLM sous Windows, fichiers sous Linux et macOS) et la configuration administrée de Codex (requirements.toml), les rétablit toutes les 5 minutes et signale chaque Dérive. Seuls les hooks et mods administrés sont admis. La Politique est signée et vérifiée sur le Poste.",
+        "limits": "Un Poste sans Agent xSOM n’est pas couvert. Un administrateur local peut arrêter le service : le silence du Poste se voit alors dans la console. Ne gère que Claude Code et Codex.",
+        "prerequisites": "MDM ou GPO pour installer le paquet ; console joignable depuis le Poste (adresse autorisée par le proxy, ou installation chez le Groupe).",
+        "productPart": "Agent xSOM, console, Politique signée.",
+        "consultingPart": "Déploiement par le MDM du Groupe, recette sur un Poste de référence."
+      },
+      "en": {
+        "name": "xSOM Agent and enforced managed settings",
+        "covers": "A service on each workstation enforces Claude Code’s managed settings (HKLM registry on Windows, files on Linux and macOS) and Codex’s managed configuration (requirements.toml), restores them every 5 minutes and reports each drift. Only managed hooks and mods are allowed. The Policy is signed and verified on the workstation.",
+        "limits": "A workstation without the xSOM Agent is not covered. A local administrator can stop the service: the workstation’s silence then shows in the console. Manages only Claude Code and Codex.",
+        "prerequisites": "MDM or GPO to install the package; console reachable from the workstation (address allowed by the proxy, or installation at the Group).",
+        "productPart": "xSOM Agent, console, signed Policy.",
+        "consultingPart": "Rollout through the Group’s MDM, test on a reference workstation."
+      }
+    },
+    {
+      "id": "poste-paquets",
+      "level": "poste",
+      "module": "Fleet Guard",
+      "nature": "produit",
+      "state": "compile-windows",
+      "zones": [
+        "postes-dev",
+        "console"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [],
+      "fr": {
+        "name": "Paquets d’installation et enrôlement des Postes",
+        "covers": "Installation par MSI (Intune, GPO), .deb ou .pkg (MDM) ; enrôlement par Jeton d’enrôlement de lot ; Identité de poste dans le TPM, repli logiciel signalé dans la console.",
+        "limits": "Paquets non signés tant qu’aucun certificat n’est acquis. Recette Windows réelle à faire.",
+        "prerequisites": "MDM ; Jeton d’enrôlement de lot créé dans la console ; certificat de signature de l’éditeur.",
+        "productPart": "Paquets, enrôlement, Identité de poste.",
+        "consultingPart": "Intégration au MDM, pilote sur un lot de Postes."
+      },
+      "en": {
+        "name": "Installation packages and workstation enrolment",
+        "covers": "Installation by MSI (Intune, GPO), .deb or .pkg (MDM); enrolment with a batch enrolment token; workstation identity in the TPM, software fallback reported in the console.",
+        "limits": "Packages unsigned until a certificate is acquired. Real Windows test still to do.",
+        "prerequisites": "MDM; batch enrolment token created in the console; publisher signing certificate.",
+        "productPart": "Packages, enrolment, workstation identity.",
+        "consultingPart": "MDM integration, pilot on a batch of workstations."
+      }
+    },
+    {
+      "id": "poste-couverture",
+      "level": "poste",
+      "module": "Fleet Sièges",
+      "nature": "produit",
+      "state": "compile-windows",
+      "zones": [
+        "console",
+        "postes-dev"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [],
+      "fr": {
+        "name": "Couverture et état des Postes",
+        "covers": "Vue de couverture par Groupe et par Équipe : État du poste, Motifs (hook absent, Politique expirée, source des réglages remplacée…), dernière Dérive, Postes en écart exportables ; version minimale de l’agent avant chaque publication.",
+        "limits": "Un Poste sans Agent xSOM n’apparaît pas : rapprocher la liste de l’inventaire du MDM.",
+        "prerequisites": "Agent xSOM installé.",
+        "productPart": "Vue de couverture et export des Postes en écart.",
+        "consultingPart": "Rapprochement avec l’inventaire du MDM, suivi des écarts."
+      },
+      "en": {
+        "name": "Workstation coverage and state",
+        "covers": "Coverage view by Group and by Team: workstation state, reasons (hook missing, expired Policy, settings source overridden…), last drift, exportable list of deviating workstations; minimum agent version before each publication.",
+        "limits": "A workstation without the xSOM Agent does not appear: reconcile the list with the MDM inventory.",
+        "prerequisites": "xSOM Agent installed.",
+        "productPart": "Coverage view and export of deviating workstations.",
+        "consultingPart": "Reconciliation with the MDM inventory, follow-up of deviations."
+      }
+    },
+    {
+      "id": "poste-epinglage-organisation",
+      "level": "poste",
+      "module": null,
+      "nature": "integration",
+      "state": "sans-code",
+      "zones": [
+        "postes-dev",
+        "externes"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "partiel",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R108",
+        "R109"
+      ],
+      "fr": {
+        "name": "Épinglage de l’organisation sur le Poste (forceLoginOrgUUID)",
+        "covers": "Claude Desktop et Claude Code ne se connectent qu’à l’organisation du Groupe, quel que soit le réseau.",
+        "limits": "Aucun contrôle du contenu. Le navigateur reste libre. À poser aujourd’hui par le MDM, hors de l’Agent xSOM.",
+        "prerequisites": "Offre Team ou Enterprise du Fournisseur ; GPO, Intune ou MDM.",
+        "productPart": "Aucune pour l’instant.",
+        "consultingPart": "Paramétrage par le MDM, essai avec un compte personnel de test."
+      },
+      "en": {
+        "name": "Pinning the organisation on the workstation (forceLoginOrgUUID)",
+        "covers": "Claude Desktop and Claude Code only sign in to the Group’s organisation, whatever the network.",
+        "limits": "No content check. The browser stays free. To be set today through the MDM, outside the xSOM Agent.",
+        "prerequisites": "The Provider’s Team or Enterprise plan; GPO, Intune or MDM.",
+        "productPart": "None for now.",
+        "consultingPart": "Setting through the MDM, test with a personal test account."
+      }
+    },
+    {
+      "id": "code-controle-avant-envoi",
+      "level": "code",
+      "module": "Fleet Guard",
+      "nature": "produit",
+      "state": "compile-windows",
+      "zones": [
+        "postes-dev",
+        "console"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "oui",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R14",
+        "R139",
+        "R140",
+        "R152",
+        "R154"
+      ],
+      "fr": {
+        "name": "Contrôle avant envoi des assistants de code",
+        "covers": "Sur le Poste, avant l’envoi : prompts de Claude Code et de Codex, arguments de leurs outils Bash et MCP, et, pour Claude Code, fichiers lus par l’outil Read et fichiers cités par @ ; Instructions cachées et fichiers d’instructions du projet, Règles du Groupe, commandes refusées et écritures hors du projet. Modes bloquer, avertir ou observer par règle et par Niveau de risque. Toute panne du contrôle bloque. Seul un Événement de blocage sans valeur part vers la console.",
+        "limits": "Ne couvre ni GitHub Copilot, ni Cursor, ni Windsurf. Si Claude Code ne parvient pas à lancer le hook ou dépasse son délai, il laisse passer le prompt : le réglage onFailure « block » (Claude Code 2.1.295 ou plus) n’est pas encore imposé par les Réglages administrés. Extension VS Code de Codex sous Windows : hooks non exécutés selon un ticket ouvert. Images et PDF : Claude Code seulement (option suivante).",
+        "prerequisites": "Agent xSOM installé ; Politique publiée et Pack de règles xSOM importé ; versions de Claude Code et de Codex relevées par la recette.",
+        "productPart": "Agent xSOM, moteur de détection Apache-2.0, console et Journal des blocages.",
+        "consultingPart": "Choix des Modes et des Règles du Groupe, recette par outil et par version."
+      },
+      "en": {
+        "name": "Pre-send check for coding assistants",
+        "covers": "On the workstation, before sending: Claude Code and Codex prompts, arguments of their Bash and MCP tools, and, for Claude Code, files read by the Read tool and files mentioned with @; hidden instructions and project instruction files, Group rules, denied commands and writes outside the project. Block, warn or observe modes per rule and per risk level. Any failure of the check blocks. Only a block event without any value goes to the console.",
+        "limits": "Does not cover GitHub Copilot, Cursor or Windsurf. If Claude Code cannot start the hook or the hook times out, Claude Code lets the prompt through: the onFailure “block” setting (Claude Code 2.1.295 or later) is not yet enforced by the managed settings. Codex VS Code extension on Windows: hooks not run according to an open ticket. Images and PDFs: Claude Code only (next option).",
+        "prerequisites": "xSOM Agent installed; Policy published and xSOM rule pack imported; Claude Code and Codex versions recorded by the test.",
+        "productPart": "xSOM Agent, Apache-2.0 detection engine, console and block log.",
+        "consultingPart": "Choice of modes and Group rules, testing per tool and per version."
+      }
+    },
+    {
+      "id": "code-expurgation",
+      "level": "code",
+      "module": "Fleet Guard",
+      "nature": "produit",
+      "state": "livre-recette-a-faire",
+      "zones": [
+        "postes-dev"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R138"
+      ],
+      "fr": {
+        "name": "Expurgation transparente et pièces jointes (Claude Code)",
+        "covers": "Dans Claude Code, un secret est remplacé par un Substitut avant l’envoi au lieu de bloquer ; la vraie valeur n’est réinjectée, sur le Poste, que dans les écritures et commandes autorisées. Résultats d’outils expurgés. Images et PDF : texte reconnu sur le Poste, pièce retirée si elle montre un secret.",
+        "limits": "Claude Code seulement (ni Codex, ni le web). La valeur reste dans la transcription locale de Claude Code (deux champs relevés). Une pièce jointe qui montre un secret est retirée entière, sans masquage au pixel. La reconnaissance de texte dépend du système : sans elle, la pièce est bloquée.",
+        "prerequisites": "Agent xSOM et Mod de l’organisation imposés par les Réglages administrés ; Politique qui choisit « expurger » pour les Niveaux de risque voulus.",
+        "productPart": "Mod de l’organisation, xsom-agent redact, analyse des pièces jointes.",
+        "consultingPart": "Choix des Niveaux de risque à expurger, recette sur le Poste de référence."
+      },
+      "en": {
+        "name": "Transparent redaction and attachments (Claude Code)",
+        "covers": "In Claude Code, a secret is replaced by a substitute before sending instead of blocking; the real value is reinjected, on the workstation, only into allowed writes and commands. Tool results are redacted. Images and PDFs: text recognised on the workstation, the attachment is withdrawn if it shows a secret.",
+        "limits": "Claude Code only (not Codex, not the web). The value stays in Claude Code’s local transcript (two fields found). An attachment showing a secret is withdrawn whole, without pixel masking. Text recognition depends on the system: without it, the attachment is blocked.",
+        "prerequisites": "xSOM Agent and organisation mod enforced by the managed settings; a Policy that chooses “redact” for the desired risk levels.",
+        "productPart": "Organisation mod, xsom-agent redact, attachment analysis.",
+        "consultingPart": "Choice of risk levels to redact, test on the reference workstation."
+      }
+    },
+    {
+      "id": "code-copilot",
+      "level": "code",
+      "module": null,
+      "nature": "integration",
+      "state": "sans-code",
+      "zones": [
+        "postes-dev"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "partiel",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R145",
+        "R146",
+        "R150"
+      ],
+      "fr": {
+        "name": "Hooks de politique de GitHub Copilot (preToolUse)",
+        "covers": "Refus des appels d’outils de Copilot par des hooks posés par l’informatique, que l’utilisateur ne peut pas désactiver ; hooks de l’utilisateur écartés (ChatAllowManagedHooksOnly).",
+        "limits": "Les prompts de Copilot ne peuvent pas être bloqués par un hook de fichier (sa sortie est ignorée). Un délai dépassé laisse passer. Gouverner Copilot dans VS Code désactive les harnais Claude et Codex de l’éditeur.",
+        "prerequisites": "VS Code et Copilot administrés.",
+        "productPart": "Aucune.",
+        "consultingPart": "Paramétrage, recette, explication de la limite au Groupe."
+      },
+      "en": {
+        "name": "GitHub Copilot policy hooks (preToolUse)",
+        "covers": "Refusal of Copilot tool calls by hooks set by IT, which the user cannot disable; user hooks set aside (ChatAllowManagedHooksOnly).",
+        "limits": "Copilot prompts cannot be blocked by a file hook (its output is ignored). A timeout lets the call through. Governing Copilot in VS Code disables the editor’s Claude and Codex harnesses.",
+        "prerequisites": "Managed VS Code and Copilot.",
+        "productPart": "None.",
+        "consultingPart": "Configuration, testing, explaining the limit to the Group."
+      }
+    },
+    {
+      "id": "code-secret-guard",
+      "level": "code",
+      "module": null,
+      "nature": "produit",
+      "state": "livre-teste",
+      "zones": [
+        "postes-dev",
+        "serveurs"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "oui",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "SG"
+      ],
+      "fr": {
+        "name": "Moteur de détection ouvert Secret Guard",
+        "covers": "Analyse de fichiers et de l’entrée standard, en pré-commit ou en intégration continue, avec les règles publiées qu’utilise l’Agent xSOM et le Pack de règles du Groupe.",
+        "limits": "Contrôle du code, pas du prompt. Aucun binaire publié : à construire depuis les sources.",
+        "prerequisites": "Go pour construire ; intégration aux crochets git ou à l’intégration continue du Groupe.",
+        "productPart": "Moteur et ligne de commande, en libre accès.",
+        "consultingPart": "Intégration dans les chaînes du Groupe, si demandée."
+      },
+      "en": {
+        "name": "Secret Guard open detection engine",
+        "covers": "Scanning of files and standard input, as a pre-commit hook or in continuous integration, with the published rules the xSOM Agent uses and the Group’s rule pack.",
+        "limits": "Checks code, not prompts. No published binary: build it from source.",
+        "prerequisites": "Go to build; integration into the Group’s git hooks or continuous integration.",
+        "productPart": "Engine and command line, openly available.",
+        "consultingPart": "Integration into the Group’s pipelines, on request."
+      }
+    },
+    {
+      "id": "code-recette-outils",
+      "level": "code",
+      "module": null,
+      "nature": "conseil",
+      "state": "sans-code",
+      "zones": [
+        "postes-dev"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "oui",
+        "autres-code": "oui",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R14",
+        "R152"
+      ],
+      "fr": {
+        "name": "Recette de couverture par outil et par version",
+        "covers": "Preuve, outil par outil et version par version, que le contrôle est actif et bloque en cas de panne.",
+        "limits": "Ne dit rien entre deux recettes : à refaire à chaque mise à jour d’un assistant.",
+        "prerequisites": "Postes de test gérés comme ceux du Groupe ; versions des assistants relevées.",
+        "productPart": "Jeu de faux secrets et harnais de recette.",
+        "consultingPart": "Exécution, compte rendu daté, suivi des versions."
+      },
+      "en": {
+        "name": "Coverage test per tool and per version",
+        "covers": "Evidence, tool by tool and version by version, that the check is active and blocks on failure.",
+        "limits": "Says nothing between two tests: redo after every assistant update.",
+        "prerequisites": "Test workstations managed like the Group’s; assistant versions recorded.",
+        "productPart": "Fake-secret set and test harness.",
+        "consultingPart": "Execution, dated report, version follow-up."
+      }
+    },
+    {
+      "id": "api-passerelle",
+      "level": "api",
+      "module": "Fleet Gateway",
+      "nature": "produit-conseil",
+      "state": "livre-recette-a-faire",
+      "zones": [
+        "serveurs",
+        "console",
+        "cloud"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "oui",
+        "sieges": "non"
+      },
+      "sources": [
+        "R163",
+        "R176"
+      ],
+      "fr": {
+        "name": "Passerelle API chez le Groupe (Fleet Gateway)",
+        "covers": "Applications API et Clés virtuelles, Budgets API, Traces de passerelle sans contenu, Journal de passerelle chaîné, registre d’outils MCP et commandes refusées, approbation humaine d’un appel d’outil, fenêtre d’observation, Politique de sélection et alias logique. Aucun prompt ni aucune clé ne passe par xSOM.",
+        "limits": "N’analyse pas le contenu des requêtes : aucune détection de secrets à cette couche aujourd’hui. LiteLLM a publié en 2026 des avis de sécurité critiques : correctifs à suivre, passerelle isolée.",
+        "prerequisites": "Serveur du Groupe (Docker) ; clés des Fournisseurs gardées chez le Groupe ; exploitation par le Groupe ou en conseil.",
+        "productPart": "Passerelle, Connecteur de passerelle, module de rappel, vues de la console.",
+        "consultingPart": "Installation, durcissement, suivi des correctifs, recette."
+      },
+      "en": {
+        "name": "API Gateway at the Group (Fleet Gateway)",
+        "covers": "API Applications and virtual keys, API budgets, gateway traces without content, chained gateway log, MCP tool registry and denied commands, human approval of a tool call, observation window, selection policy and logical alias. No prompt and no key goes through xSOM.",
+        "limits": "Does not analyse request content: no secret detection at this layer today. LiteLLM published critical security advisories in 2026: follow the patches, isolate the gateway.",
+        "prerequisites": "A Group server (Docker); Provider keys kept at the Group; operated by the Group or as a consulting service.",
+        "productPart": "Gateway, gateway connector, callback module, console views.",
+        "consultingPart": "Installation, hardening, patch follow-up, testing."
+      }
+    },
+    {
+      "id": "api-filtre-contenu",
+      "level": "api",
+      "module": null,
+      "nature": "integration",
+      "state": "sans-code",
+      "zones": [
+        "serveurs"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "partiel",
+        "sieges": "non"
+      },
+      "sources": [
+        "R166",
+        "R169",
+        "R174"
+      ],
+      "fr": {
+        "name": "Filtre de contenu de LiteLLM dans la passerelle",
+        "covers": "Masquage ou blocage avant l’envoi (pre_call) des clés AWS, des jetons GitHub et d’expressions régulières du Groupe.",
+        "limits": "Secrets hors de ces motifs non vus. Sans effet sur toutes les requêtes tant que default_on n’est pas à true. Le module de détection de secrets est réservé à l’offre payante de LiteLLM. Latence avec garde-fou jamais mesurée.",
+        "prerequisites": "Passerelle LiteLLM chez le Groupe.",
+        "productPart": "Aucune.",
+        "consultingPart": "Paramétrage, recette avec de faux secrets."
+      },
+      "en": {
+        "name": "LiteLLM content filter in the gateway",
+        "covers": "Masking or blocking before sending (pre_call) of AWS keys, GitHub tokens and the Group’s regular expressions.",
+        "limits": "Secrets outside these patterns are not seen. Not applied to all requests until default_on is true. LiteLLM’s secret detection module is reserved to its paid plan. Latency with the guardrail never measured.",
+        "prerequisites": "LiteLLM gateway at the Group.",
+        "productPart": "None.",
+        "consultingPart": "Configuration, test with fake secrets."
+      }
+    },
+    {
+      "id": "cloud-serveur-verdict",
+      "level": "cloud",
+      "module": "Fleet Guard",
+      "nature": "produit-conseil",
+      "state": "livre-recette-a-faire",
+      "zones": [
+        "serveurs",
+        "cloud",
+        "metiers"
+      ],
+      "coverage": {
+        "claude-web": "oui",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "non"
+      },
+      "sources": [
+        "R11",
+        "R16",
+        "R113",
+        "R114",
+        "R116",
+        "R117",
+        "R125"
+      ],
+      "fr": {
+        "name": "Serveur de verdict pour les Inference hooks",
+        "covers": "Le Fournisseur appelle, avant chaque inférence, un serveur installé chez le Groupe : prompts de claude.ai, de l’application de bureau, de Cowork et de Claude Code de l’organisation, et arguments des appels d’outils. Tout secret ou Instruction cachée dans la conversation donne un refus ; toute analyse qui n’aboutit pas aussi. Aucun contenu n’est écrit ni transmis à xSOM.",
+        "limits": "Contrôle après l’envoi : le prompt a quitté le Groupe et un message refusé reste chez le Fournisseur. Verdict binaire, sans expurgation. Images sans texte extrait non lues. Organisations API et accès par les plateformes cloud tierces hors champ ; comptes personnels non couverts ; chatgpt.com non couvert, et aucun contrôle natif équivalent n’a été trouvé chez OpenAI. La couverture baisse si le Groupe laisse passer en cas de panne, exclut des rôles ou n’inspecte qu’une part des requêtes.",
+        "prerequisites": "Offre Entreprise du Fournisseur (Claude Enterprise) ; rôle Owner pour la configuration ; hôte avec IPv4 publique, port 443, certificat public ; mandataire inverse filtrant les adresses du Fournisseur.",
+        "productPart": "Serveur de verdict xsom-verdict, moteur de détection.",
+        "consultingPart": "Hébergement, mandataire inverse, réglages chez le Fournisseur (bloquer en cas d’échec, 100 %, aucun rôle exclu), recette, exploitation."
+      },
+      "en": {
+        "name": "Verdict Server for Inference hooks",
+        "covers": "Before each inference, the Provider calls a server installed at the Group: prompts from the organisation’s claude.ai, desktop app, Cowork and Claude Code, and tool call arguments. Any secret or hidden instruction in the conversation is refused; so is any analysis that does not complete. No content is written or sent to xSOM.",
+        "limits": "Checked after sending: the prompt has left the Group and a refused message stays with the Provider. Binary verdict, no redaction. Images without extracted text are not read. API organisations and access through third-party cloud platforms out of scope; personal accounts not covered; chatgpt.com not covered, and no equivalent native control was found at OpenAI. Coverage drops if the Group lets requests through on failure, excludes roles or inspects only part of the requests.",
+        "prerequisites": "The Provider’s Enterprise plan (Claude Enterprise); Owner role to configure; a host with a public IPv4 address, port 443, public certificate; a reverse proxy filtering the Provider’s addresses.",
+        "productPart": "xsom-verdict server, detection engine.",
+        "consultingPart": "Hosting, reverse proxy, Provider settings (block on failure, 100%, no excluded role), testing, operations."
+      }
+    },
+    {
+      "id": "finops-sieges",
+      "level": "finops",
+      "module": "Fleet Sièges",
+      "nature": "produit",
+      "state": "livre-teste",
+      "zones": [
+        "console"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "oui"
+      },
+      "sources": [
+        "R203"
+      ],
+      "fr": {
+        "name": "Sièges, Plafonds et Facture réelle (Fleet Sièges)",
+        "covers": "Plusieurs Organisations fournisseur dans une console : Sièges et Plafonds, Dépassements saisis ou importés, Facture réelle par Développeur et par Équipe, Licence xSOM, recommandations de Palier de siège, export CSV.",
+        "limits": "Sièges et Dépassements déclarés ou importés : pour les offres au siège, les Fournisseurs ne rendent pas le coût par utilisateur.",
+        "prerequisites": "Liste des Sièges (saisie ou CSV) ; annuaire du Groupe pour la connexion ; Catalogue de prix.",
+        "productPart": "Console Fleet Sièges.",
+        "consultingPart": "Reprise des Sièges existants, revue des Paliers."
+      },
+      "en": {
+        "name": "Seats, caps and actual invoice (Fleet Sièges)",
+        "covers": "Several provider organisations in one console: seats and caps, overages entered or imported, actual invoice per Developer and per Team, xSOM licence, seat tier recommendations, CSV export.",
+        "limits": "Seats and overages are declared or imported: for per-seat plans, Providers do not report cost per user.",
+        "prerequisites": "Seat list (entry or CSV); the Group’s directory for sign-in; price catalogue.",
+        "productPart": "Fleet Sièges console.",
+        "consultingPart": "Import of existing seats, tier review."
+      }
+    },
+    {
+      "id": "finops-usage",
+      "level": "finops",
+      "module": "Fleet Sièges",
+      "nature": "produit",
+      "state": "compile-windows",
+      "zones": [
+        "postes-dev",
+        "console"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "non",
+        "sieges": "oui"
+      },
+      "sources": [
+        "R202",
+        "R203",
+        "R208"
+      ],
+      "fr": {
+        "name": "Usage et Équivalent API estimé par Développeur",
+        "covers": "Usage de Claude Code et de Codex relayé par l’Agent xSOM (liste fermée de métriques, aucun contenu) ; Équivalent API estimé, daté par le Catalogue de prix, jamais additionné à la Facture réelle ; part consommée des limites du forfait ; temps ajouté par le Contrôle avant envoi.",
+        "limits": "L’Équivalent API est une estimation. Les API d’analyse d’Anthropic et d’OpenAI ne sont pas collectées.",
+        "prerequisites": "Agent xSOM installé.",
+        "productPart": "Relais de télémétrie, vues Coûts.",
+        "consultingPart": "Lecture des écarts et des Paliers."
+      },
+      "en": {
+        "name": "Usage and estimated API equivalent per Developer",
+        "covers": "Claude Code and Codex usage relayed by the xSOM Agent (closed list of metrics, no content); estimated API equivalent, dated by the price catalogue, never added to the actual invoice; consumed share of plan limits; time added by the pre-send check.",
+        "limits": "The API equivalent is an estimate. Anthropic and OpenAI analytics APIs are not collected.",
+        "prerequisites": "xSOM Agent installed.",
+        "productPart": "Telemetry relay, cost views.",
+        "consultingPart": "Review of deviations and tiers."
+      }
+    },
+    {
+      "id": "finops-depense-api",
+      "level": "finops",
+      "module": "Fleet Gateway",
+      "nature": "produit",
+      "state": "livre-recette-a-faire",
+      "zones": [
+        "console",
+        "serveurs"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "oui",
+        "sieges": "partiel"
+      },
+      "sources": [
+        "R212"
+      ],
+      "fr": {
+        "name": "Dépense API, dépense rapprochée et coût par tâche acceptée",
+        "covers": "Vue FinOps API par Application API et par modèle (estimation datée) ; imports de dépenses FOCUS, comptes hachés chez le Groupe, et Dépense rapprochée ; mesure des Tâches et Coût par tâche acceptée, sans ligne par personne.",
+        "limits": "La mesure des Tâches dépend des métadonnées envoyées par les applications. Sans source des charges communes, le coût est « partiel ». FOCUS 1.4 n’a pas de colonne de tokens (version 1.5 prévue en décembre 2026).",
+        "prerequisites": "Passerelle API ; exports de coûts du cloud au format FOCUS.",
+        "productPart": "Vues FinOps API et financières de la console.",
+        "consultingPart": "Diagnostic instrumenté, rapprochement, revue des écarts."
+      },
+      "en": {
+        "name": "API spend, reconciled spend and cost per accepted task",
+        "covers": "FinOps API view by API Application and by model (dated estimate); FOCUS spend imports, accounts hashed at the Group, and reconciled spend; task measurement and cost per accepted task, with no per-person line.",
+        "limits": "Task measurement depends on the metadata sent by the applications. Without a source for shared charges, the cost is “partial”. FOCUS 1.4 has no token column (version 1.5 planned for December 2026).",
+        "prerequisites": "API Gateway; cloud cost exports in FOCUS format.",
+        "productPart": "FinOps API and financial views in the console.",
+        "consultingPart": "Instrumented diagnosis, reconciliation, review of deviations."
+      }
+    },
+    {
+      "id": "finops-qualite-couts",
+      "level": "finops",
+      "module": null,
+      "nature": "conseil",
+      "state": "livre-recette-a-faire",
+      "zones": [
+        "console",
+        "serveurs"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "non",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "oui",
+        "sieges": "partiel"
+      },
+      "sources": [],
+      "fr": {
+        "name": "Diagnostic, pilote comparatif et accompagnement qualité-coûts",
+        "covers": "Mesure de la consommation par Tâche, pilote comparatif sur un protocole arrêté avant l’essai, bilan qui sépare résultats observés et généralisation estimée, puis mise en place des choix validés.",
+        "limits": "Aucune promesse de gain : « aucun gain » et « indéterminé » sont des conclusions recevables. Toute généralisation porte « Simulation · hypothèses affichées ».",
+        "prerequisites": "Passerelle API ou sources de mesure du Groupe ; Fonctions métier choisies avec le Groupe.",
+        "productPart": "Outils de protocole, de comparaison et de bilan.",
+        "consultingPart": "Diagnostic, pilote, bilan, accompagnement."
+      },
+      "en": {
+        "name": "Diagnosis, comparative pilot and quality-cost support",
+        "covers": "Measurement of consumption per task, comparative pilot on a protocol fixed before the trial, a report that separates observed results from estimated generalisation, then rollout of the validated choices.",
+        "limits": "No promise of savings: “no gain” and “inconclusive” are acceptable conclusions. Any generalisation carries “Simulation · assumptions shown”.",
+        "prerequisites": "API Gateway or the Group’s measurement sources; business functions chosen with the Group.",
+        "productPart": "Protocol, comparison and report tools.",
+        "consultingPart": "Diagnosis, pilot, report, support."
+      }
+    },
+    {
+      "id": "finops-preuves",
+      "level": "finops",
+      "module": "Fleet Guard",
+      "nature": "produit",
+      "state": "livre-teste",
+      "zones": [
+        "console"
+      ],
+      "coverage": {
+        "claude-web": "non",
+        "chatgpt-web": "non",
+        "comptes-personnels": "non",
+        "assistants-code": "partiel",
+        "autres-code": "non",
+        "depots": "non",
+        "api": "partiel",
+        "sieges": "partiel"
+      },
+      "sources": [],
+      "fr": {
+        "name": "Dossier de preuves et journaux chaînés",
+        "covers": "Dossier de preuves en JSON et en PDF : Politiques appliquées, Journal des blocages, charte et formations, vérification des journaux chaînés et Points de contrôle signés ; Journal d’administration ; durées de conservation réglables.",
+        "limits": "Ne prouve que ce que les Postes et la console ont observé ; les limites du contrôle sont écrites dans le Dossier.",
+        "prerequisites": "Console ; clé serveur créée par l’Opérateur xSOM.",
+        "productPart": "Dossier de preuves, journaux chaînés.",
+        "consultingPart": "Préparation d’un audit, dossier juridique et social (CSE, analyse d’impact, charte)."
+      },
+      "en": {
+        "name": "Evidence dossier and chained logs",
+        "covers": "Evidence dossier in JSON and PDF: applied Policies, block log, charter and training, verification of the chained logs and signed checkpoints; administration log; adjustable retention periods.",
+        "limits": "Only proves what the workstations and the console observed; the limits of the check are written in the dossier.",
+        "prerequisites": "Console; server key created by the xSOM operator.",
+        "productPart": "Evidence dossier, chained logs.",
+        "consultingPart": "Audit preparation, legal and social file (works council, impact assessment, charter)."
+      }
+    }
+  ]
+}
