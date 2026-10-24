@@ -2359,9 +2359,31 @@ h3.xp-head__title {
   stroke-width: 1.3;
   stroke-dasharray: 3 5;
 }
+.xfl .fl-iso__exchange {
+  fill: none;
+  stroke: #c7b5ffa6;
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+}
+.xfl .fl-iso__cost {
+  fill: none;
+  stroke: #f2c14e8c;
+  stroke-width: 1.4;
+  stroke-dasharray: 1 5;
+  stroke-linecap: round;
+}
 .xfl .fl-iso__dot { fill: var(--xp-tx); }
 .xfl .fl-iso__dot--secret { fill: var(--xp-dg); }
 .xfl .fl-iso__dot--stopped { fill: var(--xp-ok); }
+.xfl .fl-iso__dot--exchange { fill: var(--xp-vi); }
+.xfl .fl-iso__dot--cost { fill: var(--xp-am); }
+/* Une réponse du modèle : un anneau, qui remonte le flux en sens inverse des demandes. */
+.xfl .fl-iso__reply {
+  fill: none;
+  stroke: var(--xp-ac-2);
+  stroke-width: 1.6;
+}
 .xfl .fl-iso__stop--ok { stop-color: var(--xp-ok); }
 .xfl .fl-iso__stop--alert { stop-color: var(--xp-dg); }
 .xfl .fl-iso__unknown circle {
@@ -2419,10 +2441,10 @@ h3.xp-head__title {
   transform-box: fill-box;
   transform-origin: center;
 }
-.xfl .fl-iso :is(.fl-iso__shield, .fl-iso__report, .fl-iso__unknowns) {
+.xfl .fl-iso :is(.fl-iso__shield, .fl-iso__report, .fl-iso__unknowns, .fl-iso__costs, .fl-iso__dot--cost) {
   transition: opacity .5s, transform .5s, visibility 0s;
 }
-.xfl .fl-map[data-mode="blind"] :is(.fl-iso__shield, .fl-iso__report),
+.xfl .fl-map[data-mode="blind"] :is(.fl-iso__shield, .fl-iso__report, .fl-iso__costs, .fl-iso__dot--cost),
 .xfl .fl-map[data-mode="control"] .fl-iso__unknowns {
   opacity: 0;
   visibility: hidden;
@@ -2438,8 +2460,8 @@ h3.xp-head__title {
   display: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .xfl .fl-iso :is(.fl-iso__shield, .fl-iso__report, .fl-iso__unknowns, .fl-iso__hl),
-  .xfl .fl-map[data-mode] :is(.fl-iso__shield, .fl-iso__report, .fl-iso__unknowns) {
+  .xfl .fl-iso :is(.fl-iso__shield, .fl-iso__report, .fl-iso__unknowns, .fl-iso__costs, .fl-iso__dot--cost, .fl-iso__hl),
+  .xfl .fl-map[data-mode] :is(.fl-iso__shield, .fl-iso__report, .fl-iso__unknowns, .fl-iso__costs, .fl-iso__dot--cost) {
     transition: none;
   }
 }
@@ -2506,6 +2528,12 @@ h3.xp-head__title {
 }
 .xfl .fl-map__legend li[data-kind="secret"]::before { background: var(--xp-dg); }
 .xfl .fl-map__legend li[data-kind="stopped"]::before { background: var(--xp-ok); }
+.xfl .fl-map__legend li[data-kind="reply"]::before {
+  background: none;
+  box-shadow: inset 0 0 0 1.6px var(--xp-ac-2);
+}
+.xfl .fl-map__legend li[data-kind="exchange"]::before { background: var(--xp-vi); }
+.xfl .fl-map__legend li[data-kind="cost"]::before { background: var(--xp-am); }
 .xfl .fl-map__stage > .fl-map__hint {
   padding: .5rem 1rem 0;
 }

@@ -16,6 +16,7 @@ import {
   type ZoneId,
 } from "./fleet-catalogue";
 import {
+  CAPTION_SIDE,
   DRAW_ORDER,
   SCENE,
   SHIELD_ORDER,
@@ -28,6 +29,7 @@ import {
   zoneScene,
   zoomOn,
   type Flow,
+  type Path,
   type Point,
   type Shape,
   type ShieldId,
@@ -43,7 +45,7 @@ export type MapLabels = {
   readonly hint: string;
   readonly count: (n: number) => string;
   readonly modes: { readonly label: string } & Readonly<Record<Mode, string>>;
-  readonly legend: { readonly label: string; readonly request: string; readonly secret: string; readonly stopped: string };
+  readonly legend: { readonly label: string; readonly request: string; readonly secret: string; readonly stopped: string; readonly reply: string; readonly exchange: string; readonly cost: string };
   readonly places: Readonly<Record<ZoneId, { readonly name: string; readonly sub?: string }>>;
   readonly shields: Readonly<Record<ShieldId, string>>;
   readonly module: string;
@@ -83,22 +85,38 @@ function Draw({ shape, glow }: { shape: Shape; glow: string }) {
   }
 }
 
-type Request = { readonly flow: Flow; t: number; readonly speed: number; secret: boolean; handled: boolean; readonly node: SVGCircleElement };
+/** Ce qui circule : une demande (vers les IA), une réponse (en retour), un échange avec les Externes, une remontée d’usage ou de coûts. */
+type Moving = {
+  readonly path: Path;
+  readonly flow?: Flow;
+  readonly kind: "request" | "reply" | "exchange" | "cost";
+  /** Sens de parcours : 1 du départ vers l’arrivée, -1 en retour. */
+  readonly direction: 1 | -1;
+  readonly speed: number;
+  t: number;
+  secret: boolean;
+  handled: boolean;
+  readonly node: SVGCircleElement;
+};
 type Pulse = { readonly node: SVGCircleElement; readonly born: number };
 
+const pick = <T,>(list: readonly T[]) => list[Math.floor(Math.random() * list.length)] ?? list[0];
+
 /**
- * Les demandes animées le long des flux : des points créés hors de React (une demande
- * toutes les 0,32 s, 40 au plus), qui passent au vert au bouclier quand l’entreprise est
- * sous contrôle. La boucle ne tourne que lorsque la carte est à l’écran, et jamais sous
- * mouvement réduit (les demandes y sont figées, dessinées par React). L’attribut
- * `data-animating` de la carte dit si la boucle tourne.
+ * Ce qui circule le long des chemins, créé hors de React : une demande toutes les
+ * 0,32 s vers les IA, qui passe au vert au bouclier quand l’entreprise est sous
+ * contrôle ; à son arrivée, souvent, une réponse du modèle qui redescend ; des échanges
+ * entre les serveurs et les Externes, dans les deux sens ; des remontées d’usage et de
+ * coûts vers la console (masquées en angle mort par la feuille de style). La boucle ne
+ * tourne que lorsque la carte est à l’écran, et jamais sous mouvement réduit (tout y est
+ * figé, dessiné par React). L’attribut `data-animating` de la carte dit si elle tourne.
  */
 function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGElement, mode: { readonly current: Mode }, marker: string) {
-  const live: Request[] = [];
+  const live: Moving[] = [];
   const pulses: Pulse[] = [];
+  const timers = { request: 0, exchange: 0, cost: 0 };
   let frame = 0;
   let last = 0;
-  let pending = 0;
 
   const circle = (className: string, r: number) => {
     const node = document.createElementNS(SVG, "circle");
@@ -114,42 +132,52 @@ function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGEleme
     node.setAttribute("fill", `url(#${marker}-${good ? "ok" : "alert"})`);
     pulses.push({ node, born: now });
   };
-  const spawn = () => {
-    const flow = SCENE.flows[Math.floor(Math.random() * SCENE.flows.length)] ?? SCENE.flows[0];
-    const secret = Math.random() < 0.2;
-    const node = circle(secret ? "fl-iso__dot fl-iso__dot--secret" : "fl-iso__dot", secret ? 4.2 : 2.8);
-    if (secret) node.setAttribute("filter", `url(#${marker}-glow)`);
-    live.push({ flow, t: 0, speed: 1 / (2.6 + Math.random() * 1.2), secret, handled: false, node });
+  const launch = (item: Omit<Moving, "t" | "secret" | "handled" | "node"> & { secret?: boolean }, className: string, r: number) => {
+    if (live.length >= 70) return;
+    const node = circle(className, r);
+    if (item.secret) node.setAttribute("filter", `url(#${marker}-glow)`);
+    live.push({ ...item, t: item.direction === 1 ? 0 : 1, secret: item.secret ?? false, handled: false, node });
   };
+  const spawnRequest = () => {
+    const flow = pick(SCENE.flows);
+    const secret = Math.random() < 0.2;
+    launch({ path: flow, flow, kind: "request", direction: 1, speed: 1 / (2.6 + Math.random() * 1.2), secret }, secret ? "fl-iso__dot fl-iso__dot--secret" : "fl-iso__dot", secret ? 4.2 : 2.8);
+  };
+  const spawnReply = (flow: Flow) => launch({ path: flow, flow, kind: "reply", direction: -1, speed: 1 / (2.8 + Math.random() * 1.2) }, "fl-iso__reply", 3);
+  const spawnExchange = () => launch({ path: SCENE.exchange, kind: "exchange", direction: Math.random() < 0.5 ? 1 : -1, speed: 1 / (1.6 + Math.random() * 0.6) }, "fl-iso__dot fl-iso__dot--exchange", 3);
+  const spawnCost = () => launch({ path: pick(SCENE.costs), kind: "cost", direction: 1, speed: 1 / (3.4 + Math.random()) }, "fl-iso__dot fl-iso__dot--cost", 2.6);
 
   const tick = (now: number) => {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    pending += dt;
-    while (pending > 0.32) {
-      pending -= 0.32;
-      if (live.length < 40) spawn();
+    for (const [key, every, spawn] of [["request", 0.32, spawnRequest], ["exchange", 1.1, spawnExchange], ["cost", 0.9, spawnCost]] as const) {
+      timers[key] += dt;
+      while (timers[key] > every) {
+        timers[key] -= every;
+        spawn();
+      }
     }
     for (let index = live.length - 1; index >= 0; index--) {
-      const request = live[index];
-      request.t += request.speed * dt;
-      if (request.secret && !request.handled && mode.current === "control" && request.t >= request.flow.shieldAt) {
-        request.handled = true;
-        request.secret = false;
-        request.node.setAttribute("class", "fl-iso__dot fl-iso__dot--stopped");
-        request.node.setAttribute("r", "3.4");
-        request.node.removeAttribute("filter");
-        pulse(SCENE.shields[request.flow.shield], true, now);
+      const item = live[index];
+      item.t += item.direction * item.speed * dt;
+      if (item.flow && item.kind === "request" && item.secret && !item.handled && mode.current === "control" && item.t >= item.flow.shieldAt) {
+        item.handled = true;
+        item.secret = false;
+        item.node.setAttribute("class", "fl-iso__dot fl-iso__dot--stopped");
+        item.node.setAttribute("r", "3.4");
+        item.node.removeAttribute("filter");
+        pulse(SCENE.shields[item.flow.shield], true, now);
       }
-      if (request.t >= 1) {
-        if (request.secret) pulse(pointAt(request.flow, 1), false, now);
-        request.node.remove();
+      if (item.t >= 1 || item.t <= 0) {
+        if (item.kind === "request" && item.secret) pulse(pointAt(item.path, 1), false, now);
+        if (item.kind === "request" && item.flow && Math.random() < 0.6) spawnReply(item.flow);
+        item.node.remove();
         live.splice(index, 1);
         continue;
       }
-      const [x, y] = pointAt(request.flow, request.t);
-      request.node.setAttribute("cx", fixed(x));
-      request.node.setAttribute("cy", fixed(y));
+      const [x, y] = pointAt(item.path, item.t);
+      item.node.setAttribute("cx", fixed(x));
+      item.node.setAttribute("cy", fixed(y));
     }
     for (let index = pulses.length - 1; index >= 0; index--) {
       const { node, born } = pulses[index];
@@ -300,7 +328,11 @@ export function FleetMap({ lang, labels }: { lang: Lang; labels: MapLabels }) {
   };
 
   const view = useMemo(() => (narrow ? sceneView() : sceneView({ labels: labels.places, shields: labels.shields })), [narrow, labels]);
-  const zoom = zoomed ? zoomOn(view, zoneScene(zone).bounds, { maxScale: narrow ? 2.6 : 2.2 }) : { scale: 1, x: 0, y: 0 };
+  // Le viewBox part de 0,0 et la scène y est déplacée d’un bloc : l’origine du zoom (CSS,
+  // `transform-origin: 0 0`) ne dépend plus de la façon dont le navigateur la place.
+  const frame = { x: 0, y: 0, w: view.w, h: view.h };
+  const target = zoneScene(zone).bounds;
+  const zoom = zoomed ? zoomOn(frame, { ...target, x: target.x - view.x, y: target.y - view.y }, { maxScale: narrow ? 2.6 : 2.2 }) : { scale: 1, x: 0, y: 0 };
   const frozen = useMemo(() => (reduced ? frozenRequests() : []), [reduced]);
 
   const options = optionsOf(zone);
@@ -324,7 +356,7 @@ export function FleetMap({ lang, labels }: { lang: Lang; labels: MapLabels }) {
             {zoomed ? labels.overview : labels.zoom}
           </button>
         </div>
-        <svg ref={svg} className="fl-map__svg fl-iso" viewBox={[view.x, view.y, view.w, view.h].map(fixed).join(" ")} role="img" aria-label={labels.map}>
+        <svg ref={svg} className="fl-map__svg fl-iso" viewBox={`0 0 ${fixed(view.w)} ${fixed(view.h)}`} role="img" aria-label={labels.map}>
           <defs>
             <filter id={`${marker}-glow`} x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="3.2" result="blur" />
@@ -341,67 +373,75 @@ export function FleetMap({ lang, labels }: { lang: Lang; labels: MapLabels }) {
             ))}
           </defs>
           <g className="fl-map__view" style={{ transform: `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.scale})` }}>
-            <g className="fl-iso__ground">
-              {SCENE.ground.map((shape, index) => <Draw key={index} shape={shape} glow={glow} />)}
-            </g>
-            {DRAW_ORDER.map((id) => (
-              <g key={id} className="fl-iso__zone" data-zone={id} data-selected={id === zone ? "" : undefined} onClick={() => select(id, true)}>
-                {zoneScene(id).shapes.map((shape, index) => <Draw key={index} shape={shape} glow={glow} />)}
+            <g transform={`translate(${fixed(-view.x)} ${fixed(-view.y)})`}>
+              <g className="fl-iso__ground">
+                {SCENE.ground.map((shape, index) => <Draw key={index} shape={shape} glow={glow} />)}
               </g>
-            ))}
-            <g className="fl-iso__unknowns">
-              {SCENE.unknowns.map(([x, y]) => (
-                <g key={`${fixed(x)}-${fixed(y)}`} className="fl-iso__unknown">
-                  <circle cx={fixed(x)} cy={fixed(y)} r={11} />
-                  <text x={fixed(x)} y={fixed(y + 5)} textAnchor="middle">?</text>
+              {DRAW_ORDER.map((id) => (
+                <g key={id} className="fl-iso__zone" data-zone={id} data-selected={id === zone ? "" : undefined} onClick={() => select(id, true)}>
+                  {zoneScene(id).shapes.map((shape, index) => <Draw key={index} shape={shape} glow={glow} />)}
                 </g>
               ))}
-            </g>
-            <g className="fl-iso__flows">
-              {SCENE.flows.map((flow) => <polyline key={flow.zone} className="fl-iso__flow" points={pointList(flow.points)} />)}
-            </g>
-            <g className="fl-iso__reports">
-              {SCENE.reports.map((d) => <path key={d} className="fl-iso__report" d={d} />)}
-            </g>
-            <g ref={layer} className="fl-iso__requests" />
-            {reduced ? (
-              <g className="fl-iso__requests" data-frozen="">
-                {frozen.map(({ flow, t, point: [x, y], secret }) => {
-                  const kind = !secret ? "" : mode === "control" && t >= flow.shieldAt ? " fl-iso__dot--stopped" : " fl-iso__dot--secret";
-                  return <circle key={`${flow.zone}-${t}`} className={`fl-iso__dot${kind}`} cx={fixed(x)} cy={fixed(y)} r={secret ? 4 : 2.8} />;
+              <g className="fl-iso__unknowns">
+                {SCENE.unknowns.map(([x, y]) => (
+                  <g key={`${fixed(x)}-${fixed(y)}`} className="fl-iso__unknown">
+                    <circle cx={fixed(x)} cy={fixed(y)} r={11} />
+                    <text x={fixed(x)} y={fixed(y + 5)} textAnchor="middle">?</text>
+                  </g>
+                ))}
+              </g>
+              <g className="fl-iso__flows">
+                {SCENE.flows.map((flow) => <polyline key={flow.zone} className="fl-iso__flow" points={pointList(flow.points)} />)}
+              </g>
+              <polyline className="fl-iso__exchange" points={pointList(SCENE.exchange.points)} />
+              <g className="fl-iso__reports">
+                {SCENE.reports.map((d) => <path key={d} className="fl-iso__report" d={d} />)}
+              </g>
+              <g className="fl-iso__costs">
+                {SCENE.costs.map((cost) => <polyline key={cost.from} className="fl-iso__cost" data-from={cost.from} points={pointList(cost.points)} />)}
+              </g>
+              <g ref={layer} className="fl-iso__requests" />
+              {reduced ? (
+                <g className="fl-iso__requests" data-frozen="">
+                  {frozen.map(({ key, kind, flow, t, point: [x, y] }) => {
+                    if (kind === "reply") return <circle key={key} className="fl-iso__reply" cx={fixed(x)} cy={fixed(y)} r={3} />;
+                    if (kind === "exchange" || kind === "cost") return <circle key={key} className={`fl-iso__dot fl-iso__dot--${kind}`} cx={fixed(x)} cy={fixed(y)} r={2.6} />;
+                    const tone = kind === "request" ? "" : mode === "control" && flow && t >= flow.shieldAt ? " fl-iso__dot--stopped" : " fl-iso__dot--secret";
+                    return <circle key={key} className={`fl-iso__dot${tone}`} cx={fixed(x)} cy={fixed(y)} r={kind === "secret" ? 4 : 2.8} />;
+                  })}
+                </g>
+              ) : null}
+              <g className="fl-iso__shields">
+                {SHIELD_ORDER.map((id) => {
+                  const at = SCENE.shields[id];
+                  const [cx, cy] = at;
+                  const caption = captionBox(at, labels.shields[id], CAPTION_SIDE[id]);
+                  return (
+                    <g key={id} className="fl-iso__shield" data-shield={id}>
+                      <polygon className="fl-iso__hex" points={pointList(hexagon(at))} filter={glow} />
+                      <path className="fl-iso__check" d={`M${fixed(cx - 5)},${fixed(cy)} l3.6,3.8 l6.6,-7.4`} />
+                      <g className="fl-iso__caption">
+                        <rect x={fixed(caption.x)} y={fixed(caption.y)} width={fixed(caption.w)} height={caption.h} rx={5} />
+                        <text x={fixed(caption.x + 7)} y={fixed(cy + 4)}>{labels.shields[id]}</text>
+                      </g>
+                    </g>
+                  );
                 })}
               </g>
-            ) : null}
-            <g className="fl-iso__shields">
-              {SHIELD_ORDER.map((id) => {
-                const at = SCENE.shields[id];
-                const [cx, cy] = at;
-                const caption = captionBox(at, labels.shields[id]);
-                return (
-                  <g key={id} className="fl-iso__shield" data-shield={id}>
-                    <polygon className="fl-iso__hex" points={pointList(hexagon(at))} filter={glow} />
-                    <path className="fl-iso__check" d={`M${fixed(cx - 5)},${fixed(cy)} l3.6,3.8 l6.6,-7.4`} />
-                    <g className="fl-iso__caption">
-                      <rect x={fixed(caption.x)} y={fixed(caption.y)} width={fixed(caption.w)} height={caption.h} rx={5} />
-                      <text x={fixed(caption.x + 7)} y={fixed(cy + 4)}>{labels.shields[id]}</text>
+              <g className="fl-iso__labels">
+                {DRAW_ORDER.map((id) => {
+                  const { name, sub } = labels.places[id];
+                  const [ax, ay] = SCENE.labels[id];
+                  const box = labelBox(SCENE.labels[id], name, sub);
+                  return (
+                    <g key={id} className="fl-iso__label">
+                      <rect x={fixed(box.x)} y={fixed(box.y)} width={fixed(box.w)} height={box.h} rx={6} />
+                      <text className="fl-iso__name" x={fixed(ax)} y={fixed(ay - (sub ? 18 : 8))} textAnchor="middle">{name}</text>
+                      {sub ? <text className="fl-iso__sub" x={fixed(ax)} y={fixed(ay - 6)} textAnchor="middle">{sub}</text> : null}
                     </g>
-                  </g>
-                );
-              })}
-            </g>
-            <g className="fl-iso__labels">
-              {DRAW_ORDER.map((id) => {
-                const { name, sub } = labels.places[id];
-                const [ax, ay] = SCENE.labels[id];
-                const box = labelBox(SCENE.labels[id], name, sub);
-                return (
-                  <g key={id} className="fl-iso__label">
-                    <rect x={fixed(box.x)} y={fixed(box.y)} width={fixed(box.w)} height={box.h} rx={6} />
-                    <text className="fl-iso__name" x={fixed(ax)} y={fixed(ay - (sub ? 18 : 8))} textAnchor="middle">{name}</text>
-                    {sub ? <text className="fl-iso__sub" x={fixed(ax)} y={fixed(ay - 6)} textAnchor="middle">{sub}</text> : null}
-                  </g>
-                );
-              })}
+                  );
+                })}
+              </g>
             </g>
           </g>
         </svg>
@@ -409,6 +449,9 @@ export function FleetMap({ lang, labels }: { lang: Lang; labels: MapLabels }) {
           <li data-kind="request">{labels.legend.request}</li>
           <li data-kind="secret">{labels.legend.secret}</li>
           <li data-kind="stopped">{labels.legend.stopped}</li>
+          <li data-kind="reply">{labels.legend.reply}</li>
+          <li data-kind="exchange">{labels.legend.exchange}</li>
+          <li data-kind="cost">{labels.legend.cost}</li>
         </ul>
         <p className="fl-map__hint" id={`${marker}-hint`}>{labels.hint}</p>
         <div className="fl-map__tabs" role="tablist" aria-label={labels.zones} aria-orientation="horizontal" aria-describedby={`${marker}-hint`}>

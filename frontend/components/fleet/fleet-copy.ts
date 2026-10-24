@@ -12,7 +12,10 @@ import type { Lang } from "@/lib/i18n";
  * « Simulation · hypothèses affichées » ; toute capture de la console porte
  * « Démonstration · données illustratives ». Les marques Claude et ChatGPT sont citées
  * en usage nominatif seulement (« pris en charge »). Aucun fournisseur d'API ni modèle
- * n'est nommé tant que la version de LiteLLM n'est pas épinglée. Le message bloquant
+ * n'est nommé tant que la version de LiteLLM n'est pas épinglée, sauf sur la carte du
+ * chapitre Options (décision de Julian du 2026-10-24) : l'île des Fournisseurs d'IA et le
+ * texte de sa zone citent Azure OpenAI, Microsoft Copilot, Gemini, Mistral et Bedrock pour
+ * décrire, comme marques de leurs détenteurs. Le message bloquant
  * reprend mot pour mot le catalogue `hook.*` de l'Agent xSOM. Vocabulaire : glossaire
  * du PRD (§3).
  */
@@ -244,14 +247,14 @@ export const FLEET_COPY = {
       title: "Ce que fait xSOM Fleet, à chaque endroit de l’entreprise.",
       lead: "Choisissez une zone de cette entreprise type : ce qui s’installe, ce qui demande du conseil, et ce que chaque option ne couvre pas.",
       map: {
-        map: "Carte isométrique d’une entreprise type : les métiers et les Externes dans leur navigateur, les Développeurs et leurs Postes, le proxy d’entreprise, les serveurs et agents internes, les Fournisseurs d’IA et la console xSOM Fleet, reliés par des flux de demandes envoyées aux IA.",
+        map: "Carte isométrique d’une entreprise type : les métiers et les Externes dans leur navigateur, les Développeurs et leurs Postes, le proxy d’entreprise, les serveurs et agents internes, les Fournisseurs d’IA et la console xSOM Fleet, reliés par les demandes envoyées aux IA et leurs réponses, les échanges avec les Externes et, sous contrôle, l’usage et les coûts qui remontent à la console.",
         zones: "Zones de l’entreprise",
         overview: "Vue d’ensemble",
         zoom: "Zoomer sur la zone",
         hint: "Choisissez une zone sur la carte ou ci-dessous (flèches du clavier, Entrée pour zoomer, Échap pour revenir).",
         count: (n: number) => `${n} option${n > 1 ? "s" : ""}`,
         modes: { label: "État de l’entreprise", blind: "Angle mort", control: "Sous contrôle" },
-        legend: { label: "Lecture des flux", request: "Demande envoyée à une IA", secret: "Secret dans la demande", stopped: "Secret remplacé au point de contrôle" },
+        legend: { label: "Lecture des flux", request: "Demande envoyée à une IA", secret: "Secret dans la demande", stopped: "Secret remplacé au point de contrôle", reply: "Réponse du modèle, en retour", exchange: "Échange entre vos agents et les Externes", cost: "Usage et coûts vers la console, sous contrôle" },
         places: {
           metiers: { name: "Métiers", sub: "claude.ai, chatgpt.com" },
           externes: { name: "Externes", sub: "hors du Groupe" },
@@ -288,7 +291,7 @@ export const FLEET_COPY = {
           },
           proxy: {
             blind: "Il voit passer le trafic, mais pas ce que contient une conversation chiffrée avec un assistant.",
-            control: "Restriction aux espaces de l’entreprise, inspection des flux d’IA, et un Serveur de verdict qui juge chaque message avant qu’il n’atteigne le modèle.",
+            control: "Restriction aux espaces de l’entreprise, inspection des flux d’IA, et un service d’analyse branché derrière le proxy qui arrête les secrets avant qu’ils n’atteignent le modèle.",
             module: "Fleet Guard",
           },
           serveurs: {
@@ -297,8 +300,8 @@ export const FLEET_COPY = {
             module: "Fleet Gateway",
           },
           cloud: {
-            blind: "Une fois le message arrivé chez le Fournisseur, il est trop tard pour le reprendre.",
-            control: "Avec les Inference hooks du Fournisseur, chaque message passe d’abord par votre Serveur de verdict. Refusé, il n’est jamais lu par le modèle.",
+            blind: "Claude, ChatGPT, Azure OpenAI, Microsoft Copilot ou un autre : une fois le message arrivé chez un Fournisseur, il est trop tard pour le reprendre. Et chacun facture de son côté.",
+            control: "Chez les Fournisseurs qui proposent des Inference hooks, chaque message passe d’abord par votre Serveur de verdict : refusé, il n’est jamais lu par le modèle. Leurs coûts remontent à la console : Sièges, Dépassements et dépenses API.",
             module: "Fleet Guard",
           },
           console: {
@@ -546,14 +549,14 @@ export const FLEET_COPY = {
       title: "What xSOM Fleet does, at every point of the company.",
       lead: "Pick an area of this typical company: what gets installed, what takes consulting, and what each option does not cover.",
       map: {
-        map: "Isometric map of a typical company: business teams and Externals in their browser, Developers and their workstations, the corporate proxy, internal servers and agents, the AI Providers and the xSOM Fleet console, linked by flows of requests sent to AI.",
+        map: "Isometric map of a typical company: business teams and Externals in their browser, Developers and their workstations, the corporate proxy, internal servers and agents, the AI Providers and the xSOM Fleet console, linked by the requests sent to AI and their responses, the exchanges with Externals and, under control, the usage and costs reported to the console.",
         zones: "Areas of the company",
         overview: "Overview",
         zoom: "Zoom on the area",
         hint: "Pick an area on the map or below (arrow keys, Enter to zoom, Escape to go back).",
         count: (n: number) => `${n} option${n > 1 ? "s" : ""}`,
         modes: { label: "State of the company", blind: "Blind spot", control: "Under control" },
-        legend: { label: "Reading the flows", request: "Request sent to an AI", secret: "Secret in the request", stopped: "Secret replaced at the checkpoint" },
+        legend: { label: "Reading the flows", request: "Request sent to an AI", secret: "Secret in the request", stopped: "Secret replaced at the checkpoint", reply: "Model response, coming back", exchange: "Exchange between your agents and Externals", cost: "Usage and costs to the console, under control" },
         places: {
           metiers: { name: "Business teams", sub: "claude.ai, chatgpt.com" },
           externes: { name: "Externals", sub: "outside the Group" },
@@ -590,7 +593,7 @@ export const FLEET_COPY = {
           },
           proxy: {
             blind: "It sees the traffic go by, but not what an encrypted conversation with an assistant contains.",
-            control: "Restriction to the company’s workspaces, inspection of AI flows, and a Verdict Server that judges every message before it reaches the model.",
+            control: "Restriction to the company’s workspaces, inspection of AI flows, and an analysis service plugged in behind the proxy that stops secrets before they reach the model.",
             module: "Fleet Guard",
           },
           serveurs: {
@@ -599,8 +602,8 @@ export const FLEET_COPY = {
             module: "Fleet Gateway",
           },
           cloud: {
-            blind: "Once the message has reached the Provider, it is too late to take it back.",
-            control: "With the Provider’s Inference hooks, every message first goes through your Verdict Server. Refused, it is never read by the model.",
+            blind: "Claude, ChatGPT, Azure OpenAI, Microsoft Copilot or another: once the message has reached a Provider, it is too late to take it back. And each one bills on its own.",
+            control: "With the Providers that offer Inference hooks, every message first goes through your Verdict Server: refused, it is never read by the model. Their costs are reported to the console: seats, overages and API spending.",
             module: "Fleet Guard",
           },
           console: {

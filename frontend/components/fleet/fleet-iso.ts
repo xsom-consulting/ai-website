@@ -94,19 +94,39 @@ export type ZoneScene = { readonly id: ZoneId; readonly shapes: readonly Shape[]
 /** Ordre de dessin : de l’arrière vers l’avant. */
 export const DRAW_ORDER: readonly ZoneId[] = ["cloud", "console", "metiers", "proxy", "serveurs", "postes-dev", "externes"];
 
+/**
+ * Les Fournisseurs d’IA, cités pour décrire : marques de leurs détenteurs, sans
+ * partenariat. Trois rangées sur l’île, de l’arrière vers l’avant.
+ */
+export const PROVIDER_ROWS: readonly (readonly string[])[] = [
+  ["Claude", "ChatGPT"],
+  ["Azure OpenAI", "Microsoft Copilot"],
+  ["Gemini", "Mistral", "Bedrock"],
+];
+
+/** L’île des Fournisseurs : sa base (grille) et le centre de son dessus, à l’écran. */
+const ISLAND = { x: 19, y: -7.5, z: 8.2, w: 10, d: 7 } as const;
+
 function cloudZone(): Shape[] {
-  const x = 19.5, y = -6.5, z = 8.2, w = 8, d = 5.5;
+  const { x, y, z, w, d } = ISLAND;
   const shapes = prism(x, y, z - 0.6, w, d, 0.6, "island");
-  const puffs: Vec3[] = [[x + 1.4, y + 1.2, 1.1], [x + 3.2, y + 0.8, 1.5], [x + 5.4, y + 1.4, 1.2], [x + 2.2, y + 3.4, 1.0], [x + 4.6, y + 3.6, 1.3], [x + 6.6, y + 3.2, 0.9]];
+  // Les nuages restent sur les bords arrière de l’île, loin des noms.
+  const puffs: Vec3[] = [[x + 0.8, y + 1.5, 1.0], [x + 0.8, y + 3.7, 0.9], [x + 0.6, y + 5.5, 0.7], [x + 2.5, y + 0.2, 0.9]];
   for (const [px, py, size] of puffs) {
     const [cx, cy] = project([px, py, z + 0.3]);
-    shapes.push({ kind: "ellipse", cx, cy: cy - size * 8, rx: size * 22, ry: size * 15, className: "fl-iso__puff" });
+    shapes.push({ kind: "ellipse", cx, cy: cy - size * 8, rx: size * 22, ry: size * 14, className: "fl-iso__puff" });
   }
-  const names: [string, number, number][] = [["Claude", x + 2.0, y + 2.3], ["ChatGPT", x + 5.1, y + 2.6], ["API", x + 6.6, y + 4.6]];
-  for (const [text, nx, ny] of names) {
-    const [cx, cy] = project([nx, ny, z + 0.6]);
-    shapes.push({ kind: "text", x: cx, y: cy - 4, text, className: "fl-iso__brand" });
-  }
+  const [cx, cy] = project([x + w / 2, y + d / 2, z]);
+  PROVIDER_ROWS.forEach((row, line) => {
+    // Une colonne par nom, de largeur proportionnelle à sa longueur (7,4 unités par caractère).
+    const widths = row.map((name) => name.length * 7.4);
+    const gap = 16;
+    let left = cx - (widths.reduce((sum, width) => sum + width, 0) + gap * (row.length - 1)) / 2;
+    row.forEach((name, index) => {
+      shapes.push({ kind: "text", x: left + widths[index] / 2, y: cy - 8 + (line - 1) * 26, text: name, className: "fl-iso__brand" });
+      left += widths[index] + gap;
+    });
+  });
   return [...shapes, ...outline(x, y, z - 0.6, w, d, 0.6)];
 }
 
@@ -200,7 +220,7 @@ export function shapeBounds(shape: Shape): Box {
     case "rect": return { x: shape.x, y: shape.y, w: shape.w, h: shape.h };
     case "line": return pointsBounds([shape.from, shape.to]);
     // Un nom de marque, de 13 unités de haut, centré sur son ancre.
-    case "text": return { x: shape.x - shape.text.length * 4.5, y: shape.y - 11, w: shape.text.length * 9, h: 14 };
+    case "text": return { x: shape.x - shape.text.length * 3.7, y: shape.y - 11, w: shape.text.length * 7.4, h: 14 };
   }
 }
 
@@ -219,25 +239,44 @@ export function union(boxes: readonly Box[]): Box {
 
 export const pad = (box: Box, margin: number): Box => ({ x: box.x - margin, y: box.y - margin, w: box.w + 2 * margin, h: box.h + 2 * margin });
 
-/** Une demande en chemin vers les IA : de sa zone jusqu’au cloud des Fournisseurs. */
-export type Flow = {
-  readonly zone: ZoneId;
+/** Un chemin à l’écran, parcouru de `t` = 0 à `t` = 1. */
+export type Path = {
   readonly points: readonly Point[];
   readonly segments: readonly number[];
   readonly total: number;
+};
+
+function path(points: readonly Point[]): Path {
+  const segments = points.slice(1).map(([x, y], index) => Math.hypot(x - points[index][0], y - points[index][1]));
+  return { points, segments, total: segments.reduce((sum, length) => sum + length, 0) };
+}
+
+/** Une courbe de Bézier quadratique, échantillonnée en polyligne. */
+function curve(from: Point, to: Point, lift: number, steps = 20): Path {
+  const control: Point = [(from[0] + to[0]) / 2, Math.min(from[1], to[1]) - lift];
+  return path(Array.from({ length: steps + 1 }, (_, index) => {
+    const t = index / steps, u = 1 - t;
+    return [u * u * from[0] + 2 * u * t * control[0] + t * t * to[0], u * u * from[1] + 2 * u * t * control[1] + t * t * to[1]] as const;
+  }));
+}
+
+/**
+ * Une demande en chemin vers les IA : de sa zone jusqu’au cloud des Fournisseurs. Les
+ * réponses des modèles parcourent le même flux en sens inverse.
+ */
+export type Flow = Path & {
+  readonly zone: ZoneId;
   /** Où, sur le flux (0 à 1), la demande passe le point de contrôle. */
   readonly shieldAt: number;
   readonly shield: ShieldId;
 };
 
-function flow(zone: ZoneId, path: readonly Vec3[], shieldAt: number, shield: ShieldId): Flow {
-  const points = path.map(project);
-  const segments = points.slice(1).map(([x, y], index) => Math.hypot(x - points[index][0], y - points[index][1]));
-  return { zone, points, segments, total: segments.reduce((sum, length) => sum + length, 0), shieldAt, shield };
+function flow(zone: ZoneId, corners: readonly Vec3[], shieldAt: number, shield: ShieldId): Flow {
+  return { ...path(corners.map(project)), zone, shieldAt, shield };
 }
 
-/** La position d’une demande sur son flux, `t` allant de 0 (départ) à 1 (arrivée). */
-export function pointAt(flow: Flow, t: number): Point {
+/** La position sur un chemin, `t` allant de 0 (départ) à 1 (arrivée). */
+export function pointAt(flow: Path, t: number): Point {
   let distance = Math.min(1, Math.max(0, t)) * flow.total;
   for (let index = 0; index < flow.segments.length; index++) {
     const length = flow.segments[index];
@@ -259,7 +298,7 @@ const SHIELD_AT: Readonly<Record<ShieldId, Vec3>> = {
   proxy: [10.2, 6.6, 4.6],
   serveurs: [14.9, 12.8, 3.4],
   externes: [23.8, 13.4, 2.7],
-  cloud: [21.2, -1.8, 9.6],
+  cloud: [19.3, -0.9, 9.0],
   console: [15.8, 2.6, 4.7],
 };
 
@@ -271,9 +310,20 @@ export function hexagon([cx, cy]: Point, radius = 13): Point[] {
   });
 }
 
-/** La boîte de la légende d’un bouclier, à sa droite. */
-export function captionBox([cx, cy]: Point, text: string): Box {
-  return { x: cx + 17, y: cy - 10, w: text.length * 6.4 + 14, h: 20 };
+/** De quel côté du bouclier se pose sa légende : à gauche pour celui de l’île, que les noms occupent. */
+export const CAPTION_SIDE: Readonly<Record<ShieldId, "left" | "right">> = {
+  "postes-dev": "right",
+  proxy: "right",
+  serveurs: "right",
+  externes: "right",
+  cloud: "left",
+  console: "right",
+};
+
+/** La boîte de la légende d’un bouclier, à sa droite (ou à sa gauche). */
+export function captionBox([cx, cy]: Point, text: string, side: "left" | "right" = "right"): Box {
+  const w = text.length * 6.4 + 14;
+  return { x: side === "right" ? cx + 17 : cx - 17 - w, y: cy - 10, w, h: 20 };
 }
 
 /** La boîte d’une étiquette de zone, posée au-dessus de son ancre. */
@@ -290,7 +340,7 @@ const LABEL_AT: Readonly<Record<ZoneId, Vec3>> = {
   serveurs: [18.6, 14.2, 3.0],
   console: [15.8, 0.8, 5.4],
   externes: [23.8, 11.8, 3.4],
-  cloud: [23.5, -6.5, 11.4],
+  cloud: [24, -7.5, 11.6],
 };
 
 export type Scene = {
@@ -300,6 +350,10 @@ export type Scene = {
   /** Les points d’interrogation de l’angle mort. */
   readonly unknowns: readonly Point[];
   readonly flows: readonly Flow[];
+  /** Les échanges entre les serveurs et agents internes et les Externes, dans les deux sens. */
+  readonly exchange: Path;
+  /** Sous contrôle : l’usage remonté par les Postes et la passerelle, et les coûts des Fournisseurs, vers la console. */
+  readonly costs: readonly (Path & { readonly from: "postes-dev" | "serveurs" | "cloud" })[];
   /** Les remontées vers la console : des Événements sans contenu (chemins SVG). */
   readonly reports: readonly string[];
   readonly shields: Readonly<Record<ShieldId, Point>>;
@@ -332,6 +386,12 @@ function buildScene(): Scene {
       flow("externes", [[23.6, 12.6, 1.7], [26.2, 6.0, 4.8], [25.8, -1.4, 8.4]], 0.06, "externes"),
     ],
     reports,
+    exchange: path(([[18.0, 13.0, 1.4], [20.0, 13.1, 0.9], [22.1, 13.3, 0.9]] as const).map(project)),
+    costs: [
+      { from: "postes-dev" as const, ...curve(project([5.2, 12.0, 2.4]), project([15.7, 1.9, 2.6]), 80) },
+      { from: "serveurs" as const, ...curve(project([16.4, 11.6, 2.6]), project([15.9, 1.9, 2.6]), 60) },
+      { from: "cloud" as const, ...curve(project([21.0, -0.6, 7.8]), project([16.6, 1.9, 2.6]), 20) },
+    ],
     shields: entries(SHIELD_AT, project),
     labels: entries(LABEL_AT, project),
   };
@@ -348,7 +408,7 @@ export const zoneScene = (id: ZoneId) => SCENE.zones.find((zone) => zone.id === 
 export function sceneView(text?: { readonly labels: Readonly<Record<ZoneId, { readonly name: string; readonly sub?: string }>>; readonly shields: Readonly<Record<ShieldId, string>> }): Box {
   if (!text) return pad(SCENE.world, 8);
   const labels = DRAW_ORDER.map((id) => labelBox(SCENE.labels[id], text.labels[id].name, text.labels[id].sub));
-  const captions = SHIELD_ORDER.map((id) => captionBox(SCENE.shields[id], text.shields[id]));
+  const captions = SHIELD_ORDER.map((id) => captionBox(SCENE.shields[id], text.shields[id], CAPTION_SIDE[id]));
   return pad(union([SCENE.world, ...labels, ...captions]), 16);
 }
 
@@ -365,7 +425,18 @@ export function zoomOn(view: Box, target: Box, { margin = 70, maxScale = 2.4 } =
   };
 }
 
-/** Les demandes figées le long des flux, quand le mouvement est réduit. */
-export function frozenRequests(): { readonly flow: Flow; readonly t: number; readonly point: Point; readonly secret: boolean }[] {
-  return SCENE.flows.flatMap((item, index) => [0.25, 0.55, 0.85].map((t, step) => ({ flow: item, t, point: pointAt(item, t), secret: (index + step) % 3 === 0 })));
+export type FrozenKind = "request" | "secret" | "reply" | "exchange" | "cost";
+
+/**
+ * Ce qui circule, figé le long des chemins quand le mouvement est réduit : trois demandes
+ * par flux (une sur trois porte un secret), deux réponses par flux, deux échanges (un
+ * dans chaque sens) et une remontée par chemin de coûts.
+ */
+export function frozenRequests(): { readonly key: string; readonly kind: FrozenKind; readonly point: Point; readonly t: number; readonly flow?: Flow }[] {
+  return [
+    ...SCENE.flows.flatMap((item, index) => [0.25, 0.55, 0.85].map((t, step) => ({ key: `${item.zone}-${t}`, kind: ((index + step) % 3 === 0 ? "secret" : "request") as FrozenKind, point: pointAt(item, t), t, flow: item }))),
+    ...SCENE.flows.flatMap((item) => [0.4, 0.7].map((t) => ({ key: `${item.zone}-reply-${t}`, kind: "reply" as const, point: pointAt(item, t), t }))),
+    ...[0.3, 0.7].map((t) => ({ key: `exchange-${t}`, kind: "exchange" as const, point: pointAt(SCENE.exchange, t), t })),
+    ...SCENE.costs.map((item) => ({ key: `cost-${item.from}`, kind: "cost" as const, point: pointAt(item, 0.5), t: 0.5 })),
+  ];
 }
