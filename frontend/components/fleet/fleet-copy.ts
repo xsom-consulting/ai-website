@@ -12,7 +12,10 @@ import type { Lang } from "@/lib/i18n";
  * « Simulation · hypothèses affichées » ; toute capture de la console porte
  * « Démonstration · données illustratives ». Les marques Claude et ChatGPT sont citées
  * en usage nominatif seulement (« pris en charge »). Aucun fournisseur d'API ni modèle
- * n'est nommé tant que la version de LiteLLM n'est pas épinglée. Le message bloquant
+ * n'est nommé tant que la version de LiteLLM n'est pas épinglée, sauf sur la carte du
+ * chapitre Options (décision de Julian du 2026-10-24) : l'île des Fournisseurs d'IA et le
+ * texte de sa zone citent Azure OpenAI, Microsoft Copilot, Gemini, Mistral et Bedrock pour
+ * décrire, comme marques de leurs détenteurs. Le message bloquant
  * reprend mot pour mot le catalogue `hook.*` de l'Agent xSOM. Vocabulaire : glossaire
  * du PRD (§3).
  */
@@ -244,23 +247,69 @@ export const FLEET_COPY = {
       title: "Ce que fait xSOM Fleet, à chaque endroit de l’entreprise.",
       lead: "Choisissez une zone de cette entreprise type : ce qui s’installe, ce qui demande du conseil, et ce que chaque option ne couvre pas.",
       map: {
-        map: "Schéma d’une entreprise type : les métiers et les Externes dans leur navigateur, les Développeurs et leurs Postes, le proxy d’entreprise, les serveurs internes (Passerelle API, Serveur de verdict), le cloud des Fournisseurs et la console xSOM Fleet.",
+        map: "Carte isométrique d’une entreprise type : les métiers et les Externes dans leur navigateur, les Développeurs et leurs Postes, le proxy d’entreprise, les serveurs et agents internes, les Fournisseurs d’IA et la console xSOM Fleet, reliés par les demandes envoyées aux IA et leurs réponses, les échanges avec les Externes et, sous contrôle, l’usage et les coûts qui remontent à la console.",
         zones: "Zones de l’entreprise",
-        group: "Le Groupe",
         overview: "Vue d’ensemble",
         zoom: "Zoomer sur la zone",
-        hint: "Choisissez une zone (flèches du clavier, Entrée pour zoomer, Échap pour revenir).",
+        hint: "Choisissez une zone sur la carte ou ci-dessous (flèches du clavier, Entrée pour zoomer, Échap pour revenir).",
         count: (n: number) => `${n} option${n > 1 ? "s" : ""}`,
-        details: {
-          metiers: "claude.ai, chatgpt.com",
-          externes: "Comptes personnels",
-          "postes-dev": "Claude Code, Codex",
-          proxy: "Inspection TLS",
-          serveurs: "Passerelle API · Serveur de verdict",
-          cloud: "Inférence et contrôles du Fournisseur",
-          console: "Dans l’UE ou chez vous",
+        modes: { label: "État de l’entreprise", blind: "Angle mort", control: "Sous contrôle" },
+        legend: { label: "Lecture des flux", request: "Demande envoyée à une IA", secret: "Secret dans la demande", stopped: "Secret remplacé au point de contrôle", reply: "Réponse du modèle, en retour", exchange: "Échange entre vos agents et les Externes", cost: "Usage et coûts vers la console, sous contrôle", reports: "Événements sans contenu vers la console", group: "Pointillés : le Groupe" },
+        places: {
+          metiers: { name: "Métiers", sub: "claude.ai, chatgpt.com" },
+          externes: { name: "Externes", sub: "hors du Groupe" },
+          "postes-dev": { name: "Développeurs", sub: "Claude Code, Codex" },
+          proxy: { name: "Proxy d’entreprise" },
+          serveurs: { name: "Serveurs et agents", sub: "applications, API" },
+          cloud: { name: "Fournisseurs d’IA" },
+          console: { name: "Console xSOM Fleet", sub: "Dans l’UE ou chez vous" },
         },
-        flows: { prompts: "Prompts", bypass: "Hors du proxy", api: "API", hooks: "Inference hooks", apiHooks: "API · Inference hooks", events: "Événements sans contenu" },
+        shields: {
+          "postes-dev": "Agent xSOM",
+          proxy: "Contrôle web",
+          serveurs: "Passerelle API",
+          externes: "Extension",
+          cloud: "Serveur de verdict",
+          console: "Preuves et coûts",
+        },
+        module: "Module",
+        states: {
+          metiers: {
+            blind: "Un contrat, un fichier client ou un mot de passe collé dans une conversation part tel quel. Personne ne sait quels comptes sont utilisés, ni lesquels sont personnels.",
+            control: "Le proxy limite l’accès aux espaces de l’entreprise et refuse les comptes personnels. Le contrôle web arrête les secrets avant l’envoi, sans lire ni stocker les conversations.",
+            module: "Fleet Guard",
+          },
+          externes: {
+            blind: "Hors du proxy, hors de vos Postes : leurs envois ne passent par aucun contrôle.",
+            control: "Une extension de navigateur, installée d’office sur les navigateurs gérés, analyse chaque message dans la page avec le même moteur que sur le Poste.",
+            module: "Fleet Guard",
+          },
+          "postes-dev": {
+            blind: "L’assistant de code lit le dépôt, les fichiers .env et les captures d’écran, puis envoie au modèle ce qu’il a lu.",
+            control: "L’Agent xSOM contrôle chaque envoi sur le Poste. Les secrets sont remplacés par des Substituts avant de partir, et rendus seulement là où ils doivent servir. Rien ne quitte le Poste en clair.",
+            module: "Fleet Guard",
+          },
+          proxy: {
+            blind: "Il voit passer le trafic, mais pas ce que contient une conversation chiffrée avec un assistant.",
+            control: "Restriction aux espaces de l’entreprise, inspection des flux d’IA, et un service d’analyse branché derrière le proxy qui arrête les secrets avant qu’ils n’atteignent le modèle.",
+            module: "Fleet Guard",
+          },
+          serveurs: {
+            blind: "Des clés d’API partagées, des dépenses sans budget, des agents qui appellent des outils sans que personne ne valide.",
+            control: "La Passerelle API, installée chez vous, donne une Clé virtuelle et un Budget API à chaque Application API, tient la liste des outils autorisés et demande une approbation humaine pour les actions sensibles. Aucun prompt ne passe par xSOM.",
+            module: "Fleet Gateway",
+          },
+          cloud: {
+            blind: "Claude, ChatGPT, Azure OpenAI, Microsoft Copilot ou un autre : une fois le message arrivé chez un Fournisseur, il est trop tard pour le reprendre. Et chacun facture de son côté.",
+            control: "Chez les Fournisseurs qui proposent des Inference hooks, chaque message passe d’abord par votre Serveur de verdict : refusé, il n’est jamais lu par le modèle. Leurs coûts remontent à la console : Sièges, Dépassements et dépenses API.",
+            module: "Fleet Guard",
+          },
+          console: {
+            blind: "Des Sièges payés sans savoir qui les utilise, un coût par Équipe inconnu, et rien à montrer le jour de l’audit.",
+            control: "Les Sièges et leurs Plafonds par organisation, le coût réel de chaque Développeur face à son Équivalent API estimé, la couverture des Postes, et un Dossier de preuves signé pour l’audit.",
+            module: "Fleet Sièges",
+          },
+        },
         product: { title: "Produit installable", hint: "S’installe et s’exploite chez vous ; certaines options demandent une mise en place en conseil." },
         consulting: { title: "Conseil et intégration", hint: "Paramétrage de vos outils et de ceux des Fournisseurs, essais, accompagnement : sans code xSOM." },
         none: "Aucune option de ce type ici.",
@@ -500,23 +549,69 @@ export const FLEET_COPY = {
       title: "What xSOM Fleet does, at every point of the company.",
       lead: "Pick an area of this typical company: what gets installed, what takes consulting, and what each option does not cover.",
       map: {
-        map: "Diagram of a typical company: business teams and Externals in their browser, Developers and their workstations, the corporate proxy, internal servers (API Gateway, Verdict Server), the Provider cloud and the xSOM Fleet console.",
+        map: "Isometric map of a typical company: business teams and Externals in their browser, Developers and their workstations, the corporate proxy, internal servers and agents, the AI Providers and the xSOM Fleet console, linked by the requests sent to AI and their responses, the exchanges with Externals and, under control, the usage and costs reported to the console.",
         zones: "Areas of the company",
-        group: "The Group",
         overview: "Overview",
         zoom: "Zoom on the area",
-        hint: "Pick an area (arrow keys, Enter to zoom, Escape to go back).",
+        hint: "Pick an area on the map or below (arrow keys, Enter to zoom, Escape to go back).",
         count: (n: number) => `${n} option${n > 1 ? "s" : ""}`,
-        details: {
-          metiers: "claude.ai, chatgpt.com",
-          externes: "Personal accounts",
-          "postes-dev": "Claude Code, Codex",
-          proxy: "TLS inspection",
-          serveurs: "API Gateway · Verdict Server",
-          cloud: "Inference and Provider controls",
-          console: "In the EU or on your side",
+        modes: { label: "State of the company", blind: "Blind spot", control: "Under control" },
+        legend: { label: "Reading the flows", request: "Request sent to an AI", secret: "Secret in the request", stopped: "Secret replaced at the checkpoint", reply: "Model response, coming back", exchange: "Exchange between your agents and Externals", cost: "Usage and costs to the console, under control", reports: "Events without content to the console", group: "Dashed line: the Group" },
+        places: {
+          metiers: { name: "Business teams", sub: "claude.ai, chatgpt.com" },
+          externes: { name: "Externals", sub: "outside the Group" },
+          "postes-dev": { name: "Developers", sub: "Claude Code, Codex" },
+          proxy: { name: "Corporate proxy" },
+          serveurs: { name: "Servers and agents", sub: "applications, APIs" },
+          cloud: { name: "AI Providers" },
+          console: { name: "xSOM Fleet console", sub: "In the EU or on your side" },
         },
-        flows: { prompts: "Prompts", bypass: "Outside the proxy", api: "API", hooks: "Inference hooks", apiHooks: "API · Inference hooks", events: "Events without content" },
+        shields: {
+          "postes-dev": "xSOM agent",
+          proxy: "Web check",
+          serveurs: "API Gateway",
+          externes: "Extension",
+          cloud: "Verdict Server",
+          console: "Evidence and costs",
+        },
+        module: "Module",
+        states: {
+          metiers: {
+            blind: "A contract, a customer file or a password pasted into a conversation leaves as is. Nobody knows which accounts are used, nor which ones are personal.",
+            control: "The proxy limits access to the company’s workspaces and refuses personal accounts. The web check stops secrets before sending, without reading or storing conversations.",
+            module: "Fleet Guard",
+          },
+          externes: {
+            blind: "Outside the proxy, outside your workstations: what they send goes through no check at all.",
+            control: "A browser extension, force-installed on managed browsers, analyses every message in the page with the same engine as on the workstation.",
+            module: "Fleet Guard",
+          },
+          "postes-dev": {
+            blind: "The coding assistant reads the repository, the .env files and the screenshots, then sends what it read to the model.",
+            control: "The xSOM agent checks every send on the workstation. Secrets are replaced by substitutes before leaving, and restored only where they are needed. Nothing leaves the workstation in clear text.",
+            module: "Fleet Guard",
+          },
+          proxy: {
+            blind: "It sees the traffic go by, but not what an encrypted conversation with an assistant contains.",
+            control: "Restriction to the company’s workspaces, inspection of AI flows, and an analysis service plugged in behind the proxy that stops secrets before they reach the model.",
+            module: "Fleet Guard",
+          },
+          serveurs: {
+            blind: "Shared API keys, spending without a budget, agents calling tools with nobody approving.",
+            control: "The API Gateway, installed on your side, gives every API application a virtual key and an API budget, keeps the list of allowed tools and asks for human approval on sensitive actions. No prompt goes through xSOM.",
+            module: "Fleet Gateway",
+          },
+          cloud: {
+            blind: "Claude, ChatGPT, Azure OpenAI, Microsoft Copilot or another: once the message has reached a Provider, it is too late to take it back. And each one bills on its own.",
+            control: "With the Providers that offer Inference hooks, every message first goes through your Verdict Server: refused, it is never read by the model. Their costs are reported to the console: seats, overages and API spending.",
+            module: "Fleet Guard",
+          },
+          console: {
+            blind: "Seats paid for without knowing who uses them, an unknown cost per team, and nothing to show on audit day.",
+            control: "Seats and their caps per organisation, the actual cost of every developer next to their estimated API equivalent, workstation coverage, and a signed evidence dossier for the audit.",
+            module: "Fleet Sièges",
+          },
+        },
         product: { title: "Installable product", hint: "Installed and run on your side; some options need a consulting setup." },
         consulting: { title: "Consulting and integration", hint: "Configuration of your tools and the Providers’ tools, tests, support: no xSOM code." },
         none: "No option of this kind here.",
