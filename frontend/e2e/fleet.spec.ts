@@ -24,8 +24,14 @@ test("the cover names the platform in a few words, next to its diagram", async (
   await expect(supported).toContainText("Pris en charge");
   await expect(supported.locator("li")).toHaveText([/Claude\s+Claude Code/, /ChatGPT\s+Codex/]);
   await expect(supported).toContainText("sans partenariat ni approbation");
-  // Aucun fournisseur d'API nommé tant que la version de LiteLLM n'est pas épinglée.
-  await expect(page.locator("main")).not.toContainText(/Mistral|Gemini|Bedrock|Azure/);
+  // Aucun fournisseur d'API nommé tant que la version de LiteLLM n'est pas épinglée, sauf
+  // sur la carte des options, où l'île des Fournisseurs d'IA les cite pour décrire.
+  const outsideMap = await page.locator("main").evaluate((main) => {
+    const copy = main.cloneNode(true) as HTMLElement;
+    copy.querySelectorAll("#options .fl-map").forEach((map) => map.remove());
+    return copy.textContent ?? "";
+  });
+  expect(outsideMap).not.toMatch(/Mistral|Gemini|Bedrock|Azure/);
 });
 
 test("the header follows the chapters and offers sign-in next to the demo request", async ({ page }) => {
@@ -234,6 +240,97 @@ test("options: the typical company map is a keyboard tablist, product kept apart
   await expect(section).toContainText("Schéma de principe");
 });
 
+/** L’écart, en pixels, entre le centre d’une zone de la carte et le centre de la carte. */
+async function offCentre(page: import("@playwright/test").Page, zone: string) {
+  await page.waitForTimeout(700); // fin de la transition du zoom
+  return page.locator("#options .fl-map__svg").evaluate((svg, id) => {
+    const frame = svg.getBoundingClientRect();
+    const box = svg.querySelector(`.fl-iso__zone[data-zone="${id}"]`)!.getBoundingClientRect();
+    return Math.hypot(box.x + box.width / 2 - (frame.x + frame.width / 2), box.y + box.height / 2 - (frame.y + frame.height / 2));
+  }, zone);
+}
+
+test("options: the isometric map switches between the blind spot and the company under control", async ({ page }) => {
+  await page.goto("/fleet");
+  const section = page.locator("#options");
+  const map = section.locator(".fl-map");
+  await section.scrollIntoViewIfNeeded();
+  // Sept zones dessinées, quatre flux de demandes, et la boucle d’animation qui tourne à l’écran.
+  await expect(map.locator(".fl-iso__zone")).toHaveCount(7);
+  await expect(map.locator(".fl-iso__flow")).toHaveCount(4);
+  await expect(map.locator(".fl-iso__exchange")).toHaveCount(1);
+  await expect(map.locator(".fl-iso__cost")).toHaveCount(3);
+  await expect(map).toHaveAttribute("data-animating", "");
+  await expect(map.locator(".fl-iso__requests .fl-iso__dot").first()).toBeAttached();
+  // Les réponses des modèles redescendent, et les échanges avec les Externes circulent.
+  await expect(map.locator(".fl-iso__requests .fl-iso__reply").first()).toBeAttached({ timeout: 10_000 });
+  await expect(map.locator(".fl-iso__requests .fl-iso__dot--exchange").first()).toBeAttached();
+  // Les Fournisseurs d'IA, cités pour décrire, sur leur île.
+  await expect(map.locator('.fl-iso__zone[data-zone="cloud"] .fl-iso__brand')).toHaveText(["Claude", "ChatGPT", "Microsoft Copilot", "Azure OpenAI", "Gemini", "Mistral", "Bedrock"]);
+  await expect(section.locator(".fl-map__legend li")).toHaveText(["Demande envoyée à une IA", "Secret dans la demande", "Secret remplacé au point de contrôle", "Réponse du modèle, en retour", "Échange entre vos agents et les Externes", "Usage et coûts vers la console, sous contrôle", "Événements sans contenu vers la console", "Pointillés : le Groupe"]);
+  // Angle mort par défaut : points d’interrogation, aucun bouclier.
+  const modes = section.getByRole("group", { name: "État de l’entreprise" });
+  const blind = modes.getByRole("button", { name: "Angle mort" });
+  const control = modes.getByRole("button", { name: "Sous contrôle" });
+  await expect(blind).toHaveAttribute("aria-pressed", "true");
+  await expect(map.locator(".fl-iso__shield").first()).toBeHidden();
+  await expect(map.locator(".fl-iso__unknowns")).toBeVisible();
+  // En angle mort, ni usage ni coûts ne remontent à la console ; les échanges et les réponses restent.
+  await expect(map.locator(".fl-iso__costs")).toBeHidden();
+  await expect(map.locator(".fl-iso__exchange")).toBeVisible();
+  const panel = section.getByRole("tabpanel");
+  await expect(panel.locator('.fl-state[data-current="true"]')).toHaveAttribute("data-state", "blind");
+  await expect(panel.locator('.fl-state[data-state="blind"]')).toContainText("L’assistant de code lit le dépôt");
+  // Sous contrôle : les boucliers se posent, l’état « Sous contrôle » passe devant.
+  await control.click();
+  await expect(control).toHaveAttribute("aria-pressed", "true");
+  await expect(map).toHaveAttribute("data-mode", "control");
+  await expect(map.locator(".fl-iso__shield")).toHaveCount(6);
+  await expect(map.locator('.fl-iso__shield[data-shield="postes-dev"]')).toBeVisible();
+  await expect(map.locator(".fl-iso__unknowns")).toBeHidden();
+  await expect(map.locator('.fl-iso__cost[data-from="cloud"]')).toBeVisible();
+  await expect(map.locator(".fl-iso__requests .fl-iso__dot--cost").first()).toBeVisible();
+  await expect(panel.locator('.fl-state[data-current="true"]')).toHaveAttribute("data-state", "control");
+  await expect(panel.locator('.fl-state[data-current="true"]')).toContainText("L’Agent xSOM contrôle chaque envoi sur le Poste.");
+  await expect(panel.locator(".fl-map__module")).toContainText("Fleet Guard");
+  // Un clic sur un bâtiment choisit sa zone et zoome dessus.
+  await map.locator('.fl-iso__zone[data-zone="console"] .fl-iso__hl--top').click();
+  await expect(section.getByRole("tab", { name: /Console xSOM Fleet/ })).toHaveAttribute("aria-selected", "true");
+  await expect(panel.locator(".fl-map__module")).toContainText("Fleet Sièges");
+  await expect(map).toHaveAttribute("data-zoomed", "");
+  expect(await offCentre(page, "console")).toBeLessThan(12);
+  // Hors de l’écran, la boucle d’animation s’arrête.
+  await page.locator("#questions").scrollIntoViewIfNeeded();
+  await expect(map).not.toHaveAttribute("data-animating", "");
+  await blind.scrollIntoViewIfNeeded();
+  await expect(map).toHaveAttribute("data-animating", "");
+});
+
+test("options: under reduced motion, the requests stand still along the flows", async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await page.goto("/fleet");
+  const map = page.locator("#options .fl-map");
+  await map.scrollIntoViewIfNeeded();
+  // Les demandes vers les IA : trois par flux, sans les échanges ni les remontées de coûts.
+  const frozen = map.locator(".fl-iso__requests[data-frozen] .fl-iso__dot:not(.fl-iso__dot--exchange, .fl-iso__dot--cost)");
+  await expect(frozen).toHaveCount(12);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--secret')).toHaveCount(4);
+  await expect(map.locator(".fl-iso__requests[data-frozen] .fl-iso__reply")).toHaveCount(8);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--exchange')).toHaveCount(2);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--cost')).toHaveCount(3);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--cost').first()).toBeHidden();
+  await page.waitForTimeout(400);
+  await expect(map).not.toHaveAttribute("data-animating", "");
+  expect(await map.locator(".fl-iso__requests:not([data-frozen]) circle").count()).toBe(0);
+  // Sous contrôle, les secrets passés au bouclier sont verts ; celui qui ne l’a pas encore atteint reste rouge.
+  await page.getByRole("button", { name: "Sous contrôle" }).click();
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--stopped')).toHaveCount(3);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--secret')).toHaveCount(1);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--cost').first()).toBeVisible();
+  await context.close();
+});
+
 test("options: the comparison matrix lists every published option by level, FinOps included", async ({ page }) => {
   await page.goto("/fleet");
   const matrix = page.getByRole("region", { name: "Matrice de comparaison des options" });
@@ -256,6 +353,8 @@ test("options: on a 360 px phone, the map and the matrix stay inside the page", 
   await expect(page.locator('#options .fl-map')).toHaveAttribute("data-layout", "narrow");
   await page.getByRole("tab", { name: /Métiers/ }).click();
   await expect(page.getByRole("tabpanel").locator("h3")).toHaveText("Métiers");
+  await page.getByRole("tab", { name: /Cloud des Fournisseurs/ }).click();
+  expect(await offCentre(page, "cloud")).toBeLessThan(8);
   const frame = page.locator(".fl-mx__scroll");
   expect(await frame.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
