@@ -234,6 +234,67 @@ test("options: the typical company map is a keyboard tablist, product kept apart
   await expect(section).toContainText("Schéma de principe");
 });
 
+test("options: the isometric map switches between the blind spot and the company under control", async ({ page }) => {
+  await page.goto("/fleet");
+  const section = page.locator("#options");
+  const map = section.locator(".fl-map");
+  await section.scrollIntoViewIfNeeded();
+  // Sept zones dessinées, quatre flux de demandes, et la boucle d’animation qui tourne à l’écran.
+  await expect(map.locator(".fl-iso__zone")).toHaveCount(7);
+  await expect(map.locator(".fl-iso__flow")).toHaveCount(4);
+  await expect(map).toHaveAttribute("data-animating", "");
+  await expect(map.locator(".fl-iso__requests .fl-iso__dot").first()).toBeAttached();
+  // Angle mort par défaut : points d’interrogation, aucun bouclier.
+  const modes = section.getByRole("group", { name: "État de l’entreprise" });
+  const blind = modes.getByRole("button", { name: "Angle mort" });
+  const control = modes.getByRole("button", { name: "Sous contrôle" });
+  await expect(blind).toHaveAttribute("aria-pressed", "true");
+  await expect(map.locator(".fl-iso__shield").first()).toBeHidden();
+  await expect(map.locator(".fl-iso__unknowns")).toBeVisible();
+  const panel = section.getByRole("tabpanel");
+  await expect(panel.locator('.fl-state[data-current="true"]')).toHaveAttribute("data-state", "blind");
+  await expect(panel.locator('.fl-state[data-state="blind"]')).toContainText("L’assistant de code lit le dépôt");
+  // Sous contrôle : les boucliers se posent, l’état « Sous contrôle » passe devant.
+  await control.click();
+  await expect(control).toHaveAttribute("aria-pressed", "true");
+  await expect(map).toHaveAttribute("data-mode", "control");
+  await expect(map.locator(".fl-iso__shield")).toHaveCount(6);
+  await expect(map.locator('.fl-iso__shield[data-shield="postes-dev"]')).toBeVisible();
+  await expect(map.locator(".fl-iso__unknowns")).toBeHidden();
+  await expect(panel.locator('.fl-state[data-current="true"]')).toHaveAttribute("data-state", "control");
+  await expect(panel.locator('.fl-state[data-current="true"]')).toContainText("L’Agent xSOM contrôle chaque envoi sur le Poste.");
+  await expect(panel.locator(".fl-map__module")).toContainText("Fleet Guard");
+  // Un clic sur un bâtiment choisit sa zone et zoome dessus.
+  await map.locator('.fl-iso__zone[data-zone="console"] .fl-iso__hl--top').click({ force: true });
+  await expect(section.getByRole("tab", { name: /Console xSOM Fleet/ })).toHaveAttribute("aria-selected", "true");
+  await expect(panel.locator(".fl-map__module")).toContainText("Fleet Sièges");
+  await expect(map).toHaveAttribute("data-zoomed", "");
+  // Hors de l’écran, la boucle d’animation s’arrête.
+  await page.locator("#questions").scrollIntoViewIfNeeded();
+  await expect(map).not.toHaveAttribute("data-animating", "");
+  await blind.scrollIntoViewIfNeeded();
+  await expect(map).toHaveAttribute("data-animating", "");
+});
+
+test("options: under reduced motion, the requests stand still along the flows", async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await page.goto("/fleet");
+  const map = page.locator("#options .fl-map");
+  await map.scrollIntoViewIfNeeded();
+  const frozen = map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot');
+  await expect(frozen).toHaveCount(12);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--secret')).toHaveCount(4);
+  await page.waitForTimeout(400);
+  await expect(map).not.toHaveAttribute("data-animating", "");
+  expect(await map.locator(".fl-iso__requests:not([data-frozen]) circle").count()).toBe(0);
+  // Sous contrôle, les secrets passés au bouclier sont verts ; celui qui ne l’a pas encore atteint reste rouge.
+  await page.getByRole("button", { name: "Sous contrôle" }).click();
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--stopped')).toHaveCount(3);
+  await expect(map.locator('.fl-iso__requests[data-frozen] .fl-iso__dot--secret')).toHaveCount(1);
+  await context.close();
+});
+
 test("options: the comparison matrix lists every published option by level, FinOps included", async ({ page }) => {
   await page.goto("/fleet");
   const matrix = page.getByRole("region", { name: "Matrice de comparaison des options" });
