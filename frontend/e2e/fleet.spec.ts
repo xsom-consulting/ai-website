@@ -267,7 +267,7 @@ test("options: the isometric map switches between the blind spot and the company
   await expect(map.locator(".fl-iso__requests .fl-iso__dot--exchange").first()).toBeAttached();
   // Les Fournisseurs d'IA, cités pour décrire, sur leur île.
   await expect(map.locator('.fl-iso__zone[data-zone="cloud"] .fl-iso__brand')).toHaveText(["Claude", "ChatGPT", "Azure OpenAI", "Microsoft Copilot", "Gemini", "Mistral", "Bedrock"]);
-  await expect(section.locator(".fl-map__legend li")).toHaveText(["Demande envoyée à une IA", "Secret dans la demande", "Secret remplacé au point de contrôle", "Réponse du modèle, en retour", "Échange entre vos agents et les Externes", "Usage et coûts vers la console, sous contrôle"]);
+  await expect(section.locator(".fl-map__legend li")).toHaveText(["Demande envoyée à une IA", "Secret dans la demande", "Secret remplacé au point de contrôle", "Réponse du modèle, en retour", "Échange entre vos agents et les Externes", "Usage et coûts vers la console, sous contrôle", "Événements sans contenu vers la console", "Pointillés : le Groupe"]);
   // Angle mort par défaut : points d’interrogation, aucun bouclier.
   const modes = section.getByRole("group", { name: "État de l’entreprise" });
   const blind = modes.getByRole("button", { name: "Angle mort" });
@@ -294,7 +294,7 @@ test("options: the isometric map switches between the blind spot and the company
   await expect(panel.locator('.fl-state[data-current="true"]')).toContainText("L’Agent xSOM contrôle chaque envoi sur le Poste.");
   await expect(panel.locator(".fl-map__module")).toContainText("Fleet Guard");
   // Un clic sur un bâtiment choisit sa zone et zoome dessus.
-  await map.locator('.fl-iso__zone[data-zone="console"] .fl-iso__hl--top').click({ force: true });
+  await map.locator('.fl-iso__zone[data-zone="console"] .fl-iso__hl--top').click();
   await expect(section.getByRole("tab", { name: /Console xSOM Fleet/ })).toHaveAttribute("aria-selected", "true");
   await expect(panel.locator(".fl-map__module")).toContainText("Fleet Sièges");
   await expect(map).toHaveAttribute("data-zoomed", "");

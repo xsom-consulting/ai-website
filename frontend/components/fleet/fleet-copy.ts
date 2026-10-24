@@ -254,7 +254,7 @@ export const FLEET_COPY = {
         hint: "Choisissez une zone sur la carte ou ci-dessous (flèches du clavier, Entrée pour zoomer, Échap pour revenir).",
         count: (n: number) => `${n} option${n > 1 ? "s" : ""}`,
         modes: { label: "État de l’entreprise", blind: "Angle mort", control: "Sous contrôle" },
-        legend: { label: "Lecture des flux", request: "Demande envoyée à une IA", secret: "Secret dans la demande", stopped: "Secret remplacé au point de contrôle", reply: "Réponse du modèle, en retour", exchange: "Échange entre vos agents et les Externes", cost: "Usage et coûts vers la console, sous contrôle" },
+        legend: { label: "Lecture des flux", request: "Demande envoyée à une IA", secret: "Secret dans la demande", stopped: "Secret remplacé au point de contrôle", reply: "Réponse du modèle, en retour", exchange: "Échange entre vos agents et les Externes", cost: "Usage et coûts vers la console, sous contrôle", reports: "Événements sans contenu vers la console", group: "Pointillés : le Groupe" },
         places: {
           metiers: { name: "Métiers", sub: "claude.ai, chatgpt.com" },
           externes: { name: "Externes", sub: "hors du Groupe" },
@@ -262,7 +262,7 @@ export const FLEET_COPY = {
           proxy: { name: "Proxy d’entreprise" },
           serveurs: { name: "Serveurs et agents", sub: "applications, API" },
           cloud: { name: "Fournisseurs d’IA" },
-          console: { name: "Console xSOM Fleet" },
+          console: { name: "Console xSOM Fleet", sub: "Dans l’UE ou chez vous" },
         },
         shields: {
           "postes-dev": "Agent xSOM",
@@ -556,7 +556,7 @@ export const FLEET_COPY = {
         hint: "Pick an area on the map or below (arrow keys, Enter to zoom, Escape to go back).",
         count: (n: number) => `${n} option${n > 1 ? "s" : ""}`,
         modes: { label: "State of the company", blind: "Blind spot", control: "Under control" },
-        legend: { label: "Reading the flows", request: "Request sent to an AI", secret: "Secret in the request", stopped: "Secret replaced at the checkpoint", reply: "Model response, coming back", exchange: "Exchange between your agents and Externals", cost: "Usage and costs to the console, under control" },
+        legend: { label: "Reading the flows", request: "Request sent to an AI", secret: "Secret in the request", stopped: "Secret replaced at the checkpoint", reply: "Model response, coming back", exchange: "Exchange between your agents and Externals", cost: "Usage and costs to the console, under control", reports: "Events without content to the console", group: "Dashed line: the Group" },
         places: {
           metiers: { name: "Business teams", sub: "claude.ai, chatgpt.com" },
           externes: { name: "Externals", sub: "outside the Group" },
@@ -564,7 +564,7 @@ export const FLEET_COPY = {
           proxy: { name: "Corporate proxy" },
           serveurs: { name: "Servers and agents", sub: "applications, APIs" },
           cloud: { name: "AI Providers" },
-          console: { name: "xSOM Fleet console" },
+          console: { name: "xSOM Fleet console", sub: "In the EU or on your side" },
         },
         shields: {
           "postes-dev": "xSOM agent",

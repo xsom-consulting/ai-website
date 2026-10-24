@@ -45,7 +45,7 @@ export type MapLabels = {
   readonly hint: string;
   readonly count: (n: number) => string;
   readonly modes: { readonly label: string } & Readonly<Record<Mode, string>>;
-  readonly legend: { readonly label: string; readonly request: string; readonly secret: string; readonly stopped: string; readonly reply: string; readonly exchange: string; readonly cost: string };
+  readonly legend: { readonly label: string; readonly request: string; readonly secret: string; readonly stopped: string; readonly reply: string; readonly exchange: string; readonly cost: string; readonly reports: string; readonly group: string };
   readonly places: Readonly<Record<ZoneId, { readonly name: string; readonly sub?: string }>>;
   readonly shields: Readonly<Record<ShieldId, string>>;
   readonly module: string;
@@ -136,7 +136,12 @@ function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGEleme
     if (live.length >= 70) return;
     const node = circle(className, r);
     if (item.secret) node.setAttribute("filter", `url(#${marker}-glow)`);
-    live.push({ ...item, t: item.direction === 1 ? 0 : 1, secret: item.secret ?? false, handled: false, node });
+    // Posé dès sa création au départ de son trajet : jamais une image à l’origine du dessin.
+    const t = item.direction === 1 ? 0 : 1;
+    const [x, y] = pointAt(item.path, t);
+    node.setAttribute("cx", fixed(x));
+    node.setAttribute("cy", fixed(y));
+    live.push({ ...item, t, secret: item.secret ?? false, handled: false, node });
   };
   const spawnRequest = () => {
     const flow = pick(SCENE.flows);
@@ -148,7 +153,8 @@ function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGEleme
   const spawnCost = () => launch({ path: pick(SCENE.costs), kind: "cost", direction: 1, speed: 1 / (3.4 + Math.random()) }, "fl-iso__dot fl-iso__dot--cost", 2.6);
 
   const tick = (now: number) => {
-    const dt = Math.min(0.05, (now - last) / 1000);
+    // Au redémarrage, la première image peut dater d’avant `start` : jamais de temps négatif.
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
     last = now;
     for (const [key, every, spawn] of [["request", 0.32, spawnRequest], ["exchange", 1.1, spawnExchange], ["cost", 0.9, spawnCost]] as const) {
       timers[key] += dt;
@@ -159,8 +165,10 @@ function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGEleme
     }
     for (let index = live.length - 1; index >= 0; index--) {
       const item = live[index];
+      const before = item.t;
       item.t += item.direction * item.speed * dt;
-      if (item.flow && item.kind === "request" && item.secret && !item.handled && mode.current === "control" && item.t >= item.flow.shieldAt) {
+      // Seul un secret qui franchit le bouclier pendant cette image est remplacé.
+      if (item.flow && item.kind === "request" && item.secret && !item.handled && mode.current === "control" && before < item.flow.shieldAt && item.t >= item.flow.shieldAt) {
         item.handled = true;
         item.secret = false;
         item.node.setAttribute("class", "fl-iso__dot fl-iso__dot--stopped");
@@ -168,7 +176,7 @@ function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGEleme
         item.node.removeAttribute("filter");
         pulse(SCENE.shields[item.flow.shield], true, now);
       }
-      if (item.t >= 1 || item.t <= 0) {
+      if ((item.direction === 1 && item.t >= 1) || (item.direction === -1 && item.t <= 0)) {
         if (item.kind === "request" && item.secret) pulse(pointAt(item.path, 1), false, now);
         if (item.kind === "request" && item.flow && Math.random() < 0.6) spawnReply(item.flow);
         item.node.remove();
@@ -204,12 +212,20 @@ function animateRequests(host: HTMLElement, svg: SVGSVGElement, layer: SVGGEleme
     frame = 0;
     delete host.dataset.animating;
   };
+  const cleanup = () => {
+    stop();
+    layer.replaceChildren();
+  };
+  // Sans IntersectionObserver, la boucle tourne sans s’arrêter hors de l’écran.
+  if (typeof IntersectionObserver === "undefined") {
+    start();
+    return cleanup;
+  }
   const observer = new IntersectionObserver(([entry]) => (entry?.isIntersecting ? start() : stop()));
   observer.observe(svg);
   return () => {
     observer.disconnect();
-    stop();
-    layer.replaceChildren();
+    cleanup();
   };
 }
 
@@ -452,6 +468,8 @@ export function FleetMap({ lang, labels }: { lang: Lang; labels: MapLabels }) {
           <li data-kind="reply">{labels.legend.reply}</li>
           <li data-kind="exchange">{labels.legend.exchange}</li>
           <li data-kind="cost">{labels.legend.cost}</li>
+          <li data-kind="reports">{labels.legend.reports}</li>
+          <li data-kind="group">{labels.legend.group}</li>
         </ul>
         <p className="fl-map__hint" id={`${marker}-hint`}>{labels.hint}</p>
         <div className="fl-map__tabs" role="tablist" aria-label={labels.zones} aria-orientation="horizontal" aria-describedby={`${marker}-hint`}>

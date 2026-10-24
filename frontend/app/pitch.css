@@ -2433,7 +2433,8 @@ h3.xp-head__title {
   font-family: var(--font-body), sans-serif;
   font-size: 10.5px;
 }
-.xfl .fl-iso :is(.fl-iso__labels, .fl-iso__requests) {
+/* Seuls les bâtiments reçoivent le clic : rien de ce qui est dessiné au-dessus ne le capte. */
+.xfl .fl-iso :is(.fl-iso__unknowns, .fl-iso__flows, .fl-iso__exchange, .fl-iso__reports, .fl-iso__costs, .fl-iso__requests, .fl-iso__shields, .fl-iso__labels) {
   pointer-events: none;
 }
 /* Angle mort : points d’interrogation ; sous contrôle : boucliers et remontées vers la console. */
@@ -2534,6 +2535,16 @@ h3.xp-head__title {
 }
 .xfl .fl-map__legend li[data-kind="exchange"]::before { background: var(--xp-vi); }
 .xfl .fl-map__legend li[data-kind="cost"]::before { background: var(--xp-am); }
+.xfl .fl-map__legend li:is([data-kind="reports"], [data-kind="group"])::before {
+  width: 14px;
+  height: 0;
+  border-radius: 0;
+  background: none;
+  border-top: 2px dashed var(--xp-ok);
+}
+.xfl .fl-map__legend li[data-kind="group"]::before {
+  border-top-color: var(--xp-tx-2);
+}
 .xfl .fl-map__stage > .fl-map__hint {
   padding: .5rem 1rem 0;
 }
