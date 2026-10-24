@@ -266,7 +266,7 @@ test("options: the isometric map switches between the blind spot and the company
   await expect(map.locator(".fl-iso__requests .fl-iso__reply").first()).toBeAttached({ timeout: 10_000 });
   await expect(map.locator(".fl-iso__requests .fl-iso__dot--exchange").first()).toBeAttached();
   // Les Fournisseurs d'IA, cités pour décrire, sur leur île.
-  await expect(map.locator('.fl-iso__zone[data-zone="cloud"] .fl-iso__brand')).toHaveText(["Claude", "ChatGPT", "Azure OpenAI", "Microsoft Copilot", "Gemini", "Mistral", "Bedrock"]);
+  await expect(map.locator('.fl-iso__zone[data-zone="cloud"] .fl-iso__brand')).toHaveText(["Claude", "ChatGPT", "Microsoft Copilot", "Azure OpenAI", "Gemini", "Mistral", "Bedrock"]);
   await expect(section.locator(".fl-map__legend li")).toHaveText(["Demande envoyée à une IA", "Secret dans la demande", "Secret remplacé au point de contrôle", "Réponse du modèle, en retour", "Échange entre vos agents et les Externes", "Usage et coûts vers la console, sous contrôle", "Événements sans contenu vers la console", "Pointillés : le Groupe"]);
   // Angle mort par défaut : points d’interrogation, aucun bouclier.
   const modes = section.getByRole("group", { name: "État de l’entreprise" });

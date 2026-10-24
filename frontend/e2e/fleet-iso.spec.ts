@@ -83,7 +83,7 @@ test("iso: the Providers island names seven Providers, on the island and without
   const cloud = zoneScene("cloud");
   const brands = cloud.shapes.filter((shape) => shape.kind === "text");
   expect(brands.map((shape) => (shape.kind === "text" ? shape.text : ""))).toEqual(PROVIDER_ROWS.flat());
-  expect(PROVIDER_ROWS.flat()).toEqual(["Claude", "ChatGPT", "Azure OpenAI", "Microsoft Copilot", "Gemini", "Mistral", "Bedrock"]);
+  expect(PROVIDER_ROWS.flat()).toEqual(["Claude", "ChatGPT", "Microsoft Copilot", "Azure OpenAI", "Gemini", "Mistral", "Bedrock"]);
   const top = union(cloud.shapes.filter((shape) => shape.className.endsWith("--island-t")).map(shapeBounds));
   const boxes = brands.map(shapeBounds);
   for (const box of boxes) expect(union([top, box])).toEqual(top);

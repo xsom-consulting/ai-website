@@ -96,12 +96,13 @@ export const DRAW_ORDER: readonly ZoneId[] = ["cloud", "console", "metiers", "pr
 
 /**
  * Les Fournisseurs d’IA, cités pour décrire : marques de leurs détenteurs, sans
- * partenariat. Trois rangées sur l’île, de l’arrière vers l’avant.
+ * partenariat. Quatre rangées sur l’île, de l’arrière vers l’avant.
  */
 export const PROVIDER_ROWS: readonly (readonly string[])[] = [
   ["Claude", "ChatGPT"],
-  ["Azure OpenAI", "Microsoft Copilot"],
-  ["Gemini", "Mistral", "Bedrock"],
+  ["Microsoft Copilot"],
+  ["Azure OpenAI", "Gemini"],
+  ["Mistral", "Bedrock"],
 ];
 
 /** L’île des Fournisseurs : sa base (grille) et le centre de son dessus, à l’écran. */
