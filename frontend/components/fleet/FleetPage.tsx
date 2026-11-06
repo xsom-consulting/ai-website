@@ -12,6 +12,7 @@ import { FleetCapture } from "./FleetCapture";
 import { FleetConsole } from "./FleetConsole";
 import { FleetFlow } from "./FleetFlow";
 import { FleetGateway } from "./FleetGateway";
+import { FleetGuardDemo } from "./FleetGuardDemo";
 import { FleetGuardFlow } from "./FleetGuardFlow";
 import { FleetHowFilm } from "./FleetHowFilm";
 import { FleetMap } from "./FleetMap";
@@ -24,6 +25,7 @@ import {
   FLEET_CONSOLE_URL,
   FLEET_CONTACT,
   FLEET_COPY,
+  FLEET_GUARD_DEMO_MEDIA,
   FLEET_MEASUREMENT,
   FLEET_PRICE_CONTACT,
   FLEET_SIMULATION_CONTACT,
@@ -175,6 +177,7 @@ export function FleetPage() {
               <p className="xp-caption">{copy.guard.caption}</p>
               <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="xp-link">{copy.guard.source} <span aria-hidden="true">↗</span></SiteLink>
             </div>
+            <div className="reveal" data-delay="4"><FleetGuardDemo labels={copy.guard.demo} media={FLEET_GUARD_DEMO_MEDIA} /></div>
           </div>
         </Chapter>
 

@@ -89,6 +89,29 @@ test("security: the secret is stopped on the workstation, with the agent's exact
   await expect(section.getByRole("link", { name: /Lire le code de Secret Guard/ })).toHaveAttribute("href", "https://github.com/xsom-consulting/secret-guard");
 });
 
+test("security: two real recordings show redaction, dated, without downloading them up front", async ({ page }) => {
+  const videos: string[] = [];
+  page.on("request", (request) => { if (request.url().includes("guard-demo") && request.url().endsWith(".mp4")) videos.push(request.url()); });
+  await page.goto("/fleet");
+  const demo = page.locator("#securite .fl-gdemo");
+  await expect(demo.locator("h3")).toHaveText("En vrai, sur un Poste");
+  await expect(demo).toContainText("bloquer l’envoi, ou expurger");
+  const clips = demo.locator("video");
+  await expect(clips).toHaveCount(2);
+  for (const id of ["texte", "capture"]) {
+    const clip = demo.locator(`[data-clip="${id}"] video`);
+    await expect(clip).toHaveAttribute("src", `/signal-media/xsom-fleet-guard-demo-${id}.mp4`);
+    await expect(clip).toHaveAttribute("poster", `/signal-media/xsom-fleet-guard-demo-${id}.jpg`);
+    await expect(clip).toHaveAttribute("preload", "none");
+    await expect(clip).toHaveAttribute("aria-label", /xSOM Fleet/);
+  }
+  await expect(demo.locator("figcaption strong")).toHaveText(["Un mot de passe dans le prompt", "Un jeton dans une capture d’écran"]);
+  // Captures réelles, datées, secrets inventés : jamais présentées comme autre chose.
+  await expect(demo.locator(".fl-gdemo__caption")).toContainText("novembre 2026");
+  await expect(demo.locator(".fl-gdemo__caption")).toContainText("Secrets inventés");
+  expect(videos).toEqual([]);
+});
+
 test("FinOps: the real measurement, the labelled simulation, then the console in tabs", async ({ page }) => {
   await page.goto("/fleet");
   const section = page.locator("#finops");
@@ -164,7 +187,8 @@ test("strategy: Fleet Gateway is offered for pilot, names no model and shows no 
 
 test("the film is the one presentation film, declared without downloading it up front", async ({ page }) => {
   await page.goto("/fleet");
-  await expect(page.locator("video")).toHaveCount(1);
+  // Le seul film de présentation ; les captures vidéo de Fleet Guard (#securite) sont à part.
+  await expect(page.locator("video:not(.fl-gdemo__video)")).toHaveCount(1);
   const section = page.locator("#film");
   await expect(section.locator("h2")).toHaveText("Voyez-le en 72 secondes.");
   const film = section.locator("video");
