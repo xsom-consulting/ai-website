@@ -45,6 +45,16 @@ export const fleetHowMedia = (lang: Lang) => ({
 });
 
 /**
+ * Les deux captures vidéo de Fleet Guard (chapitre Sécurité) : Claude Code sur un Poste
+ * équipé de l'Agent xSOM, Politique qui expurge, secrets inventés. Interface en français,
+ * mêmes fichiers dans les deux langues. Provenance : `signal-media/xsom-fleet-guard-demo.md`.
+ */
+export const FLEET_GUARD_DEMO_MEDIA = [
+  { id: "texte", mp4: `${MEDIA}/xsom-fleet-guard-demo-texte.mp4`, poster: `${MEDIA}/xsom-fleet-guard-demo-texte.jpg` },
+  { id: "capture", mp4: `${MEDIA}/xsom-fleet-guard-demo-capture.mp4`, poster: `${MEDIA}/xsom-fleet-guard-demo-capture.jpg` },
+] as const;
+
+/**
  * Le prix du forfait Codex de xSOM (septembre 2026), dans sa devise : 103 € TTC par
  * mois. Jamais converti, jamais additionné aux dollars : aucun ratio n'est calculé pour
  * Codex.
@@ -153,6 +163,23 @@ export const FLEET_COPY = {
       failClosed: "Analyse incomplète ou délai dépassé : l’envoi est bloqué aussi.",
       caption: "Schéma de principe. Message : texte exact de l’Agent xSOM.",
       source: "Lire le code de Secret Guard",
+      demo: {
+        title: "En vrai, sur un Poste",
+        lead: "La Politique choisit, règle par règle : bloquer l’envoi, ou expurger. Ici, elle expurge : le message part, le secret reste sur le Poste.",
+        items: [
+          {
+            title: "Un mot de passe dans le prompt",
+            body: "Le mot de passe est remplacé par un Substitut avant l’envoi. Une ligne l’annonce dans la conversation ; le modèle ne voit que le Substitut.",
+            label: "Vidéo : dans Claude Code, un prompt contient l’URL d’une base de données avec son mot de passe. xSOM Fleet remplace le mot de passe par XXXXXXXXXXX1 avant l’envoi, une ligne l’annonce, et le modèle recopie l’URL avec le Substitut.",
+          },
+          {
+            title: "Un jeton dans une capture d’écran",
+            body: "La zone du jeton est recouverte d’un rectangle blanc sur une copie de l’image. Le modèle lit tout le reste.",
+            label: "Vidéo : dans Claude Code, une capture d’écran d’un fichier .env contient un jeton GitHub. xSOM Fleet masque la ligne du jeton sur une copie de l’image ; le modèle décrit l’image et recopie les autres lignes.",
+          },
+        ],
+        caption: "Captures d’écran réelles, novembre 2026 : Claude Code dans le terminal macOS, Agent xSOM 0.9.11. Secrets inventés pour la démonstration.",
+      },
     },
     finops: {
       title: "Pilotage FinOps : réduisez fortement votre budget IA.",
@@ -455,6 +482,23 @@ export const FLEET_COPY = {
       failClosed: "Incomplete scan or timeout: the send is blocked too.",
       caption: "Schematic. Message: the xSOM agent’s exact text.",
       source: "Read the Secret Guard code",
+      demo: {
+        title: "For real, on a workstation",
+        lead: "The Policy decides, rule by rule: block the send, or redact. Here it redacts: the message goes out, the secret stays on the workstation.",
+        items: [
+          {
+            title: "A password in the prompt",
+            body: "The password is replaced by a substitute before sending. A line in the conversation says so; the model only sees the substitute.",
+            label: "Video: in Claude Code, a prompt contains a database URL with its password. xSOM Fleet replaces the password with XXXXXXXXXXX1 before sending, a line says so, and the model copies the URL with the substitute.",
+          },
+          {
+            title: "A token in a screenshot",
+            body: "The token’s area is covered by a white box on a copy of the image. The model reads everything else.",
+            label: "Video: in Claude Code, a screenshot of a .env file contains a GitHub token. xSOM Fleet masks the token line on a copy of the image; the model describes the image and copies the other lines.",
+          },
+        ],
+        caption: "Real screen recordings, November 2026: Claude Code in the macOS terminal, xSOM agent 0.9.11. Secrets made up for the demonstration; interface in French.",
+      },
     },
     finops: {
       title: "FinOps steering: cut your AI budget sharply.",
