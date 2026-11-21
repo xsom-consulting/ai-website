@@ -1,19 +1,25 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * La page xSOM Fleet, lue comme un dossier de présentation : la couverture (la plateforme
- * en un mot et son schéma), trois piliers en chapitres numérotés (sécurité, FinOps,
- * stratégie), les options sur le schéma d’une entreprise type, la démo vidéo, les licences et engagements, les questions et l'appel
- * final. Un indicateur de progression discret. Le film est produit à part (`films/`) :
- * la page doit tenir sans lui, et ne rien télécharger quand le mouvement est réduit.
+ * xSOM Fleet en deux pages. La page produit (`/fleet`, racine de `fleet.xsom.fr`) : une
+ * promesse, deux appels, puis une section courte par sujet (Sécurité, FinOps, Stratégie,
+ * Audit, Déploiement), la démo vidéo, les questions et l'appel final ; chaque section
+ * porte une preuve concrète. Le détail (`/fleet/details`, `fleet.xsom.fr/details`) range
+ * l'ancien dossier de présentation : la couverture et son schéma, les chapitres numérotés
+ * (sécurité, FinOps, stratégie, options, démo vidéo, engagements, questions), un
+ * indicateur de progression discret. Le film est produit à part (`films/`) : les pages
+ * doivent tenir sans lui, et ne rien télécharger quand le mouvement est réduit.
  */
+const DETAILS = "/fleet/details";
+const SECTIONS = ["securite", "finops", "strategie", "audit", "deploiement", "film", "questions"];
 const CHAPTERS = ["securite", "finops", "strategie", "options", "film", "engagements", "questions"];
 const FILM_CHAPTERS = ["choose", "policy", "coverage", "invisible", "costs", "proof"];
 
-test("the cover names the platform in a few words, next to its diagram", async ({ page }) => {
-  await page.goto("/fleet");
-  await expect(page.locator("h1")).toHaveText("La gestion de l’IA d’entreprise.");
-  await expect(page.locator("#promesse .xp-cover__lead")).toHaveText("Vos abonnements, vos clés API et vos modèles, gouvernés depuis une seule console.");
+test("the detail page keeps the former cover and its diagram, with a way back", async ({ page }) => {
+  await page.goto(DETAILS);
+  await expect(page.locator("h1")).toHaveText("xSOM Fleet en détail.");
+  await expect(page.locator("#promesse .xp-cover__lead")).toContainText("Le schéma complet");
+  await expect(page.locator("#promesse").getByRole("link", { name: /Retour à la présentation/ })).toHaveAttribute("href", "/fleet");
   await expect(page.locator("#promesse").getByRole("link", { name: "Demander une démonstration" })).toHaveAttribute("href", /^mailto:/);
   const flow = page.locator("#promesse .fl-flow");
   await expect(flow).toHaveAttribute("role", "img");
@@ -34,11 +40,12 @@ test("the cover names the platform in a few words, next to its diagram", async (
   expect(outsideMap).not.toMatch(/Mistral|Gemini|Bedrock|Azure/);
 });
 
-test("the header follows the chapters and offers sign-in next to the demo request", async ({ page }) => {
+test("the header follows the sections and offers sign-in next to the demo request", async ({ page }) => {
   await page.goto("/fleet");
   const menu = page.getByRole("navigation", { name: "Navigation principale" });
-  await expect(menu.getByRole("link")).toHaveText(["Plateforme", "Sécurité", "FinOps", "Stratégie", "Options", "Démo vidéo", "Questions"]);
+  await expect(menu.getByRole("link")).toHaveText(["Sécurité", "FinOps", "Stratégie", "Audit", "Déploiement", "Questions", "En détail"]);
   await expect(menu.getByRole("link", { name: "Sécurité" })).toHaveAttribute("href", "/fleet#securite");
+  await expect(menu.getByRole("link", { name: "En détail" })).toHaveAttribute("href", "/fleet/details");
   const header = page.locator("header.home-header");
   const signIn = header.getByRole("link", { name: "Se connecter" });
   await expect(signIn).toHaveAttribute("href", "https://plateforme.xsom.fr");
@@ -54,14 +61,133 @@ test("on a phone, the menu folds and keeps sign-in in its panel", async ({ brows
   await expect(signIn).toBeHidden();
   await page.getByRole("button", { name: "Menu", exact: true }).click();
   await expect(signIn).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", { name: "Démo vidéo" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", { name: "En détail" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await context.close();
 });
 
+// ---- La page produit (`/fleet`).
+
+test("product page: one promise, two calls, then the supported services", async ({ page }) => {
+  await page.goto("/fleet");
+  await expect(page.locator("h1")).toHaveText("Les assistants de code pour toute l’entreprise, sans fuite de secrets.");
+  const hero = page.locator("#promesse");
+  await expect(hero.locator(".xp-actions a")).toHaveText(["Demander une démonstration", /Essayer gratuitement Secret Guard/]);
+  await expect(hero.getByRole("link", { name: "Demander une démonstration" })).toHaveAttribute("href", /^mailto:/);
+  await expect(hero.getByRole("link", { name: /Essayer gratuitement Secret Guard/ })).toHaveAttribute("href", "/secret-guard");
+  // L'exemple : la valeur masquée, puis le Substitut qui part à sa place.
+  await expect(hero.locator(".fp-example mark")).toHaveText(["••••••••••••", "XXXXXXXXXXX1"]);
+  const supported = hero.locator(".fp-supported");
+  await expect(supported.locator("li")).toHaveText(["Claude Code", "Codex", "GitHub Copilot CLI", /Claude Desktop\s*Mode précis, macOS/, /Le web\s*par extension de navigateur/]);
+  await expect(supported).toContainText("sans partenariat ni approbation");
+});
+
+test("product page: few sections, each with a short title and one sentence", async ({ page }) => {
+  await page.goto("/fleet");
+  const ids = await page.locator("main > section[id]").evaluateAll((nodes) => nodes.map((n) => n.id));
+  expect(ids).toEqual(["promesse", ...SECTIONS]);
+  await expect(page.locator("#securite h2")).toHaveText("Les secrets sont expurgés avant l’envoi, pas seulement bloqués.");
+  await expect(page.locator("#finops h2")).toHaveText("Le coût réel, par Développeur et par Équipe.");
+  await expect(page.locator("#strategie h2")).toHaveText("Abonnements, API ou modèle chez vous : choisissez sur des chiffres.");
+  await expect(page.locator("#audit h2")).toHaveText("Des preuves que l’auditeur vérifie lui-même.");
+  await expect(page.locator("#deploiement h2")).toHaveText("En place en trois étapes.");
+  // Pas de chapitres numérotés ni de rail sur la page produit : ils restent dans le détail.
+  await expect(page.locator("[data-n]")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "Chapitres de la page" })).toHaveCount(0);
+});
+
+test("product page: security shows the two real recordings and leads to the full diagram", async ({ page }) => {
+  const videos: string[] = [];
+  page.on("request", (request) => { if (request.url().endsWith(".mp4")) videos.push(request.url()); });
+  await page.goto("/fleet");
+  const section = page.locator("#securite");
+  await expect(section.locator(".fp-points h3")).toHaveText(["Avant l’envoi", "Transparent", "Même dans les images"]);
+  for (const id of ["texte", "capture"]) await expect(section.locator(`[data-clip="${id}"] video`)).toHaveAttribute("preload", "none");
+  await expect(section.locator(".fl-gdemo__caption")).toContainText("novembre 2026");
+  await expect(section.getByRole("link", { name: /schéma complet/ })).toHaveAttribute("href", "/fleet/details#securite");
+  expect(videos).toEqual([]);
+});
+
+test("product page: FinOps keeps the dated real measurement, then the demo console", async ({ page }) => {
+  await page.goto("/fleet");
+  const section = page.locator("#finops");
+  const card = section.locator(".fp-measure__card");
+  await expect(card).toContainText("× 39");
+  await expect(card).toContainText("Mesure réelle");
+  await expect(card).toContainText("Chez xSOM, septembre 2026");
+  await expect(card).toContainText("200 $/mois");
+  await expect(card).toContainText("7 815 $");
+  await expect(card).toContainText("une estimation, septembre 2026");
+  await expect(section.locator(".fl-capture__thumb img")).toHaveAttribute("src", "/signal-media/xsom-ccusage-2026-09.webp");
+  await expect(section.getByRole("tablist", { name: "Vues de la console" }).getByRole("tab")).toHaveText(["Coûts", "Sièges"]);
+  for (const frame of await section.locator(".fl-frame").all()) await expect(frame.locator(".xp-pill--demo")).toHaveText("Démonstration · données illustratives");
+});
+
+test("product page: strategy is offered for pilot, any simulation is labelled, no model named", async ({ page }) => {
+  await page.goto("/fleet");
+  const section = page.locator("#strategie");
+  await expect(section).toContainText("Disponible pour pilote");
+  await expect(section.locator(".fp-channels h3")).toHaveText(["Abonnements", "API", "Modèle chez vous"]);
+  await expect(section.locator(".xp-pill--sim")).toHaveText("Simulation · hypothèses affichées");
+  await expect(section.getByRole("link", { name: "Demander la simulation pour votre entreprise" })).toHaveAttribute("href", /^mailto:.*simulation/);
+  await expect(section.getByRole("link", { name: /Voir une simulation/ })).toHaveAttribute("href", "/fleet/details#finops");
+  expect(await section.innerText()).not.toMatch(/Mistral|Gemini|Bedrock|Azure|GPT|Opus|Sonnet/);
+});
+
+test("product page: audit evidence, the event folded away, exact licences", async ({ page }) => {
+  await page.goto("/fleet");
+  const section = page.locator("#audit");
+  await expect(section.locator(".fp-points h3")).toHaveText(["Dossier de preuves", "Journal des blocages", "Rien ne quitte le Poste"]);
+  const fold = section.locator("details.fp-fold");
+  await expect(fold).not.toHaveAttribute("open", "");
+  await expect(fold.locator(".fl-json")).toBeHidden();
+  await fold.locator("summary").click();
+  await expect(fold.locator(".fl-json")).toContainText('"decision": "block"');
+  await expect(section).toContainText("Détection : Secret Guard, Apache-2.0. Expurgation : PolyForm Small Business 1.0.0.");
+  await expect(section.getByRole("link", { name: /Lire le code de Secret Guard/ })).toHaveAttribute("href", "https://github.com/xsom-consulting/secret-guard");
+});
+
+test("product page: three rollout steps, the film lower down, short questions and the final call", async ({ page }) => {
+  await page.goto("/fleet");
+  await expect(page.locator("#deploiement .fp-steps h3")).toHaveText(["Le Client Fleet sur chaque Poste", "Une Politique signée", "La console"]);
+  await expect(page.locator("#film video")).toHaveAttribute("src", "/signal-media/xsom-fleet-how-v2-fr.mp4");
+  await expect(page.locator("#questions details")).toHaveCount(5);
+  const final = page.locator(".xp-final");
+  await expect(final.getByRole("link", { name: "Demander une démonstration" })).toHaveAttribute("href", /^mailto:/);
+  await expect(final.getByRole("link", { name: "Demander un tarif" })).toHaveAttribute("href", /^mailto:.*tarif/);
+  await expect(final.getByRole("link", { name: /Tout le détail/ })).toHaveAttribute("href", "/fleet/details");
+});
+
+test("product page: the only amounts are the dated measurement and the demo console", async ({ page }) => {
+  await page.goto("/fleet");
+  const text = await page.locator("main").innerText();
+  const amounts = text.match(/\d[\d\s ,.]*\s?(?:\$|€|k€)|\$\s?\d[\d,.]*|€\s?\d[\d,.]*/g) ?? [];
+  const allowed = /^(200 \$|7 815 \$|25 476,00 \$|44 043,62 \$)$/;
+  for (const amount of amounts) expect(amount.trim().replace(/\s+/g, " ").replace(/ /g, " ")).toMatch(allowed);
+});
+
+test("product page: the same page in English", async ({ browser, baseURL }) => {
+  const context = await browser.newContext();
+  await context.addCookies([{ name: "xsom_lang", value: "en", url: baseURL! }]);
+  const page = await context.newPage();
+  await page.goto("/fleet");
+  await expect(page.locator("h1")).toHaveText("Coding assistants for the whole company, without leaking secrets.");
+  await expect(page.locator("#promesse").getByRole("link", { name: /Try Secret Guard for free/ })).toHaveAttribute("href", "/secret-guard");
+  await expect(page.locator("#securite h2")).toHaveText("Secrets are redacted before sending, not just blocked.");
+  await expect(page.locator("#finops .fp-measure__card")).toContainText("At xSOM, September 2026");
+  await expect(page.locator("#finops")).toContainText("The console is shown in French.");
+  await expect(page.locator("#strategie .xp-pill--sim")).toHaveText("Simulation · assumptions shown");
+  await expect(page.locator("#audit")).toContainText("Detection: Secret Guard, Apache-2.0. Redaction: PolyForm Small Business 1.0.0.");
+  await expect(page.locator("#deploiement h2")).toHaveText("Up and running in three steps.");
+  await expect(page.locator("#questions details")).toHaveCount(5);
+  await context.close();
+});
+
+// ---- Le détail (`/fleet/details`) : l'ancien dossier de présentation, rangé.
+
 test("the chapters are numbered in reading order, with a discreet progress rail", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   for (const [index, id] of CHAPTERS.entries()) {
     await expect(page.locator(`#${id}`)).toHaveAttribute("data-n", String(index + 1).padStart(2, "0"));
   }
@@ -75,7 +201,7 @@ test("the chapters are numbered in reading order, with a discreet progress rail"
 });
 
 test("security: the secret is stopped on the workstation, with the agent's exact message", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const section = page.locator("#securite");
   await expect(section.locator("h2")).toHaveText("Les meilleures IA, accessibles en toute sécurité.");
   const flow = section.locator(".fl-guard");
@@ -92,7 +218,7 @@ test("security: the secret is stopped on the workstation, with the agent's exact
 test("security: two real recordings show redaction, dated, without downloading them up front", async ({ page }) => {
   const videos: string[] = [];
   page.on("request", (request) => { if (request.url().includes("guard-demo") && request.url().endsWith(".mp4")) videos.push(request.url()); });
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const demo = page.locator("#securite .fl-gdemo");
   await expect(demo.locator("h3")).toHaveText("En vrai, sur un Poste");
   await expect(demo).toContainText("bloquer l’envoi, ou expurger");
@@ -113,7 +239,7 @@ test("security: two real recordings show redaction, dated, without downloading t
 });
 
 test("FinOps: the real measurement, the labelled simulation, then the console in tabs", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const section = page.locator("#finops");
   await expect(section.locator("h2")).toHaveText("Pilotage FinOps : réduisez fortement votre budget IA.");
   const measure = section.locator(".fl-measure");
@@ -146,7 +272,7 @@ test("FinOps: the real measurement, the labelled simulation, then the console in
 });
 
 test("every console capture and every demo figure is labelled as demonstration", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const frames = page.locator(".fl-frame");
   await expect(frames).toHaveCount(2);
   for (const frame of await frames.all()) await expect(frame.locator(".xp-pill--demo")).toHaveText("Démonstration · données illustratives");
@@ -155,7 +281,7 @@ test("every console capture and every demo figure is labelled as demonstration",
 test("the ccusage capture opens large and scrolls inside its frame on a phone", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
-  await page.goto(`${baseURL}/fleet`);
+  await page.goto(`${baseURL}${DETAILS}`);
   const thumb = page.locator(".fl-capture__thumb img");
   await expect(thumb).toHaveAttribute("src", "/signal-media/xsom-ccusage-2026-09.webp");
   await expect(thumb).toHaveAttribute("alt", /\$7814\.73.*\$1173\.27.*\$8988\.00/);
@@ -171,7 +297,7 @@ test("the ccusage capture opens large and scrolls inside its frame on a phone", 
 });
 
 test("strategy: Fleet Gateway is offered for pilot, names no model and shows no amount", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const section = page.locator("#strategie");
   await expect(section.locator("h2")).toHaveText("Une vraie stratégie IA, optimisée.");
   await expect(section).toContainText("Fleet Gateway · disponible pour pilote");
@@ -186,7 +312,7 @@ test("strategy: Fleet Gateway is offered for pilot, names no model and shows no 
 });
 
 test("the film is the one presentation film, declared without downloading it up front", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   // Le seul film de présentation ; les captures vidéo de Fleet Guard (#securite) sont à part.
   await expect(page.locator("video:not(.fl-gdemo__video)")).toHaveCount(1);
   const section = page.locator("#film");
@@ -203,7 +329,7 @@ test("the film is the one presentation film, declared without downloading it up 
 });
 
 test("licences, sources and commitments, then the questions and the final call", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const section = page.locator("#engagements");
   await expect(section.locator("h2")).toHaveText("Licences, sources et engagements.");
   await expect(section.locator(".fl-badge strong")).toHaveText(["Apache-2.0", "MIT", "SBOM", "UE ou chez vous", "0 prompt", "Dossier de preuves"]);
@@ -216,7 +342,7 @@ test("licences, sources and commitments, then the questions and the final call",
 });
 
 test("the page shows no price range and no unsourced figure outside the measurement", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const text = await page.locator("main").innerText();
   // Les seuls montants : la mesure ccusage, la simulation (en k€) et les captures de démonstration.
   const amounts = text.match(/\d[\d\s ,.]*\s?(?:\$|€|k€)|\$\s?\d[\d,.]*|€\s?\d[\d,.]*/g) ?? [];
@@ -225,7 +351,7 @@ test("the page shows no price range and no unsourced figure outside the measurem
 });
 
 test("options: the typical company map is a keyboard tablist, product kept apart from consulting", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const section = page.locator("#options");
   await expect(section.locator("h2")).toHaveText("Ce que fait xSOM Fleet, à chaque endroit de l’entreprise.");
   const zones = section.getByRole("tablist", { name: "Zones de l’entreprise" });
@@ -275,7 +401,7 @@ async function offCentre(page: import("@playwright/test").Page, zone: string) {
 }
 
 test("options: the isometric map switches between the blind spot and the company under control", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const section = page.locator("#options");
   const map = section.locator(".fl-map");
   await section.scrollIntoViewIfNeeded();
@@ -333,7 +459,7 @@ test("options: the isometric map switches between the blind spot and the company
 test("options: under reduced motion, the requests stand still along the flows", async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const map = page.locator("#options .fl-map");
   await map.scrollIntoViewIfNeeded();
   // Les demandes vers les IA : trois par flux, sans les échanges ni les remontées de coûts.
@@ -356,7 +482,7 @@ test("options: under reduced motion, the requests stand still along the flows", 
 });
 
 test("options: the comparison matrix lists every published option by level, FinOps included", async ({ page }) => {
-  await page.goto("/fleet");
+  await page.goto(DETAILS);
   const matrix = page.getByRole("region", { name: "Matrice de comparaison des options" });
   await expect(matrix.locator('th[scope="rowgroup"]')).toHaveText(["Web (navigateur)", "Poste et applications de bureau", "Code et assistants de code", "API (applications et agents)", "Cloud des Fournisseurs", "FinOps et preuves"]);
   await expect(matrix.locator('tbody th[scope="row"]')).toHaveCount(22);
@@ -372,7 +498,7 @@ test("options: on a 360 px phone, the map and the matrix stay inside the page", 
   const page = await context.newPage();
   const outside: string[] = [];
   page.on("request", (request) => { if (new URL(request.url()).origin !== new URL(baseURL!).origin) outside.push(request.url()); });
-  await page.goto(`${baseURL}/fleet`);
+  await page.goto(`${baseURL}${DETAILS}`);
   await page.locator("#options").scrollIntoViewIfNeeded();
   await expect(page.locator('#options .fl-map')).toHaveAttribute("data-layout", "narrow");
   await page.getByRole("tab", { name: /Métiers/ }).click();
@@ -386,13 +512,13 @@ test("options: on a 360 px phone, the map and the matrix stay inside the page", 
   await context.close();
 });
 
-test("the Fleet page speaks English with the same chapters", async ({ browser, baseURL }) => {
+test("the detail page speaks English with the same chapters", async ({ browser, baseURL }) => {
   const context = await browser.newContext();
   await context.addCookies([{ name: "xsom_lang", value: "en", url: baseURL! }]);
   const page = await context.newPage();
-  await page.goto("/fleet");
-  await expect(page.locator("h1")).toHaveText("Enterprise AI management.");
-  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link")).toHaveText(["Platform", "Security", "FinOps", "Strategy", "Options", "Video demo", "Questions"]);
+  await page.goto(DETAILS);
+  await expect(page.locator("h1")).toHaveText("xSOM Fleet in detail.");
+  await expect(page.getByRole("navigation", { name: "Main navigation" }).getByRole("link")).toHaveText(["Security", "FinOps", "Strategy", "Audit", "Rollout", "Questions", "In detail"]);
   await expect(page.locator("header.home-header").getByRole("link", { name: "Sign in" })).toHaveAttribute("href", "https://plateforme.xsom.fr");
   await expect(page.locator("#securite h2")).toHaveText("The best AI, made safe to use.");
   await expect(page.locator("#securite .fl-guard")).toContainText("Sending blocked by xSOM Fleet: a secret was detected on this Poste. Its value is neither displayed nor transmitted.");
@@ -413,32 +539,36 @@ test("the Fleet page speaks English with the same chapters", async ({ browser, b
   await context.close();
 });
 
-test("under reduced motion, no film is requested and the page still renders", async ({ browser }) => {
-  const context = await browser.newContext({ reducedMotion: "reduce" });
-  const page = await context.newPage();
-  const errors: string[] = [];
-  const videos: string[] = [];
-  page.on("pageerror", (error) => errors.push(String(error)));
-  page.on("request", (request) => { if (request.url().endsWith(".mp4")) videos.push(request.url()); });
-  await page.goto("/fleet");
-  for (let y = 0; y < 12000; y += 800) {
-    await page.evaluate((top) => window.scrollTo(0, top), y);
-    await page.waitForTimeout(50);
-  }
-  await expect(page.locator("h1")).toHaveText("La gestion de l’IA d’entreprise.");
-  // Rien n'est masqué : la révélation au défilement ne s'applique pas.
-  expect(await page.locator(".reveal").evaluateAll((nodes) => nodes.filter((n) => getComputedStyle(n).opacity !== "1").length)).toBe(0);
-  expect(videos).toEqual([]);
-  expect(errors).toEqual([]);
-  await context.close();
-});
-
-for (const width of [390, 768, 1024, 1440]) {
-  test(`the Fleet page stays contained at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 900 });
-    await page.goto("/fleet");
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+for (const [path, heading] of [["/fleet", "Les assistants de code pour toute l’entreprise, sans fuite de secrets."], [DETAILS, "xSOM Fleet en détail."]]) {
+  test(`under reduced motion, no film is requested and ${path} still renders`, async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: "reduce" });
+    const page = await context.newPage();
+    const errors: string[] = [];
+    const videos: string[] = [];
+    page.on("pageerror", (error) => errors.push(String(error)));
+    page.on("request", (request) => { if (request.url().endsWith(".mp4")) videos.push(request.url()); });
+    await page.goto(path);
+    for (let y = 0; y < 12000; y += 800) {
+      await page.evaluate((top) => window.scrollTo(0, top), y);
+      await page.waitForTimeout(50);
+    }
+    await expect(page.locator("h1")).toHaveText(heading);
+    // Rien n'est masqué : la révélation au défilement ne s'applique pas.
+    expect(await page.locator(".reveal").evaluateAll((nodes) => nodes.filter((n) => getComputedStyle(n).opacity !== "1").length)).toBe(0);
+    expect(videos).toEqual([]);
+    expect(errors).toEqual([]);
+    await context.close();
   });
+}
+
+for (const path of ["/fleet", DETAILS]) {
+  for (const width of [390, 768, 1024, 1440]) {
+    test(`${path} stays contained at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(path);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    });
+  }
 }
 
 test("the Fleet page carries its own title, Open Graph image and JSON-LD", async ({ request }) => {
@@ -467,7 +597,9 @@ test("the old sections and films are gone", async ({ page, request }) => {
 
 test("the Fleet page names no real customer and promises no certification", async ({ request }) => {
   for (const lang of ["fr", "en"]) {
-    const html = (await (await request.get("/", { headers: { host: "fleet.xsom.fr", cookie: `xsom_lang=${lang}` } })).text()).toLowerCase();
-    for (const word of ["certifié", "certified", "garanti", "guarantee", "conforme", "compliant", "orchestrateur", "orchestrator", "partenaire", "validé par"]) expect(html).not.toContain(word);
+    for (const path of ["/", "/details"]) {
+      const html = (await (await request.get(path, { headers: { host: "fleet.xsom.fr", cookie: `xsom_lang=${lang}` } })).text()).toLowerCase();
+      for (const word of ["certifié", "certified", "garanti", "guarantee", "conforme", "compliant", "orchestrateur", "orchestrator", "partenaire", "validé par"]) expect(html).not.toContain(word);
+    }
   }
 });

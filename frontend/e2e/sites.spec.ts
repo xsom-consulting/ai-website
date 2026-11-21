@@ -8,6 +8,8 @@ import { expect, test } from "@playwright/test";
 const cases: [host: string, path: string, status: number, location?: string][] = [
   ["fleet.xsom.fr", "/", 200],
   ["fleet.xsom.fr", "/fleet", 308, "https://fleet.xsom.fr/"],
+  ["fleet.xsom.fr", "/details", 200],
+  ["fleet.xsom.fr", "/fleet/details", 308, "https://fleet.xsom.fr/details"],
   ["fleet.xsom.fr", "/menaces", 308, "https://ai.xsom.fr/menaces"],
   ["fleet.xsom.fr", "/produits", 308, "https://ai.xsom.fr/#produits"],
   ["fleet.xsom.fr", "/mentions-legales", 200],
@@ -21,12 +23,15 @@ const cases: [host: string, path: string, status: number, location?: string][] =
   ["ai.xsom.fr", "/", 200],
   ["ai.xsom.fr", "/secret-guard?ref=nav", 308, "https://guard.xsom.fr/?ref=nav"],
   ["ai.xsom.fr", "/fleet", 308, "https://fleet.xsom.fr/"],
+  ["ai.xsom.fr", "/fleet/details", 308, "https://fleet.xsom.fr/details"],
+  ["guard.xsom.fr", "/details", 404],
   ["ai.xsom.fr", "/menaces", 200],
   ["ai.xsom.fr", "/produits", 308, "https://ai.xsom.fr/#produits"],
   ["ai.xsom.fr", "/cookies", 200],
   ["ai.xsom.fr", "/login", 404],
   ["localhost:3100", "/", 200],
   ["localhost:3100", "/fleet", 200],
+  ["localhost:3100", "/fleet/details", 200],
   ["localhost:3100", "/secret-guard", 200],
   ["localhost:3100", "/menaces", 200],
   ["localhost:3100", "/conditions-utilisation", 200],
@@ -48,7 +53,7 @@ test("hors des trois adresses, l'ancienne adresse des produits mène à la secti
 
 test("fleet.xsom.fr shows the Fleet page at its root", async ({ request }) => {
   const response = await request.get("/", { headers: { host: "fleet.xsom.fr" } });
-  expect(await response.text()).toContain("La gestion de l’IA d’entreprise.");
+  expect(await response.text()).toContain("Les assistants de code pour toute l’entreprise, sans fuite de secrets.");
 });
 
 test("guard.xsom.fr shows Secret Guard at its root", async ({ request }) => {
@@ -100,6 +105,7 @@ test("robots.txt, sitemap.xml and llms.txt follow the host", async ({ request })
     }
   }
   expect(await get("/sitemap.xml", "ai.xsom.fr")).toContain("<loc>https://ai.xsom.fr/menaces</loc>");
+  expect(await get("/sitemap.xml", "fleet.xsom.fr")).toContain("<loc>https://fleet.xsom.fr/details</loc>");
 
   expect(await get("/llms.txt", "ai.xsom.fr")).toMatch(/^# xSOM · IA/);
   expect(await get("/llms.txt", "fleet.xsom.fr")).toMatch(/^# xSOM Fleet/);

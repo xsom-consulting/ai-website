@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
-import { FleetPage } from "@/components/fleet/FleetPage";
+import { FleetProductPage } from "@/components/fleet/FleetProductPage";
 import { FLEET_COPY, FLEET_ORIGIN, fleetOgImage } from "@/components/fleet/fleet-copy";
 import { getLang } from "@/lib/lang";
 import "../guard-landing.css";
 import "../home.css";
 import "../pitch.css";
+import "../fleet-product.css";
 
 /**
  * Titre absolu : le gabarit du site (« · xSOM Fleet ») ne s'applique pas à
@@ -64,7 +65,7 @@ export default async function FleetRoute() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />
-      <FleetPage />
+      <FleetProductPage />
     </>
   );
 }
