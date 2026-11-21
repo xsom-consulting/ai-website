@@ -162,7 +162,7 @@ export const SECRET_GUARD_COPY = {
       kicker: "Free for up to 3 workstations",
       title: ["Use AI.", "Keep your secrets."],
       lead: "Before every send to your AI assistant, Secret Guard checks on your machine what is leaving. An API key, a token, a password: it blocks the send, or replaces the value with a Substitute. The model never sees the real value.",
-      assistants: "For Claude Code, Codex and GitHub Copilot CLI; soon ChatGPT and Claude in the browser.",
+      assistants: "For Claude Code, Codex, GitHub Copilot CLI and Claude Desktop (precise mode, macOS); ChatGPT and Claude in the browser with the extension, soon in the stores.",
       trademarks: "Claude, ChatGPT, Codex and GitHub Copilot are trademarks of their owners, named to indicate the supported services, with no partnership or endorsement.",
       form: {
         label: "Your email",

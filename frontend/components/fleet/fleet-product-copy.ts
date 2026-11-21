@@ -12,6 +12,8 @@
  * charge, avec la mention de marques. Vocabulaire : glossaire du PRD (§3).
  */
 
+import { substitute } from "@/components/secret-guard/secret-guard-copy";
+
 /** Les sections de la page, dans l'ordre de lecture (ancres du menu). */
 export const FLEET_SECTIONS = ["securite", "finops", "strategie", "audit", "deploiement", "film", "questions"] as const;
 
@@ -30,7 +32,7 @@ export const FLEET_PRODUCT_COPY = {
         sent: "Le modèle reçoit",
         before: "Connecte-toi à la base avec le mot de passe ",
         value: "••••••••••••",
-        substitute: "XXXXXXXXXXX1",
+        substitute: substitute("fr", 1, "mot de passe"),
         note: "Le Substitut part à la place du secret ; la vraie valeur reste sur le Poste.",
       },
     },
@@ -144,7 +146,7 @@ export const FLEET_PRODUCT_COPY = {
         sent: "The model receives",
         before: "Connect to the database with the password ",
         value: "••••••••••••",
-        substitute: "XXXXXXXXXXX1",
+        substitute: substitute("en", 1, "password"),
         note: "The substitute is sent instead of the secret; the real value stays on the workstation.",
       },
     },
