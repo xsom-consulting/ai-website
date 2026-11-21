@@ -1,0 +1,405 @@
+/* La page produit de fleet.xsom.fr : la charte « pitch » (`pitch.css`, sous `.xp`), avec
+   plus d'air et moins d'éléments. Une section = un repère, un titre court, une phrase,
+   une preuve. Tout est sous `.fp`. */
+
+.fp {
+  --fp-section: clamp(3.75rem, 8vw, 6.5rem);
+  --fp-measure: 40rem;
+}
+
+/* ---- Repère, titre, phrase. */
+.fp .fp-kicker {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: .8125rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--xp-ac-2);
+}
+.fp .fp-head {
+  max-width: 46rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+.fp .fp-title {
+  margin: .75rem 0 0;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.fp .fp-lead {
+  max-width: var(--fp-measure);
+  margin: 1rem 0 0;
+  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--xp-tx-2);
+}
+.fp .fp-subtitle {
+  margin: clamp(3rem, 6vw, 4.5rem) 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* ---- Sections. */
+.fp .fp-section {
+  padding-block: var(--fp-section);
+  border-top: 1px solid var(--xp-line);
+  scroll-margin-top: var(--header-h);
+}
+.fp .fp-section--tint {
+  background: var(--xp-s1);
+}
+
+/* ---- Promesse. */
+.fp .fp-hero {
+  padding: calc(var(--home-header) + clamp(3rem, 8vw, 6rem)) 0 clamp(3rem, 6vw, 4.5rem);
+  background: radial-gradient(ellipse 70% 60% at 80% 20%, #4d74ff1f, transparent 70%);
+}
+.fp .fp-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.fp .fp-hero__title {
+  margin: 1rem 0 0;
+  font-size: clamp(2.25rem, 4.2vw, 3.625rem);
+  line-height: 1.03;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+.fp .fp-hero__lead {
+  max-width: 36rem;
+  margin: 1.5rem 0 0;
+  font-size: clamp(1.125rem, 1.6vw, 1.3125rem);
+  line-height: 1.55;
+  color: var(--xp-tx-2);
+}
+.fp .fp-hero .xp-actions {
+  margin-top: 2rem;
+}
+.fp .fp-hero__note {
+  margin: .875rem 0 0;
+  font-size: .875rem;
+  color: var(--xp-mu);
+}
+
+/* L'exemple : ce que le Développeur écrit, ce que le modèle reçoit. */
+.fp .fp-example {
+  margin: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--xp-line-2);
+  border-radius: 16px;
+  background: var(--xp-s1);
+}
+.fp .fp-example figcaption {
+  font-size: .875rem;
+  color: var(--xp-mu);
+}
+.fp .fp-example__row {
+  display: grid;
+  gap: .5rem;
+  margin-top: 1.25rem;
+}
+.fp .fp-example__row span {
+  font-size: .875rem;
+  font-weight: 600;
+  color: var(--xp-tx-2);
+}
+.fp .fp-example__row code {
+  display: block;
+  padding: .875rem 1rem;
+  border: 1px solid var(--xp-line);
+  border-radius: 10px;
+  background: #05080f;
+  font-size: .875rem;
+  line-height: 1.5;
+  color: var(--xp-tx);
+  overflow-wrap: anywhere;
+}
+.fp .fp-example__row mark {
+  padding: .05rem .25rem;
+  border-radius: 4px;
+  background: #3dd59826;
+  color: var(--xp-ok);
+}
+.fp .fp-example__row mark[data-risk] {
+  background: #ff7a6326;
+  color: var(--xp-dg);
+}
+.fp .fp-example__note {
+  margin: 1rem 0 0;
+  font-size: .8125rem;
+  line-height: 1.5;
+  color: var(--xp-mu);
+}
+
+/* Les services pris en charge, et la mention de marques. */
+.fp .fp-supported {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--xp-line);
+}
+.fp .fp-supported__label {
+  margin: 0;
+  font-size: .8125rem;
+  color: var(--xp-mu);
+}
+.fp .fp-supported ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .625rem;
+  margin: .875rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.fp .fp-supported li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .4rem;
+  padding: .45rem .8rem;
+  border: 1px solid var(--xp-line-2);
+  border-radius: 999px;
+  font-size: .9375rem;
+  font-weight: 600;
+  color: var(--xp-tx);
+}
+.fp .fp-supported li small {
+  font-size: .8125rem;
+  font-weight: 400;
+  color: var(--xp-mu);
+}
+.fp .fp-supported__note {
+  margin: .875rem 0 0;
+  font-size: .75rem;
+  color: var(--xp-fa);
+}
+
+/* ---- Trois points côte à côte (Sécurité, Audit). */
+.fp .fp-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fp .fp-points li {
+  padding-top: 1rem;
+  border-top: 2px solid var(--xp-ac);
+}
+.fp .fp-points h3,
+.fp .fp-channels h3,
+.fp .fp-steps h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.fp .fp-points p,
+.fp .fp-channels p,
+.fp .fp-steps p {
+  margin: .5rem 0 0;
+  line-height: 1.55;
+  color: var(--xp-tx-2);
+}
+.fp .fl-gdemo {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+}
+.fp .fp-more {
+  margin: 2rem 0 0;
+}
+
+/* ---- FinOps : la mesure. */
+.fp .fp-measure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+.fp .fp-measure__card {
+  margin: 0;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--xp-line-2);
+  border-radius: 16px;
+  background: var(--xp-bg);
+}
+.fp .fp-measure__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin: 0;
+  font-size: .875rem;
+  color: var(--xp-mu);
+}
+.fp .fp-measure__ratio {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 1.5rem 0 0;
+}
+.fp .fp-measure__ratio strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(4rem, 8vw, 6.5rem);
+  font-weight: 650;
+  line-height: .85;
+  letter-spacing: -.05em;
+  white-space: nowrap;
+  color: #fff;
+}
+.fp .fp-measure__ratio span {
+  max-width: 16rem;
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  color: var(--xp-tx-2);
+}
+.fp .fp-measure__source {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--xp-line);
+  font-size: .8125rem;
+  line-height: 1.5;
+  color: var(--xp-mu);
+}
+
+/* ---- Stratégie : trois canaux. */
+.fp .fp-channels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.fp .fp-channels li {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border: 1px solid var(--xp-line-2);
+  border-radius: 14px;
+  background: var(--xp-s1);
+}
+.fp .fp-channels small {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  font-family: var(--font-mono), monospace;
+  font-size: .75rem;
+  color: var(--xp-ac-2);
+}
+.fp .fp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 2rem;
+}
+
+/* ---- Audit : l'Événement replié, les licences. */
+.fp .fp-fold {
+  max-width: 40rem;
+  margin-top: 2.5rem;
+  border: 1px solid var(--xp-line-2);
+  border-radius: 12px;
+  background: var(--xp-bg);
+}
+.fp .fp-fold summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.fp .fp-fold[open] summary {
+  border-bottom: 1px solid var(--xp-line);
+}
+.fp .fp-fold .fl-json {
+  margin: 1rem 1.25rem 0;
+  font-size: .8125rem;
+}
+.fp .fp-fold .xp-caption {
+  margin: .75rem 1.25rem 1rem;
+}
+.fp .fp-licences {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.5rem;
+  margin: 2rem 0 0;
+  font-size: .9375rem;
+  color: var(--xp-tx-2);
+}
+
+/* ---- Déploiement : trois étapes numérotées. */
+.fp .fp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fp .fp-steps__n {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--xp-line-3);
+  border-radius: 50%;
+  font-family: var(--font-mono), monospace;
+  font-size: .9375rem;
+  color: var(--xp-ac-2);
+}
+.fp .fp-note {
+  margin: 2.5rem 0 0;
+  color: var(--xp-tx-2);
+}
+
+/* ---- Questions, appel final. */
+.fp .fp-faq {
+  display: grid;
+  grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr);
+  gap: 3rem;
+  align-items: start;
+}
+.fp .fp-faq .fp-title {
+  margin: 0;
+}
+.fp .fp-final__more {
+  margin-top: 2rem;
+}
+
+/* ---- Le détail : le lien de retour au-dessus du titre. */
+.xfl .fl-back {
+  margin: 0 0 1.5rem;
+}
+
+/* ---- Tablette et téléphone. */
+@media (max-width: 960px) {
+  .fp .fp-hero__grid,
+  .fp .fp-measure,
+  .fp .fp-faq {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fp .fp-faq {
+    gap: 1.5rem;
+  }
+  .fp .fp-points,
+  .fp .fp-channels,
+  .fp .fp-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .fp .fp-hero .xp-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fp .fp-measure__ratio {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+  }
+  .fp .fp-example {
+    padding: 1.125rem;
+  }
+}

@@ -58,22 +58,22 @@ export const NAV: Record<Site, Record<Lang, readonly NavItem[]>> = {
   },
   fleet: {
     fr: [
-      { label: "Plateforme", to: { site: "fleet", path: "/#promesse" } },
       { label: "Sécurité", to: { site: "fleet", path: "/#securite" } },
       { label: "FinOps", to: { site: "fleet", path: "/#finops" } },
       { label: "Stratégie", to: { site: "fleet", path: "/#strategie" } },
-      { label: "Options", to: { site: "fleet", path: "/#options" } },
-      { label: "Démo vidéo", to: { site: "fleet", path: "/#film" } },
+      { label: "Audit", to: { site: "fleet", path: "/#audit" } },
+      { label: "Déploiement", to: { site: "fleet", path: "/#deploiement" } },
       { label: "Questions", to: { site: "fleet", path: "/#questions" } },
+      { label: "En détail", to: { site: "fleet", path: "/details" } },
     ],
     en: [
-      { label: "Platform", to: { site: "fleet", path: "/#promesse" } },
       { label: "Security", to: { site: "fleet", path: "/#securite" } },
       { label: "FinOps", to: { site: "fleet", path: "/#finops" } },
       { label: "Strategy", to: { site: "fleet", path: "/#strategie" } },
-      { label: "Options", to: { site: "fleet", path: "/#options" } },
-      { label: "Video demo", to: { site: "fleet", path: "/#film" } },
+      { label: "Audit", to: { site: "fleet", path: "/#audit" } },
+      { label: "Rollout", to: { site: "fleet", path: "/#deploiement" } },
       { label: "Questions", to: { site: "fleet", path: "/#questions" } },
+      { label: "In detail", to: { site: "fleet", path: "/details" } },
     ],
   },
   guard: {

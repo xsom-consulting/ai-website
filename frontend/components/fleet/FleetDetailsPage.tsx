@@ -32,6 +32,7 @@ import {
   fleetHowMedia,
   type FleetChapter,
 } from "./fleet-copy";
+import { FLEET_PRODUCT_COPY } from "./fleet-product-copy";
 import { PitchProgress } from "./PitchProgress";
 
 /** Une longueur de barre, en pourcentage de la plus longue (au moins un trait visible). */
@@ -64,18 +65,19 @@ function Chapter({ id, children, className = "" }: { id: FleetChapter; children:
 }
 
 /**
- * La page xSOM Fleet, servie à la racine de `fleet.xsom.fr`, lue comme un dossier de
- * présentation : la couverture (la plateforme en un mot et son schéma), trois piliers
+ * Le détail de xSOM Fleet (`fleet.xsom.fr/details`), où la page produit range ce qu'elle
+ * ne montre pas : l'ancien dossier de présentation, gardé tel quel. Au menu : la couverture (la plateforme en un mot et son schéma), trois piliers
  * (sécurité, FinOps en trois écrans, stratégie), les options sur le schéma d’une
  * entreprise type et leur matrice, le film, les licences et engagements,
  * les questions et le contact. Une idée par écran ; un indicateur de progression
  * discret ; les révélations au défilement sont celles du site (`.reveal`), coupées
  * quand le mouvement est réduit. Charte commune avec `ai.xsom.fr` : `app/pitch.css`.
  */
-export function FleetPage() {
+export function FleetDetailsPage() {
   const { lang } = useT();
   const copy = FLEET_COPY[lang];
   const hero = copy.hero;
+  const details = FLEET_PRODUCT_COPY[lang].details;
   const measure = copy.finops.measure;
   const sankey = copy.finops.sankey;
   const consoleCopy = copy.finops.console;
@@ -141,8 +143,9 @@ export function FleetPage() {
         <section id="promesse" className="xp-cover" aria-labelledby="fl-title">
           <div className="xp-cover__grid" aria-hidden="true" />
           <div className="guard-wrap">
-            <h1 id="fl-title" className="xp-cover__title reveal">{hero.title}</h1>
-            <p className="xp-cover__lead reveal" data-delay="1">{hero.lead}</p>
+            <p className="fl-back reveal"><SiteLink to={{ site: "fleet" }} className="xp-link"><span aria-hidden="true">←</span> {details.back}</SiteLink></p>
+            <h1 id="fl-title" className="xp-cover__title reveal">{details.title}</h1>
+            <p className="xp-cover__lead reveal" data-delay="1">{details.lead}</p>
             <div className="xp-actions reveal" data-delay="2">
               <a className="xp-btn" href={FLEET_CONTACT}>{hero.contact}</a>
               <a className="xp-btn xp-btn--ghost" href="#film" onClick={glideTo}>{hero.film}</a>

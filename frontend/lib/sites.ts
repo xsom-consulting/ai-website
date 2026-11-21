@@ -48,6 +48,13 @@ export function signupUrl(email = ""): string {
 /** Le chemin de la page de chaque site quand une seule adresse les sert toutes. */
 export const SITE_HOME_PATH: Record<Site, string> = { ai: "/", fleet: "/fleet", guard: "/secret-guard" };
 
+/**
+ * Les pages d'un site au-delà de son accueil, servies sous sa racine publique
+ * (`fleet.xsom.fr/details`) ; dans le déploiement, elles vivent sous le chemin du site
+ * (`/fleet/details`).
+ */
+export const SITE_SUBPAGES: Partial<Record<Site, readonly string[]>> = { fleet: ["/details"] };
+
 const LEGAL = ["/mentions-legales", "/confidentialite", "/cookies", "/conditions-utilisation"];
 
 /** Pages publiques propres au site de la division IA. */
@@ -97,7 +104,20 @@ export function crossSiteHref(from: Site | null, target: Site, path = "/"): stri
   // Hors production, la page d'un autre site vit sous son chemin propre ; une ancre
   // (« /#x ») s'y accroche (« /fleet#x »).
   const home = SITE_HOME_PATH[target];
-  return path === "/" ? home : `${home}${path.replace(/^\//, "")}`;
+  if (path === "/") return home;
+  return path.startsWith("/#") ? `${home}${path.slice(1)}` : `${home}${path}`;
+}
+
+/**
+ * Le chemin public d'une page de déploiement sur l'adresse de son site : l'accueil
+ * (`/fleet`) devient « / », une sous-page connue (`/fleet/details`) perd le préfixe.
+ */
+function publicPath(owner: Site, path: string): string {
+  if (owner === "ai") return path;
+  const home = SITE_HOME_PATH[owner];
+  if (path === home) return "/";
+  const rest = path.slice(home.length);
+  return path.startsWith(`${home}/`) && SITE_SUBPAGES[owner]?.includes(rest) ? rest : path;
 }
 
 /**
@@ -112,11 +132,10 @@ export function routeForSite(site: Site | null, path: string, search: string): S
   if (legacy !== undefined) return { kind: "redirect", url: site === null ? legacy : `${SITE_ORIGINS.ai}${legacy}` };
   if (site === null || under(path, LEGAL)) return { kind: "next" };
   if (path === "/" && site !== "ai") return { kind: "rewrite", path: SITE_HOME_PATH[site] };
-  if (site !== "ai" && path === SITE_HOME_PATH[site]) return { kind: "redirect", url: `${SITE_ORIGINS[site]}/${search}` };
+  if (site !== "ai" && SITE_SUBPAGES[site]?.includes(path)) return { kind: "rewrite", path: `${SITE_HOME_PATH[site]}${path}` };
   const owner = ownerOf(path);
-  if (owner !== null && owner !== site) {
-    const target = path === SITE_HOME_PATH[owner] ? "/" : path;
-    return { kind: "redirect", url: `${SITE_ORIGINS[owner]}${target}${search}` };
+  if (owner !== null && (owner !== site || publicPath(owner, path) !== path)) {
+    return { kind: "redirect", url: `${SITE_ORIGINS[owner]}${publicPath(owner, path)}${search}` };
   }
   return { kind: "next" };
 }

@@ -1,8 +1,9 @@
 import type { Lang } from "@/lib/i18n";
 
 /**
- * La page xSOM Fleet, lue comme un dossier de présentation : une idée par écran, des
- * chapitres numérotés. La couverture (la plateforme en un mot et son schéma), puis trois
+ * Le détail de xSOM Fleet (`/details`, `FleetDetailsPage`), lu comme un dossier de
+ * présentation : une idée par écran, des chapitres numérotés. La page produit
+ * (`FleetProductPage`) en reprend une partie (captures, mesure, console, film). La couverture (la plateforme en un mot et son schéma), puis trois
  * piliers (sécurité, FinOps, stratégie), le film, les licences et engagements, les
  * questions et le contact.
  *
@@ -398,7 +399,7 @@ export const FLEET_COPY = {
       items: [
         ["xSOM voit-il nos prompts ou nos clés ?", "Non. Le Contrôle avant envoi tourne sur le Poste, sans réseau ni modèle d’IA, et la passerelle reste chez vous. Seuls remontent des métriques d’usage et des Événements sans contenu."],
         ["Est-ce permis par les fournisseurs ?", "Vos développeurs gardent l’outil officiel, non modifié, avec leur propre connexion ; aucun identifiant n’est collecté, aucun compte n’est revendu. L’agent écrit seulement les réglages que chaque fournisseur documente pour les entreprises."],
-        ["Quels assistants sont couverts ?", "Claude Code et Codex, sur les Postes Windows, macOS et Linux ; par la passerelle Fleet Gateway, vos applications API et vos modèles hébergés chez vous. ChatGPT sur le web, Copilot et les modèles lancés sur le Poste lui-même ne le sont pas encore : d’autres assistants suivront, sans date annoncée."],
+        ["Quels assistants sont couverts ?", "Claude Code, Codex et GitHub Copilot CLI, sur les Postes Windows, macOS et Linux ; Claude Desktop en Mode précis sur macOS ; le web par extension de navigateur ; par la passerelle Fleet Gateway, vos applications API et vos modèles hébergés chez vous. Les modèles lancés sur le Poste lui-même ne le sont pas encore."],
         ["À partir de combien de développeurs ?", "150 et plus. En dessous, une seule organisation Claude Team suffit."],
         ["Et si le contrôle échoue ?", "L’envoi est bloqué, avec un message clair. Un contenu trop gros, une analyse incomplète ou un délai dépassé ne laissent jamais partir un envoi partiel. Le contrôle ne fait aucun appel réseau vers xSOM."],
         ["Comment se déroule le déploiement ?", "Votre outil de gestion de flotte, Intune ou un autre, installe l’agent xSOM. D’abord une démonstration gratuite sur nos propres comptes, puis un pilote de deux à trois mois chez vous, puis le Groupe entier."],
@@ -718,7 +719,7 @@ export const FLEET_COPY = {
       items: [
         ["Does xSOM see our prompts or keys?", "No. The pre-send check runs on the workstation, with no network and no AI model, and the gateway stays on your side. Only usage metrics and events without content are sent."],
         ["Do the providers allow it?", "Your developers keep the official, unmodified tool with their own sign-in; no credential is collected and no account is resold. The agent only writes the settings each provider documents for enterprises."],
-        ["Which assistants are covered?", "Claude Code and Codex, on Windows, macOS and Linux workstations; through the Fleet Gateway, your API applications and your models hosted on your side. ChatGPT on the web, Copilot and models run on the workstation itself are not covered yet: other assistants will follow, with no date announced."],
+        ["Which assistants are covered?", "Claude Code, Codex and GitHub Copilot CLI, on Windows, macOS and Linux workstations; Claude Desktop in Precise mode on macOS; the web through a browser extension; through the Fleet Gateway, your API applications and your models hosted on your side. Models run on the workstation itself are not covered yet."],
         ["From how many developers?", "150 and more. Below that, a single Claude Team organization is enough."],
         ["What if the check fails?", "The send is blocked, with a clear message. Oversized content, an incomplete scan or a timeout never lets a partial send through. The check makes no network call to xSOM."],
         ["How does the rollout work?", "Your fleet management tool, Intune or another, installs the xSOM agent. First a free demo on our own accounts, then a two-to-three-month pilot on your side, then the whole group."],

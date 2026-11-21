@@ -12,7 +12,7 @@ import { MAIN_SITE_ORIGIN, SECRET_GUARD_REPOSITORY, SITE_ORIGINS, type Site } fr
 /** Les pages de contenu de chaque site, dans l'ordre du plan. Les pages légales n'y figurent pas. */
 export const SITE_PAGES: Record<Site, readonly string[]> = {
   ai: ["/", "/menaces"],
-  fleet: ["/"],
+  fleet: ["/", "/details"],
   guard: ["/"],
 };
 
@@ -62,7 +62,8 @@ export function llmsTxt(site: Site | null): string {
 
 ## Pages
 
-- [xSOM Fleet](${origin("fleet")}/) : une lecture en chapitres. Couverture : la gestion de l’IA d’entreprise et son schéma (vos IA, xSOM Fleet, vos équipes). 01 Sécurité : les meilleures IA, accessibles en toute sécurité (analyse locale sur le Poste, blocage avant envoi avec le message réel de l’Agent xSOM, Événement sans contenu, Politique signée). 02 FinOps : réduire fortement le budget IA (mesure réelle chez xSOM en septembre 2026 avec ccusage : forfait Claude de 200 $ par mois pour 7 815 $ d’usage au tarif API, soit 39 fois son prix ; Codex : forfait de 103 € TTC pour 1 173 $ ; une simulation Sankey aux hypothèses affichées ; la console, Coûts et Sièges, sur données de démonstration). 03 Stratégie : le bon modèle pour chaque cas métier, par une passerelle installée chez le client (Fleet Gateway, disponible pour pilote). 04 Options : le schéma interactif d’une entreprise type (métiers, Externes, Développeurs et Postes, proxy, serveurs internes, cloud des Fournisseurs, console), avec pour chaque zone ce qui s’installe et ce qui relève du conseil, les limites de chaque option et une matrice de comparaison, FinOps compris. 05 Démo vidéo : le film de présentation avec voix off et chapitres. 06 Licences, sources et engagements (détection de Secret Guard en Apache-2.0, expurgation sous PolyForm Small Business 1.0.0, LiteLLM en partie MIT, SBOM CycloneDX, hébergement UE ou chez le client, 0 prompt chez xSOM, Dossier de preuves). 07 Questions fréquentes, puis la demande de démonstration ou de tarif.
+- [xSOM Fleet](${origin("fleet")}/) : la page produit. Promesse : les assistants de code pour toute l’entreprise, sans fuite de secrets. Sécurité (Fleet Guard) : les secrets expurgés sur le Poste avant l’envoi, pas seulement bloqués, même dans les images ; Claude Code, Codex, GitHub Copilot CLI, Claude Desktop (Mode précis, macOS), le web par extension de navigateur ; deux captures vidéo réelles. FinOps (Fleet Sièges) : le coût réel par Développeur et par Équipe ; mesure réelle chez xSOM en septembre 2026 avec ccusage : forfait Claude de 200 $ par mois pour 7 815 $ d’usage au tarif API (estimation), soit 39 fois son prix ; la console sur données de démonstration. Stratégie (Fleet Gateway, disponible pour pilote) : abonnements, API ou modèle chez le client, choisis sur des chiffres. Preuves pour l’audit : Dossier de preuves, Journal des blocages, Événements sans contenu ; détection de Secret Guard en Apache-2.0, expurgation sous PolyForm Small Business 1.0.0. Déploiement en trois étapes (Client Fleet sur chaque Poste, Politique signée, console). Démo vidéo, questions fréquentes, demande de démonstration ou de tarif.
+- [xSOM Fleet en détail](${origin("fleet")}/details) : le schéma complet, le message de blocage et l’Événement, la simulation des coûts aux hypothèses affichées, le schéma interactif d’une entreprise type et la matrice des options, les licences, sources et engagements.
 - [Console xSOM Fleet](https://plateforme.xsom.fr) : la connexion des Administrateurs.
 
 ## Liens
