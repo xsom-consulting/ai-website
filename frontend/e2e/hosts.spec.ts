@@ -27,7 +27,7 @@ function watch(page: Page) {
 const sites = [
   { host: "ai.xsom.fr", brand: "xSOM · IA", heading: "Conseil et produits pour l’IA d’entreprise.", nav: ["Produits", "Prestations", "Menaces IA", "xSOM Consulting"], paths: ["/", "/menaces", "/mentions-legales"] },
   { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "La gestion de l’IA d’entreprise.", nav: ["Plateforme", "Sécurité", "FinOps", "Stratégie", "Options", "Démo vidéo", "Questions"], paths: ["/"] },
-  { host: "guard.xsom.fr", brand: "Secret Guard", heading: "Repérer les secrets avant qu’ils ne partent.", nav: ["Comment ça marche", "Open source", "Dans xSOM Fleet", "Division IA", "xSOM Consulting"], paths: ["/", "/cookies"] },
+  { host: "guard.xsom.fr", brand: "Secret Guard", heading: "Utilisez l’IA. Gardez vos secrets.", nav: ["Ce que ça fait", "Installer", "Licences", "Pour l’entreprise", "Division IA", "xSOM Consulting"], paths: ["/", "/cookies"] },
 ] as const;
 
 for (const site of sites) {
@@ -63,5 +63,8 @@ test("a link from one production address to another is absolute", async ({ page 
   const products = page.locator("#produits");
   await expect(products.getByRole("link", { name: /Découvrir xSOM Fleet/ })).toHaveAttribute("href", "https://fleet.xsom.fr/");
   await expect(products.getByRole("link", { name: /Découvrir Secret Guard/ })).toHaveAttribute("href", "https://guard.xsom.fr/");
+  await page.goto(`http://fleet.xsom.fr:${PORT}/`, { waitUntil: "load" });
+  await expect(page.locator("#promesse").getByRole("link", { name: /Essayer gratuitement Secret Guard/ })).toHaveAttribute("href", "https://guard.xsom.fr/");
+  await page.goto(`http://ai.xsom.fr:${PORT}/`, { waitUntil: "load" });
   await expect(page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", { name: "Menaces IA" })).toHaveAttribute("href", "/menaces");
 });

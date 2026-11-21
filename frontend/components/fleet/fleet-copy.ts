@@ -118,6 +118,7 @@ export const FLEET_COPY = {
       contact: "Demander une démonstration",
       film: "Voir le film",
       pilot: "Programme pilote 2026",
+      tryGuard: "Essayer gratuitement Secret Guard",
       flow: {
         label: "Schéma : vos IA (abonnements Claude Code et Codex, modèles par API avec vos clés, vos modèles hébergés chez vous) passent par xSOM Fleet (Fleet Guard pour la sécurité, Fleet Sièges pour le FinOps, Fleet Gateway pour la stratégie, une Politique signée vérifiée sur chaque Poste) vers vos équipes : Postes, Développeurs et Équipes, Facture réelle, Dossier de preuves.",
         sources: "Vos IA",
@@ -151,7 +152,7 @@ export const FLEET_COPY = {
       zone: "Poste du Développeur",
       never: "La valeur ne sort jamais de cette zone",
       input: { step: "Prompt ou fichier lu", code: ["Déploie avec", "AWS_ACCESS_KEY_ID=AKIA••••••••"], note: "Claude Code ou Codex, juste avant l’envoi." },
-      scan: { step: "Analyse locale", points: ["Moteur Secret Guard, Apache-2.0", "Sans réseau ni modèle d’IA", "Pack de règles signé"] },
+      scan: { step: "Analyse locale", points: ["Détection Secret Guard, Apache-2.0", "Sans réseau ni modèle d’IA", "Pack de règles signé"] },
       stop: {
         step: "Bloqué avant envoi",
         message: "Envoi bloqué par xSOM Fleet : un secret a été détecté sur ce Poste. Sa valeur n’est ni affichée ni transmise.",
@@ -383,7 +384,7 @@ export const FLEET_COPY = {
       title: "Licences, sources et engagements.",
       lead: "Des pièces qu’un auditeur peut vérifier, pas des promesses.",
       badges: [
-        { id: "apache", value: "Apache-2.0", caption: "Secret Guard, le moteur de détection, en code ouvert", link: true },
+        { id: "apache", value: "Apache-2.0", caption: "Secret Guard, le moteur de détection, en code ouvert ; son expurgation sous PolyForm Small Business 1.0.0", link: true },
         { id: "mit", value: "MIT", caption: "LiteLLM, sa seule partie MIT, à une version épinglée" },
         { id: "sbom", value: "SBOM", caption: "Inventaire CycloneDX, licences en liste fermée" },
         { id: "eu", value: "UE ou chez vous", caption: "Console hébergée dans l’Union européenne, ou installée chez vous" },
@@ -437,6 +438,7 @@ export const FLEET_COPY = {
       contact: "Request a demo",
       film: "Watch the film",
       pilot: "2026 pilot programme",
+      tryGuard: "Try Secret Guard for free",
       flow: {
         label: "Diagram: your AI (Claude Code and Codex subscriptions, API models with your keys, your models hosted on your side) goes through xSOM Fleet (Fleet Guard for security, Fleet Sièges for FinOps, Fleet Gateway for strategy, a signed Policy checked on every workstation) to your teams: workstations, developers and teams, actual invoice, evidence dossier.",
         sources: "Your AI",
@@ -470,7 +472,7 @@ export const FLEET_COPY = {
       zone: "Developer’s workstation",
       never: "The value never leaves this zone",
       input: { step: "Prompt or file read", code: ["Deploy with", "AWS_ACCESS_KEY_ID=AKIA••••••••"], note: "Claude Code or Codex, just before sending." },
-      scan: { step: "Local check", points: ["Secret Guard engine, Apache-2.0", "No network, no AI model", "Signed rule pack"] },
+      scan: { step: "Local check", points: ["Secret Guard detection, Apache-2.0", "No network, no AI model", "Signed rule pack"] },
       stop: {
         step: "Blocked before sending",
         message: "Sending blocked by xSOM Fleet: a secret was detected on this Poste. Its value is neither displayed nor transmitted.",
@@ -702,7 +704,7 @@ export const FLEET_COPY = {
       title: "Licences, sources and commitments.",
       lead: "Documents an auditor can check, not promises.",
       badges: [
-        { id: "apache", value: "Apache-2.0", caption: "Secret Guard, the detection engine, as open code", link: true },
+        { id: "apache", value: "Apache-2.0", caption: "Secret Guard, the detection engine, as open code; its redaction under PolyForm Small Business 1.0.0", link: true },
         { id: "mit", value: "MIT", caption: "LiteLLM, its MIT part only, at a pinned version" },
         { id: "sbom", value: "SBOM", caption: "CycloneDX inventory, licences in a closed list" },
         { id: "eu", value: "EU or on your side", caption: "Console hosted in the European Union, or installed on your side" },

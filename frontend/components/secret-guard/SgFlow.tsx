@@ -8,14 +8,15 @@ import { SECRET_GUARD_COPY } from "./secret-guard-copy";
 const LAYER_ICONS = [CodeIcon, ActivityIcon, SlidersIcon];
 
 /**
- * Le schéma : le texte part de la machine, traverse le filtre, et n'arrive au serveur
- * que masqué. Le jeton d'exemple n'a que son préfixe : aucune valeur réelle.
+ * Rien ne quitte la machine : le texte part du Poste, traverse le filtre, et n'arrive au
+ * serveur qu'avec le Substitut. Le jeton d'exemple n'a que son préfixe : aucune valeur
+ * réelle. Sous le schéma, ce qui ne part jamais.
  */
 export function SgFlow() {
   const { lang } = useT();
   const copy = SECRET_GUARD_COPY[lang].flow;
   return (
-    <section id="fonctionnement" className="sg-flow" aria-labelledby="sg-flow-title">
+    <section id="machine" className="sg-flow" aria-labelledby="sg-flow-title">
       <div className="guard-wrap">
         <header className="sg-head">
           <p className="home-kicker" data-reveal>{copy.kicker}</p>
@@ -61,6 +62,15 @@ export function SgFlow() {
             <p className="sg-code" data-safe>{copy.sent} <code>Bearer <mark>{copy.masked}</mark></code></p>
           </article>
         </div>
+
+        <ul className="sg-points sg-flow__points">
+          {copy.points.map(([name, body]) => (
+            <li key={name} data-reveal>
+              <h3>{name}</h3>
+              <p>{body}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

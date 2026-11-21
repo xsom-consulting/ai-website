@@ -47,7 +47,7 @@ export function llmsTxt(site: Site | null): string {
 ## Produits
 
 - [xSOM Fleet](${origin("fleet")}/) : ${FLEET_SUMMARY}
-- [Secret Guard](${origin("guard")}/) : le moteur de détection de secrets de xSOM, open source (Apache-2.0), analyse locale sans réseau ni modèle de langage.
+- [Secret Guard](${origin("guard")}/) : bloque ou masque les secrets avant l’envoi aux assistants d’IA, analyse locale sans réseau ni modèle de langage ; gratuit jusqu’à 3 Postes ; détection en Apache-2.0, expurgation sous PolyForm Small Business 1.0.0.
 - [Secret Guard, code source](${SECRET_GUARD_REPOSITORY})
 
 ## Cabinet
@@ -62,7 +62,7 @@ export function llmsTxt(site: Site | null): string {
 
 ## Pages
 
-- [xSOM Fleet](${origin("fleet")}/) : une lecture en chapitres. Couverture : la gestion de l’IA d’entreprise et son schéma (vos IA, xSOM Fleet, vos équipes). 01 Sécurité : les meilleures IA, accessibles en toute sécurité (analyse locale sur le Poste, blocage avant envoi avec le message réel de l’Agent xSOM, Événement sans contenu, Politique signée). 02 FinOps : réduire fortement le budget IA (mesure réelle chez xSOM en septembre 2026 avec ccusage : forfait Claude de 200 $ par mois pour 7 815 $ d’usage au tarif API, soit 39 fois son prix ; Codex : forfait de 103 € TTC pour 1 173 $ ; une simulation Sankey aux hypothèses affichées ; la console, Coûts et Sièges, sur données de démonstration). 03 Stratégie : le bon modèle pour chaque cas métier, par une passerelle installée chez le client (Fleet Gateway, disponible pour pilote). 04 Options : le schéma interactif d’une entreprise type (métiers, Externes, Développeurs et Postes, proxy, serveurs internes, cloud des Fournisseurs, console), avec pour chaque zone ce qui s’installe et ce qui relève du conseil, les limites de chaque option et une matrice de comparaison, FinOps compris. 05 Démo vidéo : le film de présentation avec voix off et chapitres. 06 Licences, sources et engagements (Secret Guard en Apache-2.0, LiteLLM en partie MIT, SBOM CycloneDX, hébergement UE ou chez le client, 0 prompt chez xSOM, Dossier de preuves). 07 Questions fréquentes, puis la demande de démonstration ou de tarif.
+- [xSOM Fleet](${origin("fleet")}/) : une lecture en chapitres. Couverture : la gestion de l’IA d’entreprise et son schéma (vos IA, xSOM Fleet, vos équipes). 01 Sécurité : les meilleures IA, accessibles en toute sécurité (analyse locale sur le Poste, blocage avant envoi avec le message réel de l’Agent xSOM, Événement sans contenu, Politique signée). 02 FinOps : réduire fortement le budget IA (mesure réelle chez xSOM en septembre 2026 avec ccusage : forfait Claude de 200 $ par mois pour 7 815 $ d’usage au tarif API, soit 39 fois son prix ; Codex : forfait de 103 € TTC pour 1 173 $ ; une simulation Sankey aux hypothèses affichées ; la console, Coûts et Sièges, sur données de démonstration). 03 Stratégie : le bon modèle pour chaque cas métier, par une passerelle installée chez le client (Fleet Gateway, disponible pour pilote). 04 Options : le schéma interactif d’une entreprise type (métiers, Externes, Développeurs et Postes, proxy, serveurs internes, cloud des Fournisseurs, console), avec pour chaque zone ce qui s’installe et ce qui relève du conseil, les limites de chaque option et une matrice de comparaison, FinOps compris. 05 Démo vidéo : le film de présentation avec voix off et chapitres. 06 Licences, sources et engagements (détection de Secret Guard en Apache-2.0, expurgation sous PolyForm Small Business 1.0.0, LiteLLM en partie MIT, SBOM CycloneDX, hébergement UE ou chez le client, 0 prompt chez xSOM, Dossier de preuves). 07 Questions fréquentes, puis la demande de démonstration ou de tarif.
 - [Console xSOM Fleet](https://plateforme.xsom.fr) : la connexion des Administrateurs.
 
 ## Liens
@@ -74,15 +74,16 @@ export function llmsTxt(site: Site | null): string {
   }
   return `# Secret Guard
 
-> Le moteur de détection de secrets de xSOM, open source (Apache-2.0). Règles explicites et calcul d’entropie, analyse locale, sans réseau ni modèle de langage. (EN: xSOM’s open-source secret-detection engine.)
+> Secret Guard protège les assistants d’IA (Claude Code, Codex, GitHub Copilot CLI ; ChatGPT et Claude dans le navigateur, bientôt) : avant l’envoi, le Client Fleet installé sur le Poste analyse le prompt et les fichiers lus, localement, sans réseau ni modèle de langage, puis bloque l’envoi ou remplace la valeur par un Substitut. Rien ne quitte le Poste. Gratuit jusqu’à 3 Postes. (EN: Secret Guard keeps secrets on the workstation when using AI assistants; free for up to 3 workstations.)
 
 ## Pages
 
-- [Secret Guard](${origin("guard")}/) : ce que fait le moteur, comment il fonctionne, son code ouvert, son rôle dans xSOM Fleet. Une nouvelle version de l’extension VS Code, branchée sur ce moteur, est en préparation.
+- [Secret Guard](${origin("guard")}/) : ce que ça fait (bloquer, masquer par un Substitut, captures d’écran, mascotte, faux positifs), comment l’installer (macOS, Linux, Windows en essai ; extension du navigateur bientôt), ce qui ne quitte jamais la machine, les licences, et xSOM Fleet pour une entreprise.
+- [Créer un compte gratuit](https://plateforme.xsom.fr/inscription) : inscription ouverte, par adresse courriel ou GitHub.
 
 ## Liens
 
-- [Code source](${SECRET_GUARD_REPOSITORY}) : le dépôt public du moteur, sous licence Apache-2.0.
+- [Code source](${SECRET_GUARD_REPOSITORY}) : le dépôt public ; la détection sous licence Apache-2.0, l’expurgation (dossier expurgation/) sous PolyForm Small Business 1.0.0 (gratuite pour moins de 100 personnes et moins de 1 M$ de revenu, sinon licence écrite de xSOM).
 - [xSOM Fleet](${origin("fleet")}/) : la plateforme qui intègre le moteur dans son module Fleet Guard.
 - [xSOM · IA](${origin("ai")}/) : la division IA de xSOM Consulting.
 - [xSOM Consulting](${MAIN_SITE_ORIGIN}) : le site principal de conseil.

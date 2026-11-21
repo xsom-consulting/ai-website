@@ -78,16 +78,18 @@ export const NAV: Record<Site, Record<Lang, readonly NavItem[]>> = {
   },
   guard: {
     fr: [
-      { label: "Comment ça marche", to: { site: "guard", path: "/#fonctionnement" } },
-      { label: "Open source", to: { site: "guard", path: "/#open-source" } },
-      { label: "Dans xSOM Fleet", to: { site: "guard", path: "/#fleet" } },
+      { label: "Ce que ça fait", to: { site: "guard", path: "/#ce-que-ca-fait" } },
+      { label: "Installer", to: { site: "guard", path: "/#installer" } },
+      { label: "Licences", to: { site: "guard", path: "/#licences" } },
+      { label: "Pour l’entreprise", to: { site: "guard", path: "/#fleet" } },
       { label: "Division IA", to: { site: "ai" } },
       WWW.fr,
     ],
     en: [
-      { label: "How it works", to: { site: "guard", path: "/#fonctionnement" } },
-      { label: "Open source", to: { site: "guard", path: "/#open-source" } },
-      { label: "In xSOM Fleet", to: { site: "guard", path: "/#fleet" } },
+      { label: "What it does", to: { site: "guard", path: "/#ce-que-ca-fait" } },
+      { label: "Install", to: { site: "guard", path: "/#installer" } },
+      { label: "Licences", to: { site: "guard", path: "/#licences" } },
+      { label: "For companies", to: { site: "guard", path: "/#fleet" } },
       { label: "AI division", to: { site: "ai" } },
       WWW.en,
     ],
@@ -105,8 +107,8 @@ export const FOOTER_TAGLINE: Record<Site, Record<Lang, string>> = {
     en: "Enterprise AI management: security on every workstation, FinOps steering, AI strategy.",
   },
   guard: {
-    fr: "Le moteur de détection de secrets de xSOM, open source (Apache-2.0).",
-    en: "xSOM’s secret-detection engine, open source (Apache-2.0).",
+    fr: "Vos secrets restent sur votre machine face aux assistants d’IA. Détection en Apache-2.0, expurgation sous PolyForm Small Business 1.0.0.",
+    en: "Your secrets stay on your machine when you use AI assistants. Detection under Apache-2.0, redaction under PolyForm Small Business 1.0.0.",
   },
 };
 
@@ -198,7 +200,7 @@ export const SITE_DEFAULT_META: Record<Site, Record<Lang, { readonly title: stri
     en: { title: "xSOM Fleet", description: "xSOM Fleet: enterprise AI management. Security on every workstation, FinOps steering, AI strategy." },
   },
   guard: {
-    fr: { title: "Secret Guard", description: "Secret Guard : le moteur open source (Apache-2.0) de détection de secrets de xSOM. Analyse locale, sans réseau ni modèle de langage." },
-    en: { title: "Secret Guard", description: "Secret Guard: xSOM’s open-source (Apache-2.0) secret-detection engine. Local analysis, no network and no language model." },
+    fr: { title: "Secret Guard", description: "Secret Guard bloque ou masque vos secrets avant qu’ils ne partent vers vos assistants d’IA. Analyse sur votre machine, sans réseau ni modèle de langage. Gratuit jusqu’à 3 Postes." },
+    en: { title: "Secret Guard", description: "Secret Guard blocks or masks your secrets before they leave for your AI assistants. Analysis on your machine, no network and no language model. Free for up to 3 workstations." },
   },
 };
