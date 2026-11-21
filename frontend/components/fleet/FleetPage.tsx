@@ -146,6 +146,7 @@ export function FleetPage() {
             <div className="xp-actions reveal" data-delay="2">
               <a className="xp-btn" href={FLEET_CONTACT}>{hero.contact}</a>
               <a className="xp-btn xp-btn--ghost" href="#film" onClick={glideTo}>{hero.film}</a>
+              <SiteLink to={{ site: "guard" }} className="xp-btn xp-btn--ghost fl-try-guard">{hero.tryGuard} <span aria-hidden="true">→</span></SiteLink>
               <span className="xp-actions__note">{hero.pilot}</span>
             </div>
             <div className="reveal" data-delay="3">

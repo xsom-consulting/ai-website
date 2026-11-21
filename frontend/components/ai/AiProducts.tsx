@@ -14,7 +14,7 @@ type FeatureKey = Products["fleet"]["features"][number]["key"];
 /**
  * « Nos produits » dans la charte claire de www.xsom.fr (« 01 Notre offre »). Ce qui
  * fonctionne se montre en action, ce qui se construit se décrit : Secret Guard joue son
- * expurgation dans VS Code (messages réels de l'extension, capture réelle de son panneau),
+ * expurgation dans VS Code (Substitut réel du Client Fleet, capture réelle du panneau),
  * xSOM Fleet, en développement, est présenté par son architecture cible. Le mouvement
  * joue une fois, à l'apparition, puis se pose ; sans animation, tout est dans son état final.
  */
@@ -85,7 +85,6 @@ export function AiProducts({ copy }: { copy: Products }) {
               <p className="ai-showcase__audience">{guard.audience}</p>
               <p className="ai-showcase__line">{guard.line}</p>
               <ul className="ai-checks">{guard.points.map((point) => <li key={point}>{point}</li>)}</ul>
-              <p className="ai-tag ai-tag--soon"><CodeGlyph />{guard.vscode}</p>
               <div className="ai-showcase__actions">
                 <SiteLink to={{ site: "guard" }} className="ai-btn">{guard.action} <span aria-hidden="true">→</span></SiteLink>
                 <SiteLink to={{ href: SECRET_GUARD_REPOSITORY }} className="ai-link">{guard.source} <span aria-hidden="true">↗</span></SiteLink>
@@ -208,10 +207,6 @@ function FeatureIcon({ name }: { name: FeatureKey }) {
   return <Stroke><circle cx="6" cy="6" r="2.2" /><circle cx="6" cy="18" r="2.2" /><circle cx="18" cy="12" r="2.2" /><path d="M6 8.2v7.6M8 6.8c4 .6 6 2.4 7.9 4.4M8 17.2c4-.6 6-2.4 7.9-4.4" /></Stroke>;
 }
 
-function CodeGlyph() {
-  return <Stroke><path d="m8 8-4 4 4 4" /><path d="m16 8 4 4-4 4" /><path d="m13.5 5-3 14" /></Stroke>;
-}
-
 /** Les fils de l'architecture, dans le repère 520 × 400 du schéma (voir `ai-home.css`). */
 const WIRES = [
   "M122 70 C 165 70, 160 97, 195 97",
@@ -291,7 +286,7 @@ const GUARD_FINAL = GUARD_STEPS.length - 1;
 /**
  * Secret Guard en action, joué dans une fenêtre VS Code : la caméra cadre le champ du
  * chat, le développeur envoie à @secretguard un prompt avec une clé, la clé est
- * remplacée par le marqueur réel de l'extension, la caméra recule, le modèle répond et le
+ * remplacée par le Substitut réel du Client Fleet, la caméra recule, le modèle répond et le
  * vrai panneau de l'extension s'ouvre depuis la barre d'état. Joué une fois à
  * l'apparition, rejouable ; sans animation (ou sans JavaScript), l'état final s'affiche.
  */

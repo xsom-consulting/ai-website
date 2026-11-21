@@ -59,14 +59,15 @@ test("the products put xSOM Fleet first, say what it does and point to their own
   await expect(guard.getByRole("heading", { name: "Secret Guard" })).toBeVisible();
   await expect(guard).toContainText("Apache-2.0");
   await expect(guard).toContainText("Pour les entreprises et les indépendants");
-  // Ce qui fonctionne se montre en action : l'expurgation, avec le marqueur réel de
-  // l'extension. Dans son état final, le modèle n'a reçu que le marqueur.
+  // Ce qui fonctionne se montre en action : l'expurgation, avec le Substitut réel du
+  // Client Fleet. Dans son état final, le modèle n'a reçu que le Substitut.
   const demo = guard.getByRole("group", { name: /^Secret Guard en action dans VS Code/ });
   await expect(demo).toBeVisible();
-  await expect(demo.locator(".ai-vsc__received")).toContainText("<REDACTED_aws_access_key_id>");
+  await expect(demo.locator(".ai-vsc__received")).toContainText(`[secret masqué par xSOM n°${1} : identifiant de clé d’accès AWS, pas la vraie valeur]`);
   await expect(demo.locator(".ai-vsc__results li")).toHaveText(["Le prompt est parti : le développeur continue.", "La clé est restée sur le poste."]);
   await expect(demo.getByRole("button", { name: /Rejouer/ })).toBeVisible();
-  await expect(guard).toContainText("Extension VS Code · nouvelle version en préparation");
+  await expect(guard).toContainText("Gratuit jusqu’à 3 Postes");
+  await expect(guard).not.toContainText("VS Code · nouvelle version en préparation");
   await expect(guard.getByRole("link", { name: /Découvrir Secret Guard/ })).toHaveAttribute("href", "/secret-guard");
   await expect(guard.getByRole("link", { name: /Code source/ })).toHaveAttribute("href", "https://github.com/xsom-consulting/secret-guard");
 });

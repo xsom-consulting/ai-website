@@ -208,7 +208,7 @@ test("licences, sources and commitments, then the questions and the final call",
   await expect(section.locator("h2")).toHaveText("Licences, sources et engagements.");
   await expect(section.locator(".fl-badge strong")).toHaveText(["Apache-2.0", "MIT", "SBOM", "UE ou chez vous", "0 prompt", "Dossier de preuves"]);
   await expect(section.getByRole("link", { name: /Code source de Secret Guard/ })).toHaveAttribute("href", "https://github.com/xsom-consulting/secret-guard");
-  for (const text of ["LiteLLM", "CycloneDX", "Union européenne", "JSON et en PDF", "chaînés"]) await expect(section).toContainText(text);
+  for (const text of ["LiteLLM", "CycloneDX", "Union européenne", "JSON et en PDF", "chaînés", "PolyForm Small Business 1.0.0"]) await expect(section).toContainText(text);
   await expect(page.locator("#questions details")).toHaveCount(7);
   const final = page.locator(".xp-final");
   await expect(final.getByRole("link", { name: "Demander une démonstration" })).toHaveAttribute("href", /^mailto:/);
