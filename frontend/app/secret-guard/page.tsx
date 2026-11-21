@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { SecretGuardPage } from "@/components/secret-guard/SecretGuardPage";
-import { SECRET_GUARD_COPY, SECRET_GUARD_HERO_MEDIA, SECRET_GUARD_ORIGIN } from "@/components/secret-guard/secret-guard-copy";
+import { SECRET_GUARD_COPY, SECRET_GUARD_HERO_MEDIA, SECRET_GUARD_LICENCES, SECRET_GUARD_ORIGIN } from "@/components/secret-guard/secret-guard-copy";
 import { getLang } from "@/lib/lang";
 import { MAIN_SITE_ORIGIN, SECRET_GUARD_REPOSITORY } from "@/lib/sites";
 import "../guard-landing.css";
@@ -34,7 +34,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** Données structurées : le logiciel open source et son éditeur. Aucun prix, aucune note. */
+/**
+ * Données structurées : le code source et son éditeur, avec ses deux licences (la
+ * détection en Apache-2.0, l'expurgation sous PolyForm Small Business 1.0.0). Aucun prix,
+ * aucune note.
+ */
 function structuredData(lang: "fr" | "en") {
   const copy = SECRET_GUARD_COPY[lang].meta;
   return {
@@ -44,7 +48,7 @@ function structuredData(lang: "fr" | "en") {
     url: `${SECRET_GUARD_ORIGIN}/`,
     description: copy.description,
     codeRepository: SECRET_GUARD_REPOSITORY,
-    license: "https://www.apache.org/licenses/LICENSE-2.0",
+    license: [SECRET_GUARD_LICENCES.apache, SECRET_GUARD_LICENCES.polyform],
     programmingLanguage: "Go",
     inLanguage: lang,
     publisher: {

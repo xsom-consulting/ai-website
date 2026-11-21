@@ -2,7 +2,8 @@
  * Un seul déploiement, trois adresses publiques. Chaque adresse montre son site :
  * - `ai.xsom.fr` : la division IA de xSOM (prestations, produits, menaces) ;
  * - `fleet.xsom.fr` : xSOM Fleet, la plateforme et ses trois modules ;
- * - `guard.xsom.fr` : Secret Guard, le moteur de détection open source.
+ * - `guard.xsom.fr` : Secret Guard, la protection des secrets face aux assistants d'IA,
+ *   gratuite jusqu'à 3 Postes (inscription sur `plateforme.xsom.fr`).
  *
  * Le site de conseil de xSOM Consulting reste `www.xsom.fr` (autre dépôt, autre
  * hébergement) : chaque site y renvoie.
@@ -26,6 +27,23 @@ export const MAIN_SITE_ORIGIN = "https://www.xsom.fr";
 
 /** Le dépôt public du moteur de détection de Secret Guard. */
 export const SECRET_GUARD_REPOSITORY = "https://github.com/xsom-consulting/secret-guard";
+
+/** La plateforme xSOM Fleet : console, connexion et inscription. */
+export const PLATFORM_ORIGIN = "https://plateforme.xsom.fr";
+
+/** La page d'inscription ouverte (adresse courriel ou GitHub, sans code). */
+export const SIGNUP_URL = `${PLATFORM_ORIGIN}/inscription`;
+
+/**
+ * L'adresse d'inscription, l'adresse courriel pré-remplie dans le fragment (`#email=`) :
+ * un fragment ne part dans aucune requête, seule la page d'inscription le lit dans le
+ * navigateur. Ce site ne garde ni n'envoie l'adresse ailleurs. Sans adresse, la page
+ * d'inscription nue.
+ */
+export function signupUrl(email = ""): string {
+  const address = email.trim();
+  return address === "" ? SIGNUP_URL : `${SIGNUP_URL}#email=${encodeURIComponent(address)}`;
+}
 
 /** Le chemin de la page de chaque site quand une seule adresse les sert toutes. */
 export const SITE_HOME_PATH: Record<Site, string> = { ai: "/", fleet: "/fleet", guard: "/secret-guard" };

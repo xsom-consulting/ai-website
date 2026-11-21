@@ -53,7 +53,7 @@ test("fleet.xsom.fr shows the Fleet page at its root", async ({ request }) => {
 
 test("guard.xsom.fr shows Secret Guard at its root", async ({ request }) => {
   const response = await request.get("/", { headers: { host: "guard.xsom.fr" } });
-  expect(await response.text()).toContain("avant qu’ils ne partent.");
+  expect(await response.text()).toContain("Gardez vos secrets.");
 });
 
 test("ai.xsom.fr shows the AI division at its root", async ({ request }) => {
@@ -65,7 +65,7 @@ test("ai.xsom.fr shows the AI division at its root", async ({ request }) => {
 const metadata: [host: string, title: string, canonical: string][] = [
   ["ai.xsom.fr", "xSOM · IA · la division IA de xSOM Consulting", "https://ai.xsom.fr/"],
   ["fleet.xsom.fr", "xSOM Fleet · la gestion de l’IA d’entreprise", "https://fleet.xsom.fr/"],
-  ["guard.xsom.fr", "Secret Guard · détection de secrets open source", "https://guard.xsom.fr/"],
+  ["guard.xsom.fr", "Secret Guard · vos secrets restent sur votre machine", "https://guard.xsom.fr/"],
 ];
 
 for (const [host, title, canonical] of metadata) {
