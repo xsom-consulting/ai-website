@@ -76,7 +76,7 @@ test("product page: one promise, two calls, then the supported services", async 
   await expect(hero.getByRole("link", { name: "Demander une démonstration" })).toHaveAttribute("href", /^mailto:/);
   await expect(hero.getByRole("link", { name: /Essayer gratuitement Secret Guard/ })).toHaveAttribute("href", "/secret-guard");
   // L'exemple : la valeur masquée, puis le Substitut qui part à sa place.
-  await expect(hero.locator(".fp-example mark")).toHaveText(["••••••••••••", "XXXXXXXXXXX1"]);
+  await expect(hero.locator(".fp-example mark")).toHaveText(["••••••••••••", /masqué par xSOM n°1 : mot de passe/]);
   const supported = hero.locator(".fp-supported");
   await expect(supported.locator("li")).toHaveText(["Claude Code", "Codex", "GitHub Copilot CLI", /Claude Desktop\s*Mode précis, macOS/, /Le web\s*par extension de navigateur/]);
   await expect(supported).toContainText("sans partenariat ni approbation");
