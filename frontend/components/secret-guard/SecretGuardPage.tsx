@@ -9,7 +9,7 @@ import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_REPOSITORY, SIGNUP_URL } from "@/lib/sites";
 import { SECRET_GUARD_COPY, SECRET_GUARD_LICENCES } from "./secret-guard-copy";
 import { SgFlow } from "./SgFlow";
-import { SgHero } from "./SgHero";
+import { AparteHero } from "./AparteHero";
 import { SgCatalog, SgExpurgation, SgFaq } from "./SgAparte";
 import { SgTry } from "./demo/SgTry";
 import { APARTE_COPY } from "./aparte-copy";
@@ -30,7 +30,7 @@ export function SecretGuardPage() {
   const copy = SECRET_GUARD_COPY[lang];
   const chars = (text: string) => ({ "--chars": text.length }) as CSSProperties;
   return (
-    <div ref={root} className="guard-landing xhome xsg">
+    <div ref={root} className="guard-landing guard-home xhome xsg">
       <SiteHeader
         site="guard"
         actions={[
@@ -39,7 +39,7 @@ export function SecretGuardPage() {
         ]}
       />
       <main>
-        <SgHero />
+        <AparteHero />
 
         <SgTry />
 

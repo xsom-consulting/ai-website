@@ -17,17 +17,14 @@ test("the Secret Guard page states its promise, its free tier and the supported 
   await expect(page).toHaveURL(/\/secret-guard$/);
 
   await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM Aparté");
-  const hero = page.locator(".sg-hero");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Gardez votre IA.");
-  await expect(hero).toContainText("0 € · jusqu’à 3 Postes");
-  await expect(hero).toContainText("Claude Code, Codex et GitHub Copilot CLI");
+  const hero = page.locator("#inscription");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Aparté masque vos secrets");
+  await expect(hero).toContainText("Pour les indépendants · 0 €");
+  await expect(hero).toContainText("Claude Code, Codex, Claude Desktop ou ChatGPT");
   await expect(hero).toContainText("sans partenariat ni approbation");
   await expect(hero.getByRole("link", { name: /Continuer avec GitHub/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
-  // Pas de vidéo de démonstration tant que le fichier n'existe pas : la vidéo d'ambiance reste.
-  await expect(page.locator(".sg-demo")).toHaveCount(0);
-  const fond = page.locator(".sg-hero__video");
-  await expect(fond).toHaveAttribute("poster", "/signal-media/secret-guard-loop.jpg");
-  await expect(fond).toHaveAttribute("preload", "none");
+  // L'exemple de l'ouverture montre un Substitut tel que l'écrit le Client Fleet.
+  await expect(hero).toContainText(substituteFr(1, "clé secrète Stripe"));
 });
 
 test("the sign-up form navigates to plateforme.xsom.fr with the address in the fragment only", async ({ page }) => {
@@ -123,7 +120,7 @@ test("the Secret Guard page speaks English with the same sections", async ({ bro
   const page = await context.newPage();
   await page.route("https://plateforme.xsom.fr/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Sign up</title>" }));
   await page.goto("/secret-guard");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Keep your AI.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Aparté masks your secrets");
   await expect(page.locator("#ce-que-ca-fait .sg-example__sent")).toContainText(substituteEn(12, "API key"));
   await expect(page.locator("#licences")).toContainText("PolyForm Small Business 1.0.0");
   await expect(page.locator("#fleet")).toContainText("Pro and Enterprise");

@@ -58,7 +58,7 @@ test("fleet.xsom.fr shows the Fleet page at its root", async ({ request }) => {
 
 test("guard.xsom.fr shows Aparté at its root", async ({ request }) => {
   const response = await request.get("/", { headers: { host: "guard.xsom.fr" } });
-  expect(await response.text()).toContain("Rassurez vos clients.");
+  expect(await response.text()).toContain("Aparté masque vos secrets avant qu’ils partent vers l’IA.");
 });
 
 test("ai.xsom.fr shows the AI division at its root", async ({ request }) => {

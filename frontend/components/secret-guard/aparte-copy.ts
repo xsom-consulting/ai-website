@@ -12,6 +12,19 @@ type Item = { readonly name: string; readonly hint: string; readonly soon?: bool
 
 export const APARTE_COPY = {
   fr: {
+    hero: {
+      kicker: "Pour les indépendants · 0 €",
+      title: "Aparté masque vos secrets avant qu’ils partent vers l’IA.",
+      lead: "Clés d’API, jetons, mots de passe : dans Claude Code, Codex, Claude Desktop ou ChatGPT, Aparté les remplace par un Substitut, sur votre poste. L’IA continue de travailler. Vos clients sont rassurés.",
+      steps: ["Créez votre compte", "Téléchargez Aparté", "C’est actif"],
+      systems: "macOS · Linux · Windows (version d’essai)",
+      typed: "Vous écrivez",
+      sent: "L’IA reçoit",
+      before: "Déploie avec STRIPE_KEY=",
+      value: "sk_live_exemple-inventé",
+      substitute: substitute("fr", 1, "clé secrète Stripe"),
+      local: "La vraie valeur reste sur votre poste.",
+    },
     trust: ["xSOM Consulting, cybersécurité depuis 2007", "Conçu en France", "Moteur open source"],
     actions: { signup: "Créer mon compte · 0 €", github: "GitHub" },
     tryIt: {
@@ -99,6 +112,19 @@ export const APARTE_COPY = {
     },
   },
   en: {
+    hero: {
+      kicker: "For freelancers · €0",
+      title: "Aparté masks your secrets before they reach the AI.",
+      lead: "API keys, tokens, passwords: in Claude Code, Codex, Claude Desktop or ChatGPT, Aparté replaces them with a Substitute, on your machine. The AI keeps working. Your clients are reassured.",
+      steps: ["Create your account", "Download Aparté", "You are protected"],
+      systems: "macOS · Linux · Windows (trial version)",
+      typed: "You write",
+      sent: "The AI receives",
+      before: "Deploy with STRIPE_KEY=",
+      value: "sk_live_made-up-example",
+      substitute: substitute("en", 1, "Stripe secret key"),
+      local: "The real value stays on your machine.",
+    },
     trust: ["xSOM Consulting, cybersecurity since 2007", "Designed in France", "Open source engine"],
     actions: { signup: "Create my account · €0", github: "GitHub" },
     tryIt: {
