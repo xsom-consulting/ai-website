@@ -1,54 +1,138 @@
-/* Aparté sur guard.xsom.fr : la démonstration (un poste macOS manipulable) et les sections
-   ajoutées (expurgation, catalogue, questions). Tout vit sous .xsg ; les sections reprennent les
-   jetons du paquet de design, le bureau simulé garde sa propre palette. */
+/* Aparté sur guard.xsom.fr, dans l'identité de la maquette du 23/11 : fond blanc, encre presque
+   noire, bleu du logo, cartes grises arrondies, Inter. Tout vit sous .xsg ; le bureau simulé de
+   la démonstration a sa propre feuille (aparte-demo.css). */
 
-/* ---- Expurgation : quatre temps. */
-.xsg .ap-exp { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.xsg .ap-exp li::before { display: none; }
-.xsg .ap-exp__who { margin: 0; font-family: var(--font-mono), monospace; font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--signal-accent); }
-.xsg .ap-exp code { display: block; margin-top: var(--sp-2); padding: var(--sp-3); border: var(--signal-border) solid var(--signal-line); border-radius: var(--r-md, 10px); background: var(--signal-surface); font-family: var(--font-mono), monospace; font-size: .8rem; line-height: 1.6; overflow-wrap: anywhere; }
-.xsg .ap-exp li[data-step="1"] code, .xsg .ap-exp li[data-step="2"] code { border-color: color-mix(in srgb, var(--signal-accent) 55%, var(--signal-line)); }
-.xsg .ap-split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); margin-top: var(--sp-10, 2.5rem); }
-.xsg .ap-split > div { padding: var(--sp-6); border: var(--signal-border) solid var(--signal-line); border-radius: var(--r-lg); background: var(--signal-surface); }
-.xsg .ap-split > div[data-kept] { background: var(--home-ink); color: var(--home-ink-text); border-color: var(--home-ink); }
-.xsg .ap-split h3 { margin: 0 0 var(--sp-2); }
-.xsg .ap-split ul { margin: 0; padding-left: 1.1rem; }
-.xsg .ap-split > div[data-kept] ul { color: var(--home-ink-muted); }
+/* ---- Sections : un titre centré, une ligne d'explication, de l'air. */
+.xsg .ap-block { padding: 120px 0 0; color: var(--ap-ink); background: none; }
+.xsg .ap-head { text-align: center; }
+.xsg .ap-block h2, .xsg .ap-end h2 { font-family: var(--font-aparte), sans-serif; font-size: clamp(32px, 5vw, 56px); line-height: 1.02; letter-spacing: -.04em; margin: 0 0 14px; font-weight: 800; color: var(--ap-ink); text-wrap: balance; }
+.xsg .ap-block h2 span { color: var(--ap-accent); }
+.xsg .ap-lede { font-size: 18px; line-height: 1.55; color: var(--ap-ink-2); margin: 0 auto; max-width: 52ch; }
+.xsg .ap-where { margin: 16px auto 0; max-width: 72ch; font-size: 14px; color: var(--ap-muted); text-align: center; }
+.xsg .ap-center { text-align: center; margin: 28px 0 0; }
+.xsg .ap-exp__n { font: 600 12px/1.3 var(--font-mono), monospace; color: #0d4cb7; }
+.xsg .ap-btn.ap-btn--light { background: #fff; color: var(--ap-ink); }
+.xsg .ap-btn.ap-btn--light:hover { background: var(--ap-stage); }
+.xsg .ap-btn--light .ap-price { background: var(--ap-stage); }
+@media (max-width: 719px) { .xsg .ap-block { padding-top: 88px; } .xsg .ap-lede { font-size: 17px; } }
 
-/* ---- Catalogue : recherche, catégories, liste courte. */
-.xsg .ap-cat { max-width: 56rem; margin: 0 auto; }
-.xsg .ap-cat input { width: 100%; padding: .95rem 1.1rem; border: var(--signal-border) solid var(--signal-line); border-radius: var(--r-md, 10px); background: var(--signal-surface); color: var(--signal-text); font: inherit; font-size: var(--fs-md, 1.05rem); }
-.xsg .ap-cat input:focus { outline: 2px solid var(--signal-accent); outline-offset: 1px; }
-.xsg .ap-cat__tabs { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
-.xsg .ap-cat__tabs button { border: var(--signal-border) solid var(--signal-line); background: transparent; color: var(--signal-muted); border-radius: var(--r-pill, 999px); padding: .4rem .8rem; font: inherit; font-size: var(--fs-sm); cursor: pointer; }
-.xsg .ap-cat__tabs button[aria-pressed="true"] { background: var(--signal-text); color: var(--signal-bg); border-color: var(--signal-text); }
-.xsg .ap-cat__count { margin: var(--sp-4) 0 0; color: var(--signal-muted); font-size: var(--fs-sm); }
-.xsg .ap-cat__list { list-style: none; margin: var(--sp-2) 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--sp-8); }
-.xsg .ap-cat__list li { display: flex; align-items: center; gap: var(--sp-3); padding: .8rem 0; border-bottom: var(--signal-border) solid var(--signal-line); }
-.xsg .ap-cat__list li > span { display: grid; }
-.xsg .ap-cat__list small { color: var(--signal-muted); font-family: var(--font-mono), monospace; font-size: .75rem; }
-.xsg .ap-cat__list em { margin-left: auto; font-style: normal; font-size: var(--fs-xs); color: var(--signal-muted); white-space: nowrap; }
-.xsg .ap-cat__list em[data-soon] { border: 1px dashed var(--signal-line); border-radius: var(--r-pill, 999px); padding: .15rem .5rem; }
-.xsg .ap-cat__none { grid-column: 1 / -1; justify-content: center; color: var(--signal-muted); }
-.xsg .ap-cat__more { display: block; margin: var(--sp-6) auto 0; border: var(--signal-border) solid var(--signal-line); background: var(--signal-surface); color: var(--signal-text); border-radius: var(--r-pill, 999px); padding: .6rem 1.1rem; font: inherit; cursor: pointer; }
+/* ---- Démonstration : le titre au style d'Aparté, les essais guidés en pastilles. */
+.xsg .ap-try .ap-tries { justify-content: center; position: relative; z-index: 2; margin-top: 56px; }
+.xsg .ap-try .ap-after { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; margin: 28px 0 0; color: var(--ap-ink-2); }
+
+/* ---- Expurgation : quatre temps, puis ce que voit l'IA et ce qui reste sur le poste. */
+.xsg .ap-exp { list-style: none; margin: 44px 0 0; padding: 0; display: grid; gap: 14px; }
+@media (min-width: 980px) { .xsg .ap-exp { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.xsg .ap-exp li { background: var(--ap-stage); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.xsg .ap-exp b { font-size: 18px; letter-spacing: -.02em; line-height: 1.2; }
+.xsg .ap-exp code { background: #fff; border-radius: 12px; box-shadow: 0 1px 1px rgb(13 17 22 / .04), 0 4px 14px -6px rgb(13 17 22 / .16); padding: 12px; font: 400 12.5px/1.75 var(--font-mono), monospace; min-height: 96px; overflow-wrap: anywhere; color: var(--ap-ink); }
+.xsg .ap-exp li[data-tone="real"] code { color: #c2410c; }
+.xsg .ap-exp li[data-tone="tok"] code { color: #0d4cb7; }
+.xsg .ap-exp li[data-tone="ok"] code { color: #146c3e; }
+.xsg .ap-split { margin-top: 14px; display: grid; gap: 14px; }
+@media (min-width: 760px) { .xsg .ap-split { grid-template-columns: 1fr 1fr; } }
+.xsg .ap-split > div { border-radius: 22px; padding: 22px; background: #e8f1ff; }
+.xsg .ap-split > div[data-kept] { background: var(--ap-ink); color: #fff; }
+.xsg .ap-split b { display: block; font-size: 18px; margin-bottom: 8px; }
+.xsg .ap-split ul { margin: 0; padding-left: 18px; color: var(--ap-ink-2); }
+.xsg .ap-split > div[data-kept] ul { color: #c3c9d1; }
+
+/* ---- Mesures : quatre chiffres. */
+.xsg .ap-stats { list-style: none; margin: 44px auto 0; padding: 0; max-width: 1080px; display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+@media (min-width: 900px) { .xsg .ap-stats { grid-template-columns: repeat(4, 1fr); } }
+.xsg .ap-stats li { background: var(--ap-stage); border-radius: 22px; padding: 22px 20px; }
+.xsg .ap-stats b { display: block; font-size: clamp(36px, 5vw, 52px); font-weight: 800; letter-spacing: -.05em; line-height: 1; color: var(--ap-ink); }
+.xsg .ap-stats li:first-child b { color: var(--ap-accent); }
+.xsg .ap-stats span { display: block; margin-top: 10px; font-size: 14px; line-height: 1.45; color: var(--ap-ink-2); }
+
+/* ---- Catalogue : recherche en pilule, catégories, liste sur deux colonnes. */
+.xsg .ap-cat__search { max-width: 640px; margin: 34px auto 0; position: relative; }
+.xsg .ap-cat__search input { width: 100%; font: 400 17px/1.2 var(--font-aparte), sans-serif; padding: 17px 20px 17px 52px; border-radius: 999px; border: 0; background: var(--ap-stage); color: var(--ap-ink); outline: none; }
+.xsg .ap-cat__search input:focus { background: #fff; box-shadow: 0 0 0 1px var(--ap-line-2), 0 4px 14px -6px rgb(13 17 22 / .16); }
+.xsg .ap-cat__search svg { position: absolute; left: 20px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%); color: var(--ap-muted); }
+.xsg .ap-cat__tabs { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 16px auto 0; }
+.xsg .ap-cat__tabs button { border: 0; background: none; font: 500 14px/1 var(--font-aparte), sans-serif; color: var(--ap-muted); padding: 9px 13px; border-radius: 999px; cursor: pointer; }
+.xsg .ap-cat__tabs button[aria-pressed="true"] { background: var(--ap-ink); color: #fff; }
+.xsg .ap-cat__count { text-align: center; color: var(--ap-muted); font-size: 13px; margin: 18px 0 0; }
+.xsg .ap-cat__list { list-style: none; margin: 18px auto 0; padding: 0; max-width: 920px; display: grid; }
+@media (min-width: 760px) { .xsg .ap-cat__list { grid-template-columns: 1fr 1fr; column-gap: 40px; } }
+.xsg .ap-cat__list li { display: flex; align-items: center; gap: 12px; padding: 13px 4px; border-bottom: 1px solid var(--ap-line); }
+.xsg .ap-cat__list li > span { display: grid; min-width: 0; }
+.xsg .ap-cat__list b { font-weight: 500; font-size: 15px; }
+.xsg .ap-cat__list small { font: 400 12px/1.4 var(--font-mono), monospace; color: var(--ap-muted); margin-top: 2px; }
+.xsg .ap-cat__list em { margin-left: auto; font: 500 11.5px/1 var(--font-aparte), sans-serif; border-radius: 999px; padding: 5px 9px; background: var(--ap-stage); color: var(--ap-ink-2); white-space: nowrap; }
+.xsg .ap-cat__list em[data-soon] { background: none; box-shadow: inset 0 0 0 1px var(--ap-line-2); color: var(--ap-muted); }
+.xsg .ap-cat__none { display: block !important; grid-column: 1 / -1; text-align: center; color: var(--ap-muted); border: 0 !important; padding: 30px 0 !important; }
+.xsg .ap-cat__none a { color: var(--ap-ink); font-weight: 600; }
+.xsg .ap-cat__more { text-align: center; margin: 22px 0 0; }
+.xsg .ap-cat__more button { border: 0; background: var(--ap-stage); color: var(--ap-ink); border-radius: 999px; padding: 12px 20px; font: 600 14px/1 var(--font-aparte), sans-serif; cursor: pointer; }
+
+/* ---- Clients : le journal d'une mission, en exemple. */
+.xsg .ap-clients { display: grid; gap: 40px; align-items: center; }
+@media (min-width: 900px) { .xsg .ap-clients { grid-template-columns: 1fr 1fr; } .xsg .ap-clients .ap-lede { margin: 0; } }
+@media (max-width: 899px) { .xsg .ap-clients > div:first-child { text-align: center; } }
+.xsg .ap-stagebox { background: var(--ap-stage); border-radius: 28px; padding: 44px 20px; display: grid; place-items: center; }
+.xsg .ap-report { background: #fff; border-radius: 16px; box-shadow: 0 1px 1px rgb(13 17 22 / .04), 0 8px 24px -8px rgb(13 17 22 / .14), 0 30px 60px -30px rgb(13 17 22 / .2); padding: 20px; width: min(100%, 380px); font-size: 13.5px; }
+.xsg .ap-report p { margin: 0; }
+.xsg .ap-report__top { display: flex; justify-content: space-between; margin-bottom: 12px !important; }
+.xsg .ap-report__top span { font-size: 12px; color: var(--ap-muted); }
+.xsg .ap-report__row { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid var(--ap-line); color: var(--ap-ink-2); }
+.xsg .ap-report__row b { color: var(--ap-ink); }
+.xsg .ap-report__foot { margin-top: 10px !important; font-size: 12px; color: var(--ap-muted); }
+
+/* ---- Installer : trois étapes, quatre systèmes. */
+.xsg .ap-steps { list-style: none; margin: 44px 0 0; padding: 0; display: grid; gap: 14px; counter-reset: none; }
+@media (min-width: 900px) { .xsg .ap-steps { grid-template-columns: repeat(3, 1fr); } }
+.xsg .ap-steps li { background: var(--ap-stage); border-radius: 22px; padding: 20px; display: flex; flex-direction: column; gap: 6px; }
+.xsg .ap-steps li::before { content: none; display: none; }
+.xsg .ap-steps b { font-size: 18px; letter-spacing: -.02em; }
+.xsg .ap-steps p { margin: 0; color: var(--ap-ink-2); font-size: 14.5px; }
+.xsg .ap-systems { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+@media (min-width: 900px) { .xsg .ap-systems { grid-template-columns: repeat(4, 1fr); } }
+.xsg .ap-systems li { border: 0 !important; background: none; border-radius: 22px; padding: 20px; box-shadow: inset 0 0 0 1px var(--ap-line); }
+.xsg .ap-systems em { display: inline-block; width: auto; font-style: normal; font: 500 11.5px/1 var(--font-aparte), sans-serif; border-radius: 999px; padding: 5px 9px; background: var(--ap-stage); color: var(--ap-ink-2); }
+.xsg .ap-systems li:is([data-key="windows"], [data-key="browser"]) em { background: #fff6e0; color: #8a5a00; }
+.xsg .ap-systems h3 { margin: 14px 0 4px; font-size: 19px; letter-spacing: -.02em; color: var(--ap-ink); }
+.xsg .ap-systems p { margin: 0; color: var(--ap-ink-2); font-size: 14px; line-height: 1.45; }
+
+/* ---- Entreprises : xSOM Fleet. */
+.xsg .ap-fleet { display: grid; gap: 28px; padding: clamp(24px, 4vw, 48px); border-radius: 28px; background: #e8f1ff; }
+@media (min-width: 900px) { .xsg .ap-fleet { grid-template-columns: 1.2fr 1fr; align-items: center; } }
+.xsg .ap-fleet .ap-lede { margin: 0; }
+.xsg .ap-fleet ul { margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 10px; }
+.xsg .ap-fleet li { padding-left: 26px; position: relative; color: var(--ap-ink); font-weight: 500; }
+.xsg .ap-fleet li::before { content: "✓"; position: absolute; left: 0; color: var(--ap-accent); font-weight: 700; }
+
+/* ---- Bandeau final : 0 €. */
+.xsg .ap-end { margin-top: 120px; background: var(--ap-ink); color: #fff; border-radius: 28px; padding: clamp(32px, 6vw, 72px); display: grid; gap: 34px; }
+@media (min-width: 900px) { .xsg .ap-end { grid-template-columns: 1.1fr 1fr; align-items: center; } }
+.xsg .ap-end .ap-bigp { font-size: clamp(76px, 12vw, 140px); }
+.xsg .ap-end h2 { color: #fff; margin-top: 10px; }
+.xsg .ap-end p { color: #c3c9d1; margin: 0 0 26px; font-size: 17px; }
+.xsg .ap-facts { display: grid; gap: 16px; }
+.xsg .ap-facts > * { display: flex; gap: 14px; color: #c3c9d1; font-size: 15px; text-decoration: none; align-items: flex-start; }
+.xsg .ap-facts .ap-em { font-size: 24px; line-height: 1; flex: none; width: 30px; text-align: center; margin: 0; }
+.xsg .ap-facts b { color: #fff; display: block; }
+.xsg .ap-facts a b::after { content: " →"; color: #8fbefa; }
+
+/* ---- Licences. */
+.xsg .ap-licences { list-style: none; margin: 34px auto 0; padding: 0; max-width: 920px; display: grid; gap: 14px; }
+@media (min-width: 760px) { .xsg .ap-licences { grid-template-columns: 1fr 1fr; } }
+.xsg .ap-licences li { background: var(--ap-stage); border-radius: 22px; padding: 20px; }
+.xsg .ap-licences code { font-size: 11.5px; }
+.xsg .ap-licences h3 { margin: 10px 0 6px; font-size: 19px; letter-spacing: -.02em; }
+.xsg .ap-licences h3 a { color: var(--ap-ink); }
+.xsg .ap-licences p { margin: 0; color: var(--ap-ink-2); font-size: 14.5px; }
 
 /* ---- Questions. */
-.xsg .ap-faq { max-width: 48rem; margin: 0 auto; }
-.xsg .ap-faq details { border-bottom: var(--signal-border) solid var(--signal-line); }
-.xsg .ap-faq summary { cursor: pointer; padding: var(--sp-5) 0; font-weight: 700; display: flex; justify-content: space-between; gap: var(--sp-4); list-style: none; }
+.xsg .ap-faq { max-width: 760px; margin: 30px auto 0; }
+.xsg .ap-faq details { border-bottom: 1px solid var(--ap-line); }
+.xsg .ap-faq summary { cursor: pointer; list-style: none; padding: 18px 0; font-weight: 600; font-size: 16.5px; display: flex; justify-content: space-between; gap: 16px; color: var(--ap-ink); }
 .xsg .ap-faq summary::-webkit-details-marker { display: none; }
-.xsg .ap-faq summary::after { content: "+"; color: var(--signal-muted); }
+.xsg .ap-faq summary::after { content: "+"; color: var(--ap-muted); font-weight: 400; font-size: 22px; line-height: 1; }
 .xsg .ap-faq details[open] summary::after { content: "−"; }
-.xsg .ap-faq p { margin: 0 0 var(--sp-5); color: var(--signal-muted); }
-
-/* ---- Ouverture : une ligne de confiance sous l'inscription. */
-.xsg .ap-trust { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin: var(--sp-4) 0 0; padding: 0; list-style: none; color: var(--home-ink-muted); font-size: var(--fs-sm); }
-.xsg .ap-trust li::before { content: "·"; margin-right: .5rem; color: var(--sg-glow); }
-.xsg .ap-trust li:first-child::before { content: none; }
-
-@media (max-width: 900px) {
-  .xsg .ap-exp, .xsg .ap-split, .xsg .ap-cat__list { grid-template-columns: 1fr; }
-}
+.xsg .ap-faq p { margin: 0 0 18px; color: var(--ap-ink-2); }
+.xsg > footer { margin-top: 100px; }
 
 /* ---- L'identité d'Aparté, reprise de la maquette du 23/11 : fond blanc, encre presque noire,
    bleu du logo, Inter servie par le site (`--font-aparte`, aucun CDN). Les autres sections de la

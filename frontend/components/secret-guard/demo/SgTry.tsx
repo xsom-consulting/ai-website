@@ -1,14 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 import { useT } from "@/lib/i18n";
 import { SIGNUP_URL } from "@/lib/sites";
 import { APARTE_COPY } from "../aparte-copy";
 import { loadEngine } from "./engine";
 import { Desktop } from "./os";
 import "@/app/aparte-demo.css";
-
-const chars = (text: string) => ({ "--chars": text.length }) as CSSProperties;
 
 /**
  * La démonstration : un poste macOS manipulable dans le navigateur. Le capot se lève quand le
@@ -46,7 +44,13 @@ export function SgTry() {
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onScroll);
     onScroll();
-    return () => { removeEventListener("scroll", onScroll); removeEventListener("resize", onScroll); };
+    return () => {
+      removeEventListener("scroll", onScroll);
+      removeEventListener("resize", onScroll);
+      desktop.current?.destroy();
+      desktop.current = null;
+      started.current = false;
+    };
   }, []);
 
   const run = (name: string) => {
@@ -56,13 +60,12 @@ export function SgTry() {
   };
 
   return (
-    <section id="essayer" className="sg-panel ap-try" aria-labelledby="sg-try-title">
-      <div className="guard-wrap">
-        <header className="sg-head">
-          <p className="home-kicker" data-reveal>{copy.kicker}</p>
-          <h2 id="sg-try-title" className="home-title" data-reveal style={chars(copy.title)}>{copy.title}</h2>
-          <p className="sg-head__lead" data-reveal>{copy.lead}</p>
-        </header>
+    <section id="essayer" className="ap-block ap-try" aria-labelledby="sg-try-title">
+      <div className="ap-wrap">
+        <div className="ap-head">
+          <h2 id="sg-try-title">{copy.title}</h2>
+          <p className="ap-lede">{copy.lead}</p>
+        </div>
         <div className="mac3d" ref={mac}>
           <div className="hinge">
             <div className="lid">
@@ -76,9 +79,9 @@ export function SgTry() {
           <span>{copy.guided}</span>
           {copy.tries.map(([key, label]) => <button key={key} type="button" onClick={() => run(key)}>{label}</button>)}
         </div>
-        <p className="sg-panel__action ap-after">
+        <p className="ap-after">
           <span>{copy.after}</span>
-          <a className="guard-button" href={SIGNUP_URL}>{copy.cta} <span aria-hidden="true">→</span></a>
+          <a className="ap-btn ap-btn--big" href={SIGNUP_URL}>{copy.cta}</a>
         </p>
       </div>
     </section>

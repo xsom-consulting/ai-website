@@ -107,6 +107,36 @@ export const APARTE_COPY = {
         ],
       } as Record<CatalogKey, readonly Item[]>,
     },
+    clients: {
+      title: ["Vos clients disent ", "oui", " à l’IA."],
+      lead: "Quand ils demandent comment vous utilisez l’IA avec leurs accès, vous montrez votre journal : ce qui a été masqué ou bloqué. Jamais leur code.",
+      report: "Journal · mission client",
+      month: "novembre",
+      rows: [["Secrets masqués avant l’envoi", "14"], ["Lectures de fichiers bloquées", "3"], ["Commandes soumises à accord", "2"], ["Contenu transmis à xSOM", "aucun"]] as const,
+      foot: "Exemple. Attestation mensuelle à transmettre : bientôt.",
+    },
+    proof: {
+      title: "Mesuré, pas promis.",
+      lead: "Le moteur d’Aparté passe un banc de test avant chaque version. Les chiffres de la dernière mesure :",
+      stats: [
+        ["100 %", "des 2 859 secrets du corpus de test détectés, tels qu’ils sont écrits"],
+        ["92,1 %", "détectés quand le contexte est défavorable"],
+        ["99,8 %", "des secrets détectés sont masqués plutôt que bloqués : l’IA continue"],
+        ["6,2 %", "au plus des fichiers de dépôts sains signalés à tort"],
+      ] as const,
+      note: "Mesure du 22/11/2026, moteur v0.10.4, corpus de test de xSOM. Méthode détaillée sur demande.",
+    },
+    end: {
+      big: "0 €",
+      title: "pour les indépendants.",
+      body: "Protection complète sur votre poste, sans limite de durée, sans carte bancaire.",
+      facts: {
+        xsom: ["xSOM Consulting", "Télécoms et cybersécurité depuis 2007"],
+        france: ["Conçu en France", "Une équipe joignable, en français"],
+        engine: ["Moteur de détection open source", "Celui qui tourne dans la démonstration"],
+        fleet: ["Entreprises : xSOM Fleet", "Toute une équipe, une console, des preuves"],
+      },
+    },
     faq: {
       kicker: "Questions",
       title: "Des réponses franches.",
@@ -214,6 +244,36 @@ export const APARTE_COPY = {
           { name: "Cursor", hint: "soon", soon: true }, { name: "VS Code · Copilot", hint: "soon", soon: true },
         ],
       } as Record<CatalogKey, readonly Item[]>,
+    },
+    clients: {
+      title: ["Your clients say ", "yes", " to AI."],
+      lead: "When they ask how you use AI with their access, you show your log: what was masked or blocked. Never their code.",
+      report: "Log · client engagement",
+      month: "November",
+      rows: [["Secrets masked before sending", "14"], ["File reads blocked", "3"], ["Commands held for approval", "2"], ["Content sent to xSOM", "none"]] as const,
+      foot: "Example. Monthly attestation to share: soon.",
+    },
+    proof: {
+      title: "Measured, not promised.",
+      lead: "Aparté’s engine runs a test bench before every release. The figures from the latest run:",
+      stats: [
+        ["100 %", "of the 2,859 secrets in the test corpus detected, as written"],
+        ["92.1 %", "detected when the context is unfavourable"],
+        ["99.8 %", "of detected secrets are masked rather than blocked: the AI keeps going"],
+        ["6.2 %", "at most of clean repository files flagged by mistake"],
+      ] as const,
+      note: "Measured on 22/11/2026, engine v0.10.4, xSOM test corpus. Detailed method on request.",
+    },
+    end: {
+      big: "€0",
+      title: "for freelancers.",
+      body: "Full protection on your machine, with no time limit and no credit card.",
+      facts: {
+        xsom: ["xSOM Consulting", "Telecoms and cybersecurity since 2007"],
+        france: ["Designed in France", "A team you can reach, in French or English"],
+        engine: ["Open source detection engine", "The one running in the demo"],
+        fleet: ["Companies: xSOM Fleet", "A whole team, one console, evidence"],
+      },
     },
     faq: {
       kicker: "Questions",
