@@ -55,14 +55,14 @@ export function substitute(lang: "fr" | "en", ordinal: number, type: string): st
 export const SECRET_GUARD_COPY = {
   fr: {
     meta: {
-      title: "Secret Guard · vos secrets restent sur votre machine",
-      description: "Secret Guard bloque ou masque vos clés d’API, jetons et mots de passe avant qu’ils ne partent vers vos assistants d’IA. Analyse sur votre machine, sans réseau ni modèle de langage. Gratuit jusqu’à 3 Postes.",
+      title: "xSOM Aparté · gardez votre IA, rassurez vos clients",
+      description: "Aparté bloque ou masque vos clés d’API, jetons et mots de passe avant qu’ils ne partent vers vos assistants d’IA. Analyse sur votre machine, sans réseau ni modèle de langage. Gratuit jusqu’à 3 Postes.",
       ogAlt: "Secret Guard : vos secrets restent sur votre machine",
     },
     hero: {
-      kicker: "Gratuit jusqu’à 3 Postes",
-      title: ["Utilisez l’IA.", "Gardez vos secrets."],
-      lead: "Avant chaque envoi à votre assistant d’IA, Secret Guard vérifie sur votre machine ce qui part. Une clé d’API, un jeton, un mot de passe : il bloque l’envoi, ou remplace la valeur par un Substitut. Le modèle ne voit jamais la vraie valeur.",
+      kicker: "0 € · jusqu’à 3 Postes",
+      title: ["Gardez votre IA.", "Rassurez vos clients."],
+      lead: "Claude Code, Codex, ChatGPT : vous ne codez plus sans. Avant chaque envoi, Aparté vérifie sur votre machine ce qui part. Une clé d’API, un jeton, un mot de passe : il bloque l’envoi, ou remplace la valeur par un Substitut. Le modèle ne voit jamais la vraie valeur.",
       assistants: "Pour Claude Code, Codex et GitHub Copilot CLI ; bientôt ChatGPT et Claude dans le navigateur.",
       trademarks: "Claude, ChatGPT, Codex et GitHub Copilot sont des marques de leurs détenteurs, citées pour indiquer les services pris en charge, sans partenariat ni approbation.",
       form: {
@@ -72,9 +72,9 @@ export const SECRET_GUARD_COPY = {
         github: "Continuer avec GitHub",
         note: "L’adresse n’est lue que par la page d’inscription de plateforme.xsom.fr, dans votre navigateur. Ce site ne la garde pas. Sans code d’invitation.",
       },
-      how: "Voir ce que ça fait",
+      how: "Essayer dans le navigateur",
       video: "Un poste de développement de nuit : une ligne de code est saisie par un trait de lumière bleue.",
-      demo: "Démonstration de Secret Guard : un secret bloqué, puis masqué avant l’envoi.",
+      demo: "Démonstration d’Aparté : un secret bloqué, puis masqué avant l’envoi.",
     },
     does: {
       kicker: "Ce que ça fait",
@@ -117,7 +117,7 @@ export const SECRET_GUARD_COPY = {
       kicker: "Rien ne quitte votre machine",
       title: "L’analyse se fait chez vous.",
       prompt: "Votre prompt",
-      guard: "Secret Guard · sur votre machine",
+      guard: "Aparté · sur votre machine",
       server: "Serveurs de l’IA",
       layers: [
         ["Règles déterministes", "Clés, jetons, mots de passe"],
@@ -147,21 +147,21 @@ export const SECRET_GUARD_COPY = {
     fleet: {
       kicker: "Pour votre entreprise",
       title: "Au-delà de 3 Postes : xSOM Fleet.",
-      body: "Le même moteur tourne dans Fleet Guard, le module de sécurité de xSOM Fleet, pour toute une entreprise. Les anciennes offres Pro et Entreprise de Secret Guard renvoient désormais vers xSOM Fleet.",
+      body: "Le même moteur tourne dans Fleet Guard, le module de sécurité de xSOM Fleet, pour toute une entreprise. Aparté s’appelait Secret Guard ; ses anciennes offres Pro et Entreprise renvoient désormais vers xSOM Fleet.",
       points: ["Une console pour plusieurs équipes", "Le pilotage FinOps de vos abonnements d’IA", "Des preuves pour l’audit : Journal des blocages, Dossier de preuves"],
       action: "Découvrir xSOM Fleet",
     },
   },
   en: {
     meta: {
-      title: "Secret Guard · your secrets stay on your machine",
-      description: "Secret Guard blocks or masks your API keys, tokens and passwords before they leave for your AI assistants. Analysis on your machine, no network and no language model. Free for up to 3 workstations.",
-      ogAlt: "Secret Guard: your secrets stay on your machine",
+      title: "xSOM Aparté · keep your AI, reassure your clients",
+      description: "Aparté blocks or masks your API keys, tokens and passwords before they leave for your AI assistants. Analysis on your machine, no network and no language model. Free for up to 3 workstations.",
+      ogAlt: "xSOM Aparté: keep your AI, reassure your clients",
     },
     hero: {
-      kicker: "Free for up to 3 workstations",
-      title: ["Use AI.", "Keep your secrets."],
-      lead: "Before every send to your AI assistant, Secret Guard checks on your machine what is leaving. An API key, a token, a password: it blocks the send, or replaces the value with a Substitute. The model never sees the real value.",
+      kicker: "€0 · up to 3 workstations",
+      title: ["Keep your AI.", "Reassure your clients."],
+      lead: "Claude Code, Codex, ChatGPT: you no longer code without them. Before every send, Aparté checks on your machine what is leaving. An API key, a token, a password: it blocks the send, or replaces the value with a Substitute. The model never sees the real value.",
       assistants: "For Claude Code, Codex, GitHub Copilot CLI and Claude Desktop (precise mode, macOS); ChatGPT and Claude in the browser with the extension, soon in the stores.",
       trademarks: "Claude, ChatGPT, Codex and GitHub Copilot are trademarks of their owners, named to indicate the supported services, with no partnership or endorsement.",
       form: {
@@ -171,9 +171,9 @@ export const SECRET_GUARD_COPY = {
         github: "Continue with GitHub",
         note: "Your email is read only by the sign-up page of plateforme.xsom.fr, in your browser. This site does not keep it. No invitation code.",
       },
-      how: "See what it does",
+      how: "Try it in the browser",
       video: "A developer workstation at night: one line of code is caught by a streak of blue light.",
-      demo: "Secret Guard demo: a secret blocked, then masked before sending.",
+      demo: "Aparté demo: a secret blocked, then masked before sending.",
     },
     does: {
       kicker: "What it does",
@@ -216,7 +216,7 @@ export const SECRET_GUARD_COPY = {
       kicker: "Nothing leaves your machine",
       title: "The analysis happens on your side.",
       prompt: "Your prompt",
-      guard: "Secret Guard · on your machine",
+      guard: "Aparté · on your machine",
       server: "AI servers",
       layers: [
         ["Deterministic rules", "Keys, tokens, passwords"],
@@ -246,7 +246,7 @@ export const SECRET_GUARD_COPY = {
     fleet: {
       kicker: "For your company",
       title: "Beyond 3 workstations: xSOM Fleet.",
-      body: "The same engine runs in Fleet Guard, the security module of xSOM Fleet, for a whole company. Secret Guard’s former Pro and Enterprise offers now point to xSOM Fleet.",
+      body: "The same engine runs in Fleet Guard, the security module of xSOM Fleet, for a whole company. Aparté used to be called Secret Guard; its former Pro and Enterprise offers now point to xSOM Fleet.",
       points: ["One console for several teams", "FinOps steering of your AI subscriptions", "Evidence for the audit: block log, evidence dossier"],
       action: "Discover xSOM Fleet",
     },

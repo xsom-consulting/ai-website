@@ -10,6 +10,8 @@ import { SECRET_GUARD_REPOSITORY, SIGNUP_URL } from "@/lib/sites";
 import { SECRET_GUARD_COPY, SECRET_GUARD_LICENCES } from "./secret-guard-copy";
 import { SgFlow } from "./SgFlow";
 import { SgHero } from "./SgHero";
+import { SgCatalog, SgExpurgation, SgFaq, SgTry } from "./SgAparte";
+import { APARTE_COPY } from "./aparte-copy";
 
 const LICENCE_URL = { detection: SECRET_GUARD_LICENCES.apache, expurgation: SECRET_GUARD_LICENCES.polyform } as const;
 
@@ -28,9 +30,17 @@ export function SecretGuardPage() {
   const chars = (text: string) => ({ "--chars": text.length }) as CSSProperties;
   return (
     <div ref={root} className="guard-landing xhome xsg">
-      <SiteHeader site="guard" />
+      <SiteHeader
+        site="guard"
+        actions={[
+          { label: APARTE_COPY[lang].actions.github, href: SECRET_GUARD_REPOSITORY, variant: "ghost" },
+          { label: APARTE_COPY[lang].actions.signup, href: SIGNUP_URL, variant: "solid" },
+        ]}
+      />
       <main>
         <SgHero />
+
+        <SgTry />
 
         <section id="ce-que-ca-fait" className="sg-panel" aria-labelledby="sg-does-title">
           <div className="guard-wrap">
@@ -60,6 +70,10 @@ export function SecretGuardPage() {
             </figure>
           </div>
         </section>
+
+        <SgExpurgation />
+
+        <SgCatalog />
 
         <section id="installer" className="sg-panel sg-panel--tint" aria-labelledby="sg-install-title">
           <div className="guard-wrap">
@@ -127,6 +141,8 @@ export function SecretGuardPage() {
             </p>
           </div>
         </section>
+
+        <SgFaq />
       </main>
       <SiteFooter site="guard" />
     </div>

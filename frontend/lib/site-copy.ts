@@ -29,7 +29,7 @@ export interface NavItem {
 export const BRAND: Record<Site, Record<Lang, { readonly lead: string; readonly product: string }>> = {
   ai: { fr: { lead: "xSOM", product: "· IA" }, en: { lead: "xSOM", product: "· AI" } },
   fleet: { fr: { lead: "xSOM", product: "Fleet" }, en: { lead: "xSOM", product: "Fleet" } },
-  guard: { fr: { lead: "Secret", product: "Guard" }, en: { lead: "Secret", product: "Guard" } },
+  guard: { fr: { lead: "xSOM", product: "Aparté" }, en: { lead: "xSOM", product: "Aparté" } },
 };
 
 /** Le nom d'une marque en une seule chaîne, pour un titre ou un nom accessible. */
@@ -78,19 +78,21 @@ export const NAV: Record<Site, Record<Lang, readonly NavItem[]>> = {
   },
   guard: {
     fr: [
-      { label: "Ce que ça fait", to: { site: "guard", path: "/#ce-que-ca-fait" } },
+      { label: "Essayer", to: { site: "guard", path: "/#essayer" } },
+      { label: "Expurgation", to: { site: "guard", path: "/#expurgation" } },
+      { label: "Ce qu’on protège", to: { site: "guard", path: "/#protege" } },
       { label: "Installer", to: { site: "guard", path: "/#installer" } },
-      { label: "Licences", to: { site: "guard", path: "/#licences" } },
+      { label: "Docs", to: { href: SECRET_GUARD_REPOSITORY } },
       { label: "Pour l’entreprise", to: { site: "guard", path: "/#fleet" } },
-      { label: "Division IA", to: { site: "ai" } },
       WWW.fr,
     ],
     en: [
-      { label: "What it does", to: { site: "guard", path: "/#ce-que-ca-fait" } },
+      { label: "Try it", to: { site: "guard", path: "/#essayer" } },
+      { label: "Redaction", to: { site: "guard", path: "/#expurgation" } },
+      { label: "What it protects", to: { site: "guard", path: "/#protege" } },
       { label: "Install", to: { site: "guard", path: "/#installer" } },
-      { label: "Licences", to: { site: "guard", path: "/#licences" } },
+      { label: "Docs", to: { href: SECRET_GUARD_REPOSITORY } },
       { label: "For companies", to: { site: "guard", path: "/#fleet" } },
-      { label: "AI division", to: { site: "ai" } },
       WWW.en,
     ],
   },

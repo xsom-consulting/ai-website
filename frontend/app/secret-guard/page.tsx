@@ -8,6 +8,7 @@ import "../guard-landing.css";
 import "../guard-home.css";
 import "../home.css";
 import "../secret-guard.css";
+import "../aparte.css";
 
 /**
  * Titre absolu : le gabarit du site (« · Secret Guard ») ne s'applique pas à la page
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: copy.title,
       description: copy.description,
       url: `${SECRET_GUARD_ORIGIN}/`,
-      siteName: "Secret Guard",
+      siteName: "xSOM Aparté",
       locale: lang === "fr" ? "fr_FR" : "en_US",
       type: "website",
       images: [{ url: poster, width: 1920, height: 1080, alt: copy.ogAlt }],
@@ -44,7 +45,7 @@ function structuredData(lang: "fr" | "en") {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
-    name: "Secret Guard",
+    name: "xSOM Aparté",
     url: `${SECRET_GUARD_ORIGIN}/`,
     description: copy.description,
     codeRepository: SECRET_GUARD_REPOSITORY,
