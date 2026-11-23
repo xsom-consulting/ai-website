@@ -10,7 +10,8 @@ import { SECRET_GUARD_REPOSITORY, SIGNUP_URL } from "@/lib/sites";
 import { SECRET_GUARD_COPY, SECRET_GUARD_LICENCES } from "./secret-guard-copy";
 import { SgFlow } from "./SgFlow";
 import { SgHero } from "./SgHero";
-import { SgCatalog, SgExpurgation, SgFaq, SgTry } from "./SgAparte";
+import { SgCatalog, SgExpurgation, SgFaq } from "./SgAparte";
+import { SgTry } from "./demo/SgTry";
 import { APARTE_COPY } from "./aparte-copy";
 
 const LICENCE_URL = { detection: SECRET_GUARD_LICENCES.apache, expurgation: SECRET_GUARD_LICENCES.polyform } as const;

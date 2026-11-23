@@ -16,10 +16,10 @@ test("the Secret Guard page states its promise, its free tier and the supported 
   await page.goto("/extension");
   await expect(page).toHaveURL(/\/secret-guard$/);
 
-  await expect(page.locator(".guard-header .brand__name")).toHaveText("Secret Guard");
+  await expect(page.locator(".guard-header .brand__name")).toHaveText("xSOM Aparté");
   const hero = page.locator(".sg-hero");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Utilisez l’IA.");
-  await expect(hero).toContainText("Gratuit jusqu’à 3 Postes");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Gardez votre IA.");
+  await expect(hero).toContainText("0 € · jusqu’à 3 Postes");
   await expect(hero).toContainText("Claude Code, Codex et GitHub Copilot CLI");
   await expect(hero).toContainText("sans partenariat ni approbation");
   await expect(hero.getByRole("link", { name: /Continuer avec GitHub/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
@@ -94,12 +94,14 @@ test("the licences are exact, and companies are sent to xSOM Fleet", async ({ pa
   await expect(fleet).toContainText("Pro et Entreprise");
   await expect(fleet.getByRole("link", { name: /Découvrir xSOM Fleet/ })).toHaveAttribute("href", "/fleet");
 
-  // Ni extension VS Code annoncée, ni fichier, ni prix, ni mot interdit.
+  // Ni extension VS Code de xSOM annoncée, ni fichier, ni prix autre que 0 € (affiché pour les
+  // indépendants depuis le 23/11/2026), ni mot interdit. VS Code peut être nommé comme l'éditeur
+  // où tourne Claude Code (démonstration, catalogue).
   const html = await page.content();
-  expect(html).not.toMatch(/VS Code|en préparation/);
+  expect(html).not.toMatch(/extension VS Code|VS Code extension|en préparation/);
   expect(html).not.toMatch(/\.vsix/i);
   expect(html).not.toContain("poc-AI_guard");
-  expect(html).not.toMatch(/\d+\s?€/);
+  expect(html).not.toMatch(/(?<![\d,.])(?:[1-9]\d*(?:[.,]\d+)?|0[.,]\d*[1-9]\d*)\s?€/);
   expect(html).not.toMatch(/conforme|certifié|garanti/i);
 });
 
@@ -121,7 +123,7 @@ test("the Secret Guard page speaks English with the same sections", async ({ bro
   const page = await context.newPage();
   await page.route("https://plateforme.xsom.fr/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Sign up</title>" }));
   await page.goto("/secret-guard");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Use AI.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Keep your AI.");
   await expect(page.locator("#ce-que-ca-fait .sg-example__sent")).toContainText(substituteEn(12, "API key"));
   await expect(page.locator("#licences")).toContainText("PolyForm Small Business 1.0.0");
   await expect(page.locator("#fleet")).toContainText("Pro and Enterprise");
