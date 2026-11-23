@@ -95,14 +95,11 @@ test("the Secret Guard page speaks English with the same sections", async ({ bro
   const page = await context.newPage();
   await page.route("https://plateforme.xsom.fr/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Sign up</title>" }));
   await page.goto("/secret-guard");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Aparté masks your secrets");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Keep your AI.");
   await expect(page.locator("#ce-que-ca-fait .sg-example__sent")).toContainText(substituteEn(12, "API key"));
   await expect(page.locator("#licences")).toContainText("PolyForm Small Business 1.0.0");
   await expect(page.locator("#fleet")).toContainText("Pro and Enterprise");
-  await page.getByLabel("Your email").fill("jane@example.com");
-  await page.getByRole("button", { name: "Create my free account" }).click();
-  await page.waitForURL(/^https:\/\/plateforme\.xsom\.fr\//);
-  expect(page.url()).toBe("https://plateforme.xsom.fr/inscription#email=jane%40example.com");
+  await expect(page.locator("#inscription").getByRole("link", { name: /Download/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
   await context.close();
 });
 

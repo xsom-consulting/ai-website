@@ -27,7 +27,7 @@ function watch(page: Page) {
 const sites = [
   { host: "ai.xsom.fr", brand: "xSOM · IA", heading: "Conseil et produits pour l’IA d’entreprise.", nav: ["Produits", "Prestations", "Menaces IA", "xSOM Consulting"], paths: ["/", "/menaces", "/mentions-legales"] },
   { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "Les assistants de code pour toute l’entreprise, sans fuite de secrets.", nav: ["Sécurité", "FinOps", "Stratégie", "Audit", "Déploiement", "Questions", "En détail"], paths: ["/", "/details"] },
-  { host: "guard.xsom.fr", brand: "Aparté", brandSelector: ".ap-brand b", heading: "Gardez votre IA.", nav: ["Essayer", "Expurgation", "Ce qu’on protège", "Installer", "Entreprises", "Docs", "xSOM Consulting"], paths: ["/", "/cookies"] },
+  { host: "guard.xsom.fr", brand: "Aparté", brandSelector: ".ap-brand b", pageBrand: "xSOM Aparté", heading: "Gardez votre IA.", nav: ["Essayer", "Expurgation", "Ce qu’on protège", "Installer", "Entreprises", "Docs", "xSOM Consulting"], paths: ["/", "/cookies"] },
 ] as const;
 
 for (const site of sites) {
@@ -52,7 +52,8 @@ for (const site of sites) {
       const problems = watch(page);
       const response = await page.goto(`http://${site.host}:${PORT}${path}`, { waitUntil: "load" });
       expect(response?.status()).toBe(200);
-      await expect(page.locator("brandSelector" in site ? site.brandSelector : ".guard-header .brand__name").first()).toHaveText(site.brand);
+      // Les pages annexes gardent l'en-tête commun des sites xSOM.
+      await expect(page.locator(".guard-header .brand__name").first()).toHaveText("pageBrand" in site ? site.pageBrand : site.brand);
       expect(problems).toEqual([]);
     });
   }
