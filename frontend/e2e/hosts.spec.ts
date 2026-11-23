@@ -27,14 +27,14 @@ function watch(page: Page) {
 const sites = [
   { host: "ai.xsom.fr", brand: "xSOM · IA", heading: "Conseil et produits pour l’IA d’entreprise.", nav: ["Produits", "Prestations", "Menaces IA", "xSOM Consulting"], paths: ["/", "/menaces", "/mentions-legales"] },
   { host: "fleet.xsom.fr", brand: "xSOM Fleet", heading: "Les assistants de code pour toute l’entreprise, sans fuite de secrets.", nav: ["Sécurité", "FinOps", "Stratégie", "Audit", "Déploiement", "Questions", "En détail"], paths: ["/", "/details"] },
-  { host: "guard.xsom.fr", brand: "xSOM Aparté", heading: "Aparté masque vos secrets avant qu’ils partent vers l’IA.", nav: ["Essayer", "Expurgation", "Ce qu’on protège", "Installer", "Docs", "Pour l’entreprise", "xSOM Consulting"], paths: ["/", "/cookies"] },
+  { host: "guard.xsom.fr", brand: "Aparté", brandSelector: ".ap-brand b", heading: "Gardez votre IA.", nav: ["Essayer", "Expurgation", "Ce qu’on protège", "Installer", "Entreprises", "Docs", "xSOM Consulting"], paths: ["/", "/cookies"] },
 ] as const;
 
 for (const site of sites) {
   test(`${site.host} has its brand, its menu and no console error`, async ({ page }) => {
     const problems = watch(page);
     await page.goto(`http://${site.host}:${PORT}/`, { waitUntil: "load" });
-    await expect(page.locator(".guard-header .brand__name").first()).toHaveText(site.brand);
+    await expect(page.locator("brandSelector" in site ? site.brandSelector : ".guard-header .brand__name").first()).toHaveText(site.brand);
     await expect(page.locator("h1").first()).toContainText(site.heading.split(" ").slice(0, 3).join(" "));
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     await expect(nav.getByRole("link")).toHaveText(site.nav.map((label) => new RegExp(`^${label}`)));
@@ -52,7 +52,7 @@ for (const site of sites) {
       const problems = watch(page);
       const response = await page.goto(`http://${site.host}:${PORT}${path}`, { waitUntil: "load" });
       expect(response?.status()).toBe(200);
-      await expect(page.locator(".guard-header .brand__name").first()).toHaveText(site.brand);
+      await expect(page.locator("brandSelector" in site ? site.brandSelector : ".guard-header .brand__name").first()).toHaveText(site.brand);
       expect(problems).toEqual([]);
     });
   }

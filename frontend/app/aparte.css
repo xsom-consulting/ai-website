@@ -50,85 +50,79 @@
   .xsg .ap-exp, .xsg .ap-split, .xsg .ap-cat__list { grid-template-columns: 1fr; }
 }
 
-/* ---- En-tête : GitHub et l'inscription à droite, comme sur la page de xSOM Fleet. */
-@media (min-width: 901px) {
-  .xsg .home-header__inner { grid-template-columns: auto 1fr auto auto; }
-  .xsg .home-header nav { justify-self: center; }
-  .xsg .home-header__actions { grid-column: 4; grid-row: 1; display: flex; align-items: center; gap: .5rem; }
+/* ---- L'identité d'Aparté, reprise de la maquette du 23/11 : fond blanc, encre presque noire,
+   bleu du logo, Inter servie par le site (`--font-aparte`, aucun CDN). Les autres sections de la
+   page passent aussi en Inter, en attendant d'être reprises une à une. */
+.xsg {
+  --ap-stage: #f3f4f6; --ap-line: #e5e7eb; --ap-line-2: #d4d8de;
+  --ap-ink: #0d1116; --ap-ink-2: #3b434e; --ap-muted: #6b7280; --ap-accent: #015fce;
+  --font-display: var(--font-aparte); --font-body: var(--font-aparte);
+  font-family: var(--font-aparte), system-ui, sans-serif;
+  background: #fff;
 }
-.xsg .home-header__action {
-  display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 1rem;
-  border: 1px solid var(--signal-accent); border-radius: 8px; background: var(--signal-accent); color: var(--signal-accent-ink);
-  font-size: .875rem; font-weight: 600; white-space: nowrap; text-decoration: none;
-}
-.xsg .home-header__action[data-variant="ghost"] { background: transparent; border-color: var(--home-ink-line); color: var(--home-ink-text); }
-.xsg .home-header[data-solid="true"] .home-header__action[data-variant="ghost"] { border-color: var(--signal-line); color: var(--signal-text); }
-.xsg .home-header__action:hover { filter: brightness(1.1); }
-@media (min-width: 901px) and (max-width: 1240px) {
-  .xsg .home-header__action[data-variant="ghost"] { display: none; }
-  .xsg .home-header nav { gap: var(--sp-4); }
-}
-@media (max-width: 900px) {
-  .xsg .home-header__actions { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; padding-top: .25rem; }
-  .xsg .home-header__action { min-height: 46px; }
-}
+.xsg .ap-wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .xsg .ap-wrap { padding: 0 28px; } }
 
-.xsg .ap-split > div[data-kept] h3 { color: var(--home-ink-text); }
+/* En-tête */
+.xsg .ap-top { position: sticky; top: 0; z-index: 50; background: rgb(255 255 255 / .9); backdrop-filter: blur(12px); }
+.xsg .ap-top__bar { display: flex; align-items: center; height: 64px; gap: 20px; }
+.xsg .ap-brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ap-ink); flex: none; }
+.xsg .ap-brand svg { width: 28px; height: 28px; }
+.xsg .ap-brand b { font-weight: 800; font-size: 18px; letter-spacing: -.02em; }
+.xsg .ap-brand small { color: var(--ap-muted); font-size: 13px; }
+.xsg .ap-top__nav { display: none; gap: 2px; font-size: 14.5px; }
+.xsg .ap-top__nav a, .xsg .ap-mnav a { text-decoration: none; color: var(--ap-ink-2); padding: 8px 11px; border-radius: 999px; }
+.xsg .ap-top__nav a:hover { background: var(--ap-stage); color: var(--ap-ink); }
+.xsg .ap-top__xsom { color: var(--ap-ink) !important; font-weight: 600; box-shadow: inset 0 0 0 1px var(--ap-line-2); margin-left: 6px; }
+.xsg .ap-top__xsom span { color: var(--ap-accent); }
+.xsg .ap-top__end { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.xsg .ap-burger { display: grid; place-items: center; width: 40px; height: 40px; border: 0; background: var(--ap-stage); color: var(--ap-ink); border-radius: 12px; cursor: pointer; }
+@media (min-width: 1040px) { .xsg .ap-top__nav { display: flex; } .xsg .ap-burger { display: none; } }
+@media (max-width: 520px) { .xsg .ap-top .ap-price, .xsg .ap-brand small { display: none; } .xsg .ap-top__bar { gap: 10px; } }
+.xsg .ap-mnav { display: none; border-top: 1px solid var(--ap-line); padding: 10px 16px 16px; background: #fff; }
+.xsg .ap-mnav[data-open] { display: grid; gap: 4px; }
+.xsg .ap-mnav a { padding: 12px 10px; border-radius: 10px; font-size: 16px; color: var(--ap-ink); }
+.xsg .ap-mnav .ap-top__xsom { box-shadow: none; margin: 0; background: var(--ap-stage); }
+@media (min-width: 1040px) { .xsg .ap-mnav { display: none !important; } }
+.xsg :is(#essayer, #expurgation, #protege, #installer, #fleet, #questions) { scroll-margin-top: 72px; }
 
-/* ---- Ouverture d'Aparté, sur fond clair. Le formulaire d'inscription reprend ses couleurs
-   claires en redéfinissant les variables « encre » de l'accueil. */
-.xsg .ap-hero {
-  --home-ink: var(--signal-surface);
-  --home-ink-text: var(--signal-text);
-  --home-ink-muted: var(--signal-muted);
-  --home-ink-line: var(--signal-line);
-  padding-block: calc(var(--home-header) + var(--sp-16)) var(--sp-16);
-  background:
-    radial-gradient(60rem 30rem at 85% 10%, color-mix(in srgb, var(--signal-accent) 9%, transparent), transparent 70%),
-    var(--signal-bg);
-  scroll-margin-top: var(--home-header);
-}
-.xsg .ap-hero__inner { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: var(--sp-12); align-items: center; }
-.xsg .ap-hero .home-kicker { color: var(--signal-accent-text); }
-.xsg .ap-hero__title { margin: var(--sp-4) 0 var(--sp-5); font-family: var(--font-display), sans-serif; font-size: clamp(2.3rem, 4.6vw, 3.9rem); line-height: 1.04; letter-spacing: -0.035em; color: var(--signal-text); max-width: 16ch; }
-.xsg .ap-hero__lead { margin: 0 0 var(--sp-8); max-width: 34rem; color: var(--signal-muted); font-size: var(--fs-lg, 1.15rem); line-height: 1.6; }
-.xsg .ap-hero .sg-signup__input { background: var(--signal-bg); }
-.xsg .ap-hero__steps { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-6); margin: var(--sp-6) 0 0; padding: 0; list-style: none; counter-reset: ap-step; color: var(--signal-text); font-size: var(--fs-sm); }
-.xsg .ap-hero__steps li { display: flex; align-items: center; gap: var(--sp-2); counter-increment: ap-step; }
-.xsg .ap-hero__steps li::before { content: counter(ap-step); display: grid; place-items: center; width: 1.5rem; aspect-ratio: 1; border-radius: 50%; background: var(--signal-accent); color: var(--signal-accent-ink); font-size: .75rem; font-weight: 800; }
-.xsg .ap-hero__systems { margin: var(--sp-3) 0 0; color: var(--signal-muted); font-size: var(--fs-sm); }
+/* Boutons */
+.xsg .ap-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px; padding: 12px 20px; font: 600 15px/1 var(--font-aparte), sans-serif; cursor: pointer; text-decoration: none; background: var(--ap-ink); color: #fff; white-space: nowrap; }
+.xsg .ap-btn:hover { background: #262c35; }
+.xsg .ap-btn--big { padding: 16px 26px; font-size: 16.5px; }
+.xsg .ap-btn--sm { padding: 10px 15px; font-size: 14px; }
+.xsg .ap-btn--ghost { background: #fff; color: var(--ap-ink); box-shadow: inset 0 0 0 1px var(--ap-line-2); }
+.xsg .ap-btn--ghost:hover { background: var(--ap-stage); }
+.xsg .ap-btn svg { width: 18px; height: 18px; }
+.xsg .ap-price { background: rgb(255 255 255 / .18); border-radius: 999px; padding: 4px 8px; font-size: 13px; }
 
-.xsg .ap-hero__card { display: grid; gap: var(--sp-3); padding: var(--sp-6); border: var(--signal-border) solid var(--signal-line); border-radius: var(--r-lg); background: var(--signal-surface); box-shadow: 0 1px 2px rgb(18 37 62 / .05), 0 24px 60px -28px rgb(18 37 62 / .35); }
-.xsg .ap-hero__label { margin: 0; font-family: var(--font-mono), monospace; font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--signal-muted); }
-.xsg .ap-hero__line { margin: 0; padding: var(--sp-4); border: var(--signal-border) solid var(--signal-line); border-radius: var(--r-md); background: var(--signal-bg); }
-.xsg .ap-hero__line code { font-family: var(--font-mono), monospace; font-size: .9rem; line-height: 1.7; color: var(--signal-text); overflow-wrap: anywhere; }
-.xsg .ap-hero__secret { position: relative; display: inline-block; color: var(--signal-deny); }
-.xsg .ap-hero__secret i { position: absolute; inset: 8% -2px; width: 0; border-radius: 3px; background: var(--signal-accent); transition: width .6s cubic-bezier(.6, 0, .2, 1); }
-.xsg .ap-hero__card:is([data-state="masked"], [data-state="sent"]) .ap-hero__secret i { width: calc(100% + 4px); }
-.xsg .ap-hero__line--sent, .xsg .ap-hero__label--sent, .xsg .ap-hero__local { opacity: 0; transform: translateY(6px); transition: opacity .4s ease, transform .4s ease; }
-.xsg .ap-hero__card[data-state="sent"] :is(.ap-hero__line--sent, .ap-hero__label--sent, .ap-hero__local) { opacity: 1; transform: none; }
-.xsg .ap-hero__line--sent { border-color: color-mix(in srgb, var(--signal-accent) 45%, var(--signal-line)); }
-.xsg .ap-hero__line--sent mark { background: color-mix(in srgb, var(--signal-accent) 14%, transparent); color: var(--signal-accent-text); border-radius: 3px; padding: 0 .15em; }
-.xsg .ap-hero__local { margin: 0; color: var(--signal-allow, var(--signal-accent-text)); font-size: var(--fs-sm); font-weight: 600; }
-@media (max-width: 960px) {
-  .xsg .ap-hero__inner { grid-template-columns: 1fr; }
-  .xsg .ap-hero { padding-block: calc(var(--home-header) + var(--sp-8)) var(--sp-12); }
+/* Ouverture */
+.xsg .ap-hero { text-align: center; padding: 72px 0 24px; color: var(--ap-ink); }
+.xsg .ap-hero h1 { font-family: var(--font-aparte), sans-serif; font-size: clamp(42px, 7.6vw, 90px); line-height: .96; letter-spacing: -.05em; font-weight: 800; margin: 0 auto 22px; color: var(--ap-ink); }
+.xsg .ap-hero h1 span { color: var(--ap-accent); }
+.xsg .ap-lead { font-size: clamp(17px, 2.2vw, 21px); line-height: 1.55; color: var(--ap-ink-2); margin: 0 auto 30px; max-width: 40ch; }
+.xsg .ap-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.xsg .ap-sub { margin: 12px 0 0; font-size: 13.5px; color: var(--ap-muted); }
+.xsg .ap-perks { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin: 52px auto 0; max-width: 1080px; text-align: left; }
+@media (min-width: 900px) { .xsg .ap-perks { grid-template-columns: 1.25fr 1fr 1fr 1fr; } }
+.xsg .ap-perk { border-radius: 22px; padding: 20px 20px 22px; background: var(--ap-stage); color: var(--ap-ink); text-decoration: none; display: block; }
+.xsg a.ap-perk:hover { background: #eceef1; }
+.xsg .ap-em { font-size: 30px; line-height: 1; display: block; margin-bottom: 14px; }
+.xsg .ap-perk b { display: block; font-size: 19px; letter-spacing: -.02em; line-height: 1.15; }
+.xsg .ap-perk span:not(.ap-em):not(.ap-bigp) { display: block; color: var(--ap-ink-2); font-size: 14px; line-height: 1.45; margin-top: 4px; }
+.xsg .ap-perk--zero { background: var(--ap-ink); color: #fff; grid-column: span 2; }
+@media (min-width: 900px) { .xsg .ap-perk--zero { grid-column: auto; } }
+.xsg .ap-bigp { font-size: clamp(60px, 8vw, 84px); font-weight: 800; letter-spacing: -.05em; line-height: .88; display: block; color: #fff; }
+.xsg .ap-perk--zero b { font-size: 17px; margin-top: 10px; }
+.xsg .ap-perk--zero span:not(.ap-bigp) { color: #c3c9d1 !important; }
+.xsg .ap-trademarks { margin: 22px auto 0; max-width: 72ch; color: var(--ap-muted); font-size: 12px; }
+@media (max-width: 380px) { .xsg .ap-btn--big { width: 100%; } }
+/* Téléphone : le 0 € en grand, puis trois lignes compactes, pignon à gauche. */
+@media (max-width: 899px) {
+  .xsg .ap-perks { grid-template-columns: 1fr; gap: 10px; margin-top: 40px; }
+  .xsg .ap-perk--zero { grid-column: auto; }
+  .xsg .ap-perk:not(.ap-perk--zero) { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; align-items: center; padding: 16px 18px; border-radius: 18px; }
+  .xsg .ap-perk .ap-em { grid-row: span 2; margin: 0; font-size: 26px; }
+  .xsg .ap-perk:not(.ap-perk--zero) b { font-size: 17px; }
+  .xsg .ap-perk:not(.ap-perk--zero) span:not(.ap-em) { margin-top: 2px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .xsg .ap-hero__secret i, .xsg .ap-hero__line--sent, .xsg .ap-hero__label--sent, .xsg .ap-hero__local { transition: none; }
-}
-
-/* ---- En-tête sur fond clair : les variables « encre » du film d'ouverture sont redéfinies
-   pour l'en-tête seulement (texte foncé, fond clair translucide). */
-.xsg.guard-home .home-header {
-  --home-ink: var(--signal-bg);
-  --home-ink-text: var(--signal-text);
-  --home-ink-muted: var(--signal-muted);
-  --home-ink-line: var(--signal-line);
-  background: color-mix(in srgb, var(--signal-bg) 86%, transparent);
-  backdrop-filter: blur(12px);
-  border-bottom-color: color-mix(in srgb, var(--signal-line) 70%, transparent);
-}
-.xsg.guard-home .home-header::before { display: none; }
-.xsg.guard-home .home-header__toggle { color: var(--signal-text); }
-.xsg .ap-hero__trademarks { margin: var(--sp-4) 0 0; max-width: 34rem; color: var(--signal-muted); font-size: var(--fs-xs); }

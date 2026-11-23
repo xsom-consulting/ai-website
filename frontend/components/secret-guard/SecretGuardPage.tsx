@@ -3,16 +3,15 @@
 import { useRef, type CSSProperties } from "react";
 import { useHomeReveal } from "@/components/home/useHomeReveal";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_REPOSITORY, SIGNUP_URL } from "@/lib/sites";
 import { SECRET_GUARD_COPY, SECRET_GUARD_LICENCES } from "./secret-guard-copy";
 import { SgFlow } from "./SgFlow";
 import { AparteHero } from "./AparteHero";
+import { ApHeader } from "./ApHeader";
 import { SgCatalog, SgExpurgation, SgFaq } from "./SgAparte";
 import { SgTry } from "./demo/SgTry";
-import { APARTE_COPY } from "./aparte-copy";
 
 const LICENCE_URL = { detection: SECRET_GUARD_LICENCES.apache, expurgation: SECRET_GUARD_LICENCES.polyform } as const;
 
@@ -31,13 +30,7 @@ export function SecretGuardPage() {
   const chars = (text: string) => ({ "--chars": text.length }) as CSSProperties;
   return (
     <div ref={root} className="guard-landing guard-home xhome xsg">
-      <SiteHeader
-        site="guard"
-        actions={[
-          { label: APARTE_COPY[lang].actions.github, href: SECRET_GUARD_REPOSITORY, variant: "ghost" },
-          { label: APARTE_COPY[lang].actions.signup, href: SIGNUP_URL, variant: "solid" },
-        ]}
-      />
+      <ApHeader />
       <main>
         <AparteHero />
 

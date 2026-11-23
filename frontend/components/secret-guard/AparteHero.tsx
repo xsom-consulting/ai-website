@@ -1,59 +1,39 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { useT } from "@/lib/i18n";
+import { MAIN_SITE_ORIGIN, SIGNUP_URL } from "@/lib/sites";
 import { APARTE_COPY } from "./aparte-copy";
 import { SECRET_GUARD_COPY } from "./secret-guard-copy";
-import { SgSignup } from "./SgSignup";
 
 /**
- * L'ouverture d'Aparté, sur fond clair : ce que fait le produit en une phrase, l'inscription
- * réelle (plateforme.xsom.fr), les trois étapes d'installation, et à droite l'exemple vivant :
- * ce que vous écrivez, puis ce que reçoit l'IA. La valeur d'exemple est visiblement inventée.
+ * L'ouverture d'Aparté : la promesse en deux lignes, la phrase qui dit ce que fait le produit,
+ * « Télécharger · 0 € » (l'inscription sur plateforme.xsom.fr, qui mène au téléchargement) et
+ * l'essai sur le Mac de la page, puis quatre cartes : le prix, xSOM, la France, rien chez xSOM.
  */
 export function AparteHero() {
   const { lang } = useT();
   const copy = APARTE_COPY[lang].hero;
-  const card = useRef<HTMLDivElement>(null);
-
-  // Le bandeau recouvre la valeur, puis la ligne « L'IA reçoit » apparaît ; en boucle, sauf
-  // si le mouvement est réduit (l'état final s'affiche alors directement).
-  useEffect(() => {
-    const el = card.current;
-    if (!el) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.dataset.state = "sent"; return; }
-    let timer = 0;
-    const states = ["typed", "masked", "sent"] as const;
-    let i = 0;
-    const tick = () => {
-      el.dataset.state = states[i];
-      timer = window.setTimeout(() => { i = (i + 1) % states.length; tick(); }, states[i] === "sent" ? 4200 : 1400);
-    };
-    tick();
-    return () => window.clearTimeout(timer);
-  }, []);
-
+  const { perks } = copy;
   return (
-    <section id="inscription" className="ap-hero" aria-labelledby="ap-title">
-      <div className="guard-wrap ap-hero__inner">
-        <div className="ap-hero__text">
-          <p className="home-kicker">{copy.kicker}</p>
-          <h1 id="ap-title" className="ap-hero__title">{copy.title}</h1>
-          <p className="ap-hero__lead">{copy.lead}</p>
-          <SgSignup />
-          <ol className="ap-hero__steps">
-            {copy.steps.map((step) => <li key={step}>{step}</li>)}
-          </ol>
-          <p className="ap-hero__systems">{copy.systems}</p>
-          <p className="ap-hero__trademarks">{SECRET_GUARD_COPY[lang].hero.trademarks}</p>
+    <section id="inscription" className="ap-hero" aria-labelledby="ap-hero-title">
+      <div className="ap-wrap">
+        <h1 id="ap-hero-title">{copy.title[0]}<br /><span>{copy.title[1]}</span></h1>
+        <p className="ap-lead">{copy.lead}</p>
+        <div className="ap-cta">
+          <a className="ap-btn ap-btn--big" href={SIGNUP_URL}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 20h16" /></svg>
+            {copy.download} <span className="ap-price">{perks.free.big}</span>
+          </a>
+          <a className="ap-btn ap-btn--ghost ap-btn--big" href="#essayer">{copy.try}</a>
         </div>
-        <div className="ap-hero__card" ref={card} data-state="typed" aria-label={`${copy.typed} / ${copy.sent}`}>
-          <p className="ap-hero__label">{copy.typed}</p>
-          <p className="ap-hero__line"><code>{copy.before}<span className="ap-hero__secret"><span>{copy.value}</span><i aria-hidden="true" /></span></code></p>
-          <p className="ap-hero__label ap-hero__label--sent">{copy.sent}</p>
-          <p className="ap-hero__line ap-hero__line--sent"><code>{copy.before}<mark>{copy.substitute}</mark></code></p>
-          <p className="ap-hero__local">{copy.local}</p>
+        <p className="ap-sub">{copy.sub}</p>
+        <div className="ap-perks">
+          <div className="ap-perk ap-perk--zero"><span className="ap-bigp">{perks.free.big}</span><b>{perks.free.title}</b><span>{perks.free.body}</span></div>
+          <a className="ap-perk" href={MAIN_SITE_ORIGIN}><span className="ap-em" aria-hidden="true">🛡️</span><b>{perks.xsom.title}</b><span>{perks.xsom.body}</span></a>
+          <div className="ap-perk"><span className="ap-em" aria-hidden="true">🇫🇷</span><b>{perks.france.title}</b><span>{perks.france.body}</span></div>
+          <div className="ap-perk"><span className="ap-em" aria-hidden="true">🔒</span><b>{perks.local.title}</b><span>{perks.local.body}</span></div>
         </div>
+        <p className="ap-trademarks">{SECRET_GUARD_COPY[lang].hero.trademarks}</p>
       </div>
     </section>
   );
