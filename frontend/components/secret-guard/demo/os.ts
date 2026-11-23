@@ -417,11 +417,10 @@ export class Desktop {
       <div class="side"><div class="stabs" role="tablist"><button type="button" role="tab" class="on" aria-selected="true" data-t="claude">Claude Code</button><button type="button" role="tab" aria-selected="false" data-t="codex">Codex</button></div>
         <div class="spane" data-p="claude"><div class="ph"><span class="spark">${I.spark}</span><b>Claude Code</b><button type="button" aria-label="Nouvelle conversation Claude Code">${I.plus}</button></div></div>
         <div class="spane" data-p="codex" hidden><div class="ph"><b>Codex</b><button type="button" aria-label="Nouvelle conversation Codex">${I.plus}</button></div></div></div>
-      <footer class="sbar"><span class="rem" aria-hidden="true">&gt;&lt;</span><span>${I.branch}main</span><span class="opt">${I.sync}</span><span class="opt">⊗ 0 &nbsp;⚠ 0</span><span class="sp"></span><span class="pos">L 1, col 1</span><span class="opt">Espaces : 2</span><span class="opt">UTF-8</span><span class="opt">LF</span><span class="lang"></span><span class="sap">${LOGO}<span></span></span></footer>`;
+      <footer class="sbar"><span class="rem" aria-hidden="true">&gt;&lt;</span><span>${I.branch}main</span><span class="opt">${I.sync}</span><span class="opt">⊗ 0 &nbsp;⚠ 0</span><span class="sp"></span><span class="pos">L 1, col 1</span><span class="opt">Espaces : 2</span><span class="opt">UTF-8</span><span class="opt">LF</span><span class="lang"></span></footer>`;
     w.append(body);
     const q = <T extends HTMLElement = HTMLElement>(s: string) => body.querySelector(s) as T;
     const ex = q('.ex'), etabs = q('.etabs'), code = q('.code'), pos = q('.pos');
-    onEngineState((s) => { q('.sap span').textContent = s === 'ready' ? 'Aparté actif' : s === 'failed' ? 'Aparté indisponible' : 'Aparté démarre…'; q('.sap').classList.toggle('off', s !== 'ready'); });
     const exBtn = q<HTMLButtonElement>('.act button');
     exBtn.addEventListener('click', () => { const hide = body.classList.toggle('noex'); exBtn.classList.toggle('on', !hide); exBtn.setAttribute('aria-pressed', String(!hide)); });
 
@@ -447,11 +446,6 @@ export class Desktop {
       code.innerHTML = FILES[name].split('\n').map((line, i) => `<div class="ln"><span class="no">${i + 1}</span><span class="lt">${highlight(LANG[name][0], line) || ' '}</span></div>`).join('');
       code.scrollTop = 0;
       setPos(1, 1);
-      if (name === '.env') {
-        const a = await analyse(FILES[name]);
-        if (current !== name) return;
-        code.prepend(h('div', 'banner', `${LOGO}<span>${a.ok ? `Aparté : ${plural(a.count, 'secret', 'secrets')} dans ce fichier (${esc(a.labels.join(', '))}). Sa lecture par un agent est refusée.` : 'Aparté : analyse impossible. Par prudence, la lecture de ce fichier par un agent est refusée.'}</span>`));
-      }
     };
     code.addEventListener('click', (e) => {
       const ln = (e.target as HTMLElement).closest<HTMLElement>('.ln');

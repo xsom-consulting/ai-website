@@ -29,13 +29,21 @@ test("the Aparté page states its promise, its free tier and its two calls to ac
   await expect(page.locator(".ap-top").getByRole("link", { name: /Télécharger/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
 });
 
-test("what it does, how to install it, and what never leaves the machine", async ({ page }) => {
+test("redaction, measured figures, what it protects, and how to install it", async ({ page }) => {
   await page.goto("/secret-guard");
-  const does = page.locator("#ce-que-ca-fait");
-  await expect(does.locator(".sg-card h3")).toHaveText(["Bloquer", "Masquer", "Captures d’écran", "Une mascotte qui prévient", "Signaler un faux positif"]);
-  await expect(does).toContainText("Standard, Discrète, Minimale, Aucune");
-  await expect(does.locator(".sg-example")).toContainText("valeur inventée");
-  await expect(does.locator(".sg-example__sent")).toContainText(substituteFr(12, "clé d’API"));
+  const exp = page.locator("#expurgation");
+  await expect(exp.locator(".ap-exp li")).toHaveCount(4);
+  // L'étape 02 montre un Substitut tel que l'écrit le Client Fleet.
+  await expect(exp.locator(".ap-exp li").nth(1)).toContainText(substituteFr(1, "clé d’API"));
+  await expect(exp.locator("[data-kept]")).toContainText("La correspondance entre Substitut et valeur");
+
+  // Les chiffres sont datés et sourcés.
+  const proof = page.locator("#mesures");
+  await expect(proof.locator(".ap-stats li")).toHaveCount(4);
+  await expect(proof).toContainText("Mesure du 22/11/2026, moteur v0.10.4");
+
+  // Le journal présenté aux clients est un exemple, annoncé comme tel.
+  await expect(page.locator("#clients")).toContainText("Exemple.");
 
   const install = page.locator("#installer");
   await expect(install.locator(".sg-steps li")).toHaveCount(3);
@@ -44,12 +52,6 @@ test("what it does, how to install it, and what never leaves the machine", async
   await expect(install.locator('.sg-systems [data-key="browser"]')).toContainText("Bientôt");
   await expect(install.locator(".sg-version")).toContainText("Client Fleet 0.9.47, publié le 21 novembre 2026 · moteur v0.10.4");
   await expect(install.getByRole("link", { name: /Créer mon compte gratuit/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
-
-  const machine = page.locator("#machine");
-  await expect(machine.locator(".sg-layers li")).toHaveCount(3);
-  await expect(machine.locator(".sg-layers li").nth(2)).toContainText("Fleet Guard");
-  await expect(machine.locator("[data-safe]")).toContainText(substituteFr(1, "jeton GitHub"));
-  await expect(machine.locator(".sg-flow__points h3")).toHaveText(["Ni prompt, ni fichier", "Ni valeur de secret", "Des Événements sans contenu"]);
 });
 
 test("the licences are exact, and companies are sent to xSOM Fleet", async ({ page }) => {
@@ -96,7 +98,8 @@ test("the Secret Guard page speaks English with the same sections", async ({ bro
   await page.route("https://plateforme.xsom.fr/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Sign up</title>" }));
   await page.goto("/secret-guard");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Keep your AI.");
-  await expect(page.locator("#ce-que-ca-fait .sg-example__sent")).toContainText(substituteEn(12, "API key"));
+  await expect(page.locator("#expurgation .ap-exp li").nth(1)).toContainText(substituteEn(1, "API key"));
+  await expect(page.locator("#mesures")).toContainText("Measured on 22/11/2026");
   await expect(page.locator("#licences")).toContainText("PolyForm Small Business 1.0.0");
   await expect(page.locator("#fleet")).toContainText("Pro and Enterprise");
   await expect(page.locator("#inscription").getByRole("link", { name: /Download/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
@@ -110,7 +113,7 @@ for (const width of [390, 768, 1440]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     if (width === 390) {
       // Deux licences tiendraient côte à côte dans 390 px : elles doivent être EMPILÉES.
-      const points = page.locator("#licences .sg-points li");
+      const points = page.locator("#licences .ap-licences li");
       const first = await points.nth(0).boundingBox();
       const second = await points.nth(1).boundingBox();
       expect(second!.y).toBeGreaterThan(first!.y);
