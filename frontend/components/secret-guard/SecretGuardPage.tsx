@@ -3,13 +3,15 @@
 import { useRef, type CSSProperties } from "react";
 import { useHomeReveal } from "@/components/home/useHomeReveal";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteLink } from "@/components/site/SiteLink";
 import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_REPOSITORY, SIGNUP_URL } from "@/lib/sites";
 import { SECRET_GUARD_COPY, SECRET_GUARD_LICENCES } from "./secret-guard-copy";
 import { SgFlow } from "./SgFlow";
-import { SgHero } from "./SgHero";
+import { AparteHero } from "./AparteHero";
+import { ApHeader } from "./ApHeader";
+import { SgCatalog, SgExpurgation, SgFaq } from "./SgAparte";
+import { SgTry } from "./demo/SgTry";
 
 const LICENCE_URL = { detection: SECRET_GUARD_LICENCES.apache, expurgation: SECRET_GUARD_LICENCES.polyform } as const;
 
@@ -27,10 +29,12 @@ export function SecretGuardPage() {
   const copy = SECRET_GUARD_COPY[lang];
   const chars = (text: string) => ({ "--chars": text.length }) as CSSProperties;
   return (
-    <div ref={root} className="guard-landing xhome xsg">
-      <SiteHeader site="guard" />
+    <div ref={root} className="guard-landing guard-home xhome xsg">
+      <ApHeader />
       <main>
-        <SgHero />
+        <AparteHero />
+
+        <SgTry />
 
         <section id="ce-que-ca-fait" className="sg-panel" aria-labelledby="sg-does-title">
           <div className="guard-wrap">
@@ -60,6 +64,10 @@ export function SecretGuardPage() {
             </figure>
           </div>
         </section>
+
+        <SgExpurgation />
+
+        <SgCatalog />
 
         <section id="installer" className="sg-panel sg-panel--tint" aria-labelledby="sg-install-title">
           <div className="guard-wrap">
@@ -127,6 +135,8 @@ export function SecretGuardPage() {
             </p>
           </div>
         </section>
+
+        <SgFaq />
       </main>
       <SiteFooter site="guard" />
     </div>

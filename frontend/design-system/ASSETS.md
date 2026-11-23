@@ -12,6 +12,8 @@ The logo is never generated or recoloured. PNG sizes are rendered from these SVG
 
 - Manrope variable Latin, weight 200–800: `@fontsource-variable/manrope@5.3.0`.
 - Source Sans 3 variable Latin, weight 200–900: `@fontsource-variable/source-sans-3@5.3.0`.
+- Inter variable Latin, weight 100–900: `@fontsource-variable/inter@5.2.5`, used by the
+  Aparté page only (`inter-latin-variable.woff2`, licence `licenses/Inter-OFL.txt`).
 - The existing JetBrains Mono WOFF2 remains unchanged for technical identifiers.
 
 The two new font packages are retrieved from the npm registry. Their SIL OFL

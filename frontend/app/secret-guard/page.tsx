@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 
 import { SecretGuardPage } from "@/components/secret-guard/SecretGuardPage";
 import { SECRET_GUARD_COPY, SECRET_GUARD_HERO_MEDIA, SECRET_GUARD_LICENCES, SECRET_GUARD_ORIGIN } from "@/components/secret-guard/secret-guard-copy";
@@ -8,6 +9,17 @@ import "../guard-landing.css";
 import "../guard-home.css";
 import "../home.css";
 import "../secret-guard.css";
+import "../aparte.css";
+
+// La police d'Aparté, servie par le site (licence dans design-system/licenses/Inter-OFL.txt).
+const inter = localFont({
+  src: "../../design-system/assets/inter-latin-variable.woff2",
+  weight: "100 900",
+  style: "normal",
+  variable: "--font-aparte",
+  display: "swap",
+  fallback: ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+});
 
 /**
  * Titre absolu : le gabarit du site (« · Secret Guard ») ne s'applique pas à la page
@@ -25,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: copy.title,
       description: copy.description,
       url: `${SECRET_GUARD_ORIGIN}/`,
-      siteName: "Secret Guard",
+      siteName: "xSOM Aparté",
       locale: lang === "fr" ? "fr_FR" : "en_US",
       type: "website",
       images: [{ url: poster, width: 1920, height: 1080, alt: copy.ogAlt }],
@@ -44,7 +56,7 @@ function structuredData(lang: "fr" | "en") {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
-    name: "Secret Guard",
+    name: "xSOM Aparté",
     url: `${SECRET_GUARD_ORIGIN}/`,
     description: copy.description,
     codeRepository: SECRET_GUARD_REPOSITORY,
@@ -68,7 +80,9 @@ export default async function SecretGuardRoute() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />
-      <SecretGuardPage />
+      <div className={inter.variable}>
+        <SecretGuardPage />
+      </div>
     </>
   );
 }

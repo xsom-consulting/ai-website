@@ -6,6 +6,7 @@ import { useT } from "@/lib/i18n";
 import { SECRET_GUARD_COPY, SECRET_GUARD_DEMO_MEDIA, SECRET_GUARD_HERO_MEDIA } from "./secret-guard-copy";
 import { SgDemoVideo } from "./SgDemoVideo";
 import { SgSignup } from "./SgSignup";
+import { APARTE_COPY } from "./aparte-copy";
 
 /**
  * L'ouverture : la promesse, l'inscription gratuite, les assistants pris en charge, et
@@ -43,9 +44,10 @@ export function SgHero() {
           </h1>
           <p className="sg-hero__lead">{copy.lead}</p>
           <SgSignup />
+          <ul className="ap-trust">{APARTE_COPY[lang].trust.map((t) => <li key={t}>{t}</li>)}</ul>
           <p className="sg-hero__assistants">{copy.assistants}</p>
           <p className="sg-hero__actions">
-            <a className="sg-hero__how" href="#ce-que-ca-fait" onClick={glideTo}>{copy.how}</a>
+            <a className="sg-hero__how" href="#essayer" onClick={glideTo}>{copy.how}</a>
           </p>
           <p className="sg-hero__trademarks">{copy.trademarks}</p>
         </div>

@@ -11,50 +11,22 @@ import { expect, test } from "@playwright/test";
 const substituteFr = (ordinal: number, type: string) => `[secret masqué par xSOM n°${ordinal} : ${type}, pas la vraie valeur]`;
 const substituteEn = (ordinal: number, type: string) => `[secret masked by xSOM #${ordinal}: ${type}, not the real value]`;
 
-test("the Secret Guard page states its promise, its free tier and the supported assistants", async ({ page }) => {
+test("the Aparté page states its promise, its free tier and its two calls to action", async ({ page }) => {
   // L'ancienne adresse de l'extension mène à la page du produit.
   await page.goto("/extension");
   await expect(page).toHaveURL(/\/secret-guard$/);
 
-  await expect(page.locator(".guard-header .brand__name")).toHaveText("Secret Guard");
-  const hero = page.locator(".sg-hero");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Utilisez l’IA.");
-  await expect(hero).toContainText("Gratuit jusqu’à 3 Postes");
-  await expect(hero).toContainText("Claude Code, Codex et GitHub Copilot CLI");
+  await expect(page.locator(".ap-brand b")).toHaveText("Aparté");
+  const hero = page.locator("#inscription");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Gardez votre IA.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Rassurez vos clients.");
+  await expect(hero).toContainText("Claude Code, Codex, ChatGPT");
+  await expect(hero).toContainText("pour les indépendants");
   await expect(hero).toContainText("sans partenariat ni approbation");
-  await expect(hero.getByRole("link", { name: /Continuer avec GitHub/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
-  // Pas de vidéo de démonstration tant que le fichier n'existe pas : la vidéo d'ambiance reste.
-  await expect(page.locator(".sg-demo")).toHaveCount(0);
-  const fond = page.locator(".sg-hero__video");
-  await expect(fond).toHaveAttribute("poster", "/signal-media/secret-guard-loop.jpg");
-  await expect(fond).toHaveAttribute("preload", "none");
-});
-
-test("the sign-up form navigates to plateforme.xsom.fr with the address in the fragment only", async ({ page }) => {
-  const requests: string[] = [];
-  await page.route("https://plateforme.xsom.fr/**", async (route) => {
-    requests.push(route.request().url());
-    await route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Inscription</title>" });
-  });
-  await page.goto("/secret-guard");
-  const field = page.getByLabel("Votre adresse");
-  // Sans `name`, le champ ne peut partir dans aucune requête, même sans JavaScript.
-  expect(await field.getAttribute("name")).toBeNull();
-  await field.fill("jeanne.essai+fleet@exemple.fr");
-  await page.getByRole("button", { name: "Créer mon compte gratuit" }).click();
-  await page.waitForURL(/^https:\/\/plateforme\.xsom\.fr\//);
-  expect(page.url()).toBe("https://plateforme.xsom.fr/inscription#email=jeanne.essai%2Bfleet%40exemple.fr");
-  // Le fragment ne part pas : la requête ne porte ni l'adresse ni paramètre.
-  expect(requests).toEqual(["https://plateforme.xsom.fr/inscription"]);
-});
-
-test("an empty or invalid address does not leave the page", async ({ page }) => {
-  await page.goto("/secret-guard");
-  await page.getByRole("button", { name: "Créer mon compte gratuit" }).click();
-  await expect(page).toHaveURL(/\/secret-guard$/);
-  await page.getByLabel("Votre adresse").fill("pas-une-adresse");
-  await page.getByRole("button", { name: "Créer mon compte gratuit" }).click();
-  await expect(page).toHaveURL(/\/secret-guard$/);
+  // « Télécharger · 0 € » passe par l'inscription, qui mène au téléchargement.
+  await expect(hero.getByRole("link", { name: /Télécharger/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
+  await expect(hero.getByRole("link", { name: "Essayer sur un Mac" })).toHaveAttribute("href", "#essayer");
+  await expect(page.locator(".ap-top").getByRole("link", { name: /Télécharger/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
 });
 
 test("what it does, how to install it, and what never leaves the machine", async ({ page }) => {
@@ -94,12 +66,14 @@ test("the licences are exact, and companies are sent to xSOM Fleet", async ({ pa
   await expect(fleet).toContainText("Pro et Entreprise");
   await expect(fleet.getByRole("link", { name: /Découvrir xSOM Fleet/ })).toHaveAttribute("href", "/fleet");
 
-  // Ni extension VS Code annoncée, ni fichier, ni prix, ni mot interdit.
+  // Ni extension VS Code de xSOM annoncée, ni fichier, ni prix autre que 0 € (affiché pour les
+  // indépendants depuis le 23/11/2026), ni mot interdit. VS Code peut être nommé comme l'éditeur
+  // où tourne Claude Code (démonstration, catalogue).
   const html = await page.content();
-  expect(html).not.toMatch(/VS Code|en préparation/);
+  expect(html).not.toMatch(/extension VS Code|VS Code extension|en préparation/);
   expect(html).not.toMatch(/\.vsix/i);
   expect(html).not.toContain("poc-AI_guard");
-  expect(html).not.toMatch(/\d+\s?€/);
+  expect(html).not.toMatch(/(?<![\d,.])(?:[1-9]\d*(?:[.,]\d+)?|0[.,]\d*[1-9]\d*)\s?€/);
   expect(html).not.toMatch(/conforme|certifié|garanti/i);
 });
 
@@ -121,14 +95,11 @@ test("the Secret Guard page speaks English with the same sections", async ({ bro
   const page = await context.newPage();
   await page.route("https://plateforme.xsom.fr/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Sign up</title>" }));
   await page.goto("/secret-guard");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Use AI.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Keep your AI.");
   await expect(page.locator("#ce-que-ca-fait .sg-example__sent")).toContainText(substituteEn(12, "API key"));
   await expect(page.locator("#licences")).toContainText("PolyForm Small Business 1.0.0");
   await expect(page.locator("#fleet")).toContainText("Pro and Enterprise");
-  await page.getByLabel("Your email").fill("jane@example.com");
-  await page.getByRole("button", { name: "Create my free account" }).click();
-  await page.waitForURL(/^https:\/\/plateforme\.xsom\.fr\//);
-  expect(page.url()).toBe("https://plateforme.xsom.fr/inscription#email=jane%40example.com");
+  await expect(page.locator("#inscription").getByRole("link", { name: /Download/ })).toHaveAttribute("href", "https://plateforme.xsom.fr/inscription");
   await context.close();
 });
 
