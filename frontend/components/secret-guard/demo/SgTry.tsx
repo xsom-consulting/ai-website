@@ -46,7 +46,13 @@ export function SgTry() {
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", onScroll);
     onScroll();
-    return () => { removeEventListener("scroll", onScroll); removeEventListener("resize", onScroll); };
+    return () => {
+      removeEventListener("scroll", onScroll);
+      removeEventListener("resize", onScroll);
+      desktop.current?.destroy();
+      desktop.current = null;
+      started.current = false;
+    };
   }, []);
 
   const run = (name: string) => {
